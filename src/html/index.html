@@ -1,130 +1,143 @@
 @SPK@include("partials/mainhead.html")
+<link rel="stylesheet" href="../assets/libs/jsvectormap/css/jsvectormap.min.css">
+<link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
 </head>
 <body>
     @SPK@include("partials/switcher.html")
+    @SPK@include("partials/loader.html")
     <div class="page">
         @SPK@include("partials/header.html")
-        @SPK@include("partials/page-header.html", {"title": "Dashboard", "subtitle": 'Pages'})
+        
         @SPK@include("partials/sidebar.html")
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Chainview", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Dashboard'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
             <div class="container-fluid">
-
                 <!-- Start::row-1 -->
-
                 <div class="row">
-                    <div class="col-xxl-3 col-lg-6">
-                        <div class="card custom-card overflow-hidden">
-                            <div class="card-body">
-                                <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                        <span class="avatar avatar-md avatar-rounded bg-light p-2">
-                                            <img src="../assets/images/crypto-currencies/regular/Bitcoin.svg" alt="">
-                                        </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                            <div>
-                                                <p class="text-muted mb-0">Bitcoin
-                                                    <span
-                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+25.8%</span>
-                                                </p>
-                                                <h3 class="fw-semibold mb-0">
-                                                    $12,800
-                                                </h3>
-                                            </div>
-                                            <div>
-                                                <span id="crm-total-customers"></span>
-                                            </div>
+                    <div class="col-xl-12">
+                        <div class="row row-cols-xxl-6 row-cols-xl-3 row-cols-md-2">
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium mb-1 text-muted">Total Sales</p>
+                                            <h3 class="mb-0">$8,645</h3>
                                         </div>
+                                        <div class="avatar avatar-md br-4 bg-primary-transparent ms-auto">
+                                            <i class="bi bi-cart-check fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-primary-transparent rounded-pill">+24% <i class="fe fe-arrow-down"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium mb-1 text-muted">Total Revenue</p>
+                                            <h3 class="mb-0">$3,876</h3>
+                                        </div>
+                                        <div class="avatar avatar-md br-4 bg-secondary-transparent ms-auto">
+                                            <i class="bi bi-archive fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-success-transparent rounded-pill">+0.26% <i class="fe fe-arrow-down"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium text-muted mb-1">Total Products</p>
+                                            <h3 class="mb-0">26,231</h3>
+                                        </div>
+                                        <div class="avatar avatar-md br-4 bg-info-transparent ms-auto">
+                                            <i class="bi bi-handbag fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-danger-transparent rounded-pill">+06% <i class="fe fe-arrow-down"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium mb-1 text-muted">Total Expenses</p>
+                                            <h3 class="mb-0">$73,579</h3>
+                                        </div>
+                                        <div class="avatar avatar-md br-4 bg-warning-transparent ms-auto">
+                                            <i class="bi bi-currency-dollar fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-success-transparent rounded-pill">+10% <i class="fe fe-arrow-up"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium text-muted mb-1">Active Subscribers</p>
+                                            <h3 class="mb-0">1,468</h3>
+                                        </div>
+                                        <div class="avatar avatar-md br-4 bg-danger-transparent ms-auto">
+                                            <i class="bi bi-bell fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-danger-transparent rounded-pill">+16% <i class="fe fe-arrow-down"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col card-background">
+                            <div class="card custom-card">
+                                <div class="card-body">
+                                    <div class="d-flex">
+                                        <div>
+                                            <p class="fw-medium mb-1 text-muted">Total Sales</p>
+                                            <h3 class="mb-0">$8,645</h3>
+                                        </div>
+                                        <div class="avatar avatar-md br-4 bg-primary-transparent ms-auto">
+                                            <i class="bi bi-cart-check fs-20"></i>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mt-2">
+                                        <span class="badge bg-primary-transparent rounded-pill">+24% <i class="fe fe-arrow-down"></i></span>
+                                        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xxl-3 col-lg-6">
-                        <div class="card custom-card overflow-hidden">
-                            <div class="card-body">
-                                <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                        <span class="avatar avatar-md avatar-rounded me-2 p-2 bg-light">
-                                            <img src="../assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
-                                        </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                            <div>
-                                                <p class="text-muted mb-0">Ethereum
-                                                    <span
-                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+35.9%</span>
-                                                </p>
-                                                <h3 class="fw-semibold mb-0">$18,600
-                                                </h3>
-                                            </div>
-                                            <div id="crm-total-revenue"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-3 col-lg-6">
-                        <div class="card custom-card overflow-hidden">
-                            <div class="card-body">
-                                <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                        <span class="avatar avatar-md avatar-rounded bg-light p-2">
-                                            <img src="../assets/images/crypto-currencies/regular/Dash.svg" alt="">
-                                        </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                            <div>
-                                                <p class="text-muted mb-0">Dash
-                                                    <span
-                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+15.9%</span>
-                                                </p>
-                                                <h3 class="fw-semibold mb-0">$16,580
-                                                </h3>
-                                            </div>
-                                            <div id="crm-conversion-ratio"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xxl-3 col-lg-6">
-                        <div class="card custom-card overflow-hidden">
-                            <div class="card-body">
-                                <div class="d-flex align-items-top justify-content-between">
-                                    <div>
-                                        <span class="avatar avatar-md avatar-rounded me-2 p-2 bg-light">
-                                            <img src="../assets/images/crypto-currencies/regular/Euro.svg" alt="">
-                                        </span>
-                                    </div>
-                                    <div class="flex-fill ms-3">
-                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
-                                            <div>
-                                                <p class="text-muted mb-0">Euro
-                                                    <span
-                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+35.7%</span>
-                                                </p>
-                                                <h3 class="fw-semibold mb-0">$76,560
-                                                </h3>
-                                            </div>
-                                            <div id="crm-total-deals"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <!--End::row-1 -->
+                <!-- End::ROW-1 -->
 
+                
             </div>
         </div>
         <!-- End::app-content -->
@@ -137,7 +150,14 @@
 
     @SPK@include("partials/commonjs.html")
 
+    <script src="../assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
+    <script src="../assets/libs/jsvectormap/maps/world-merc.js"></script>
+    <script src="../assets/libs/chart.js/chart.min.js"></script>
+    <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="../assets/js/sales-dashboard.js"></script>
     @SPK@include("partials/custom_switcherjs.html")
 
     <!-- Custom JS -->
-    <script src="../assets/js/custom.js">
+    <script src="../assets/js/custom.js"></script>
+</body>
+</html>
