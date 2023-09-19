@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Meta data -->
+	<meta charset="UTF-8">
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Velvet – Premium Bootstrap-5 Admin Template">
+	<meta name="author" content="Spruko Technologies Private Limited">
+	<meta name="keywords"
+		content="admin template,admin dashboard,bootstrap 5 admin template,html template,html admin template,admin,bootstrap 5 html template,html dashboard,dashboard,crm,admin pane,admin dashboard template,html responsive template,crm admin template,dashboard template.">
+	<!-- Title -->
+	<!-- Title -->
+	<title>Velvet – Premium Bootstrap-5 Admin Template</title>
+	<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+	<link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="assets/plugins/iconfonts/icons.css" rel="stylesheet" />
+	<!-- Custom Css -->
+	<link href="assets/css/main.css" rel="stylesheet">
+	<!---Internal  Prism css-->
+	<link href="assets/plugins/prism/prism.css" rel="stylesheet">
+	<link href="assets/plugins/treeview-prism/prism.css" rel="stylesheet">
+	<link href="assets/plugins/treeview-prism/prism-treeview.css" rel="stylesheet">
+	<link href="assets/css/themes/all-themes.css" rel="stylesheet" />
+</head>
+
+<body class="theme-blush">
+	<!-- Page Loader -->
+	<div class="page-loader-wrapper">
+		<div class="loader">
+			<div class="preloader">
+				<div class="spinner-layer pl-blush">
+					<div class="circle-clipper left">
+						<div class="circle"></div>
+					</div>
+					<div class="circle-clipper right">
+						<div class="circle"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- #END# Page Loader -->
+
+	<!-- Overlay For Sidebars -->
+	<div class="overlay"></div>
+	<!-- #END# Overlay For Sidebars -->
+
+	<!-- Sidebarover lay -->
+	<div class="sidebar-overlay" data-toggle="sidebar"></div>
+
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<aside id="leftsidebar" class="sidebar">
+			<!-- User Info -->
+			<div class="admin-image"> <img src="assets/images/logo.png" alt=""> </div>
+			<!-- Menu -->
+			<div class="menu main-sidebar">
+				<ul class="list" id="documenter_nav">
+					<li class="nav-item"><a class="nav-link" href="gulp.html"><i class="fe fe-github sidemenu-icon"></i><span class="sidemenu-label">Getting Started</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="faqs.html"><i class="fe fe-help-circle sidemenu-icon"></i><span class="sidemenu-label fw-bold mr-5">Faqs </span><i class="fa fa-star float-right sidemenu-icon-2 text-warning"></i></a></li>
+					<li class="nav-item"><a class="nav-link" href="index.html"><i class="fe fe-airplay sidemenu-icon"></i><span class="sidemenu-label">Introduction</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="folder-structure.html"><i class="fe fe-folder sidemenu-icon"></i><span class="sidemenu-label">Folder structure</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="html-structure.html"><i class="fe fe-codepen sidemenu-icon"></i><span class="sidemenu-label">html-structure</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="switcher-styles.html"><i class="fe fe-layout sidemenu-icon"></i><span class="sidemenu-label">Switcher Styles</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="credits.html"><i class="fe fe-anchor sidemenu-icon"></i><span class="sidemenu-label">Credits</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="plugins.html"><i class="fe fe-droplet sidemenu-icon"></i><span class="sidemenu-label">Plugins</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="theme.html"><i class="fe fe-layers sidemenu-icon"></i><span class="sidemenu-label">Theme Style</span></a></li>
+				</ul>
+			</div>
+			<!-- #Menu -->
+		</aside>
+		<!-- #END# Left Sidebar -->
+	</section>
+
+	<section class="content mt-4 home">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-sm-12 col-lg-12 col-xl-12">
+					<div class="">
+						<div class="card" id="faqs">
+							<div class="header body">
+								<h5 class="mt-0">FAQS</h5>
+							</div>
+							<div class="card-body pt-0">
+								<div id="accordion">
+
+									<div id="general1">
+										<h5 class="faq mt-0">Gulp Related</h5>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#gulp-body-1">
+												<h4>How to use project without Scss & Gulp ?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0" id="gulp-body-1"
+												data-parent="#accordion">
+												<h6>If you don't want to use scss files, if you want to use only css files please follow below steps.</h6>
+												<h6 class="mt-3"><b>Step 1 :</b></h6>
+												<p>If you don't want to use scss files,you are in no need of gulp and other related files & folders so please remove below shown files</p>
+												<code>Html/src folder</code>
+												<br>
+												<code>Html/dist/assets/css/icons.min.css.map file</code>
+												<br>
+												<code>Html/dist/assets/css/styles.min.css.map file</code>
+												<br>
+												<code>Html/gulpfile.js file</code>
+												<br>
+												<code>Html/package-lock.json file</code>
+												<br>
+												<code>Html/package.json file</code>
+												<br>
+												<code>Html/node_modules folder</code>
+												<br>
+												<h6 class="mt-3"><b>Step 2 :</b></h6>
+												<p>Remove <code>scss</code> folder in dist folder <code>Path:Html/dist/assets/scss</code></p>
+												<p>You can simply use <code>dist</code> folder with only css, or can use by renaming it😊.</p>
+											</div>
+										</div>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#gulp-body-5">
+												<h4>How to use gulp for single folder without partials?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0" id="gulp-body-5"
+												data-parent="#accordion">
+												<h6>If you want gulp for single folder without partials please follow below steps.</h6>
+												<h6 class="mt-3"><b>Step 1 :</b></h6>
+												<p>If you don't want to use <code>src</code> & <code>dist</code> folders.if you want only one folder with gulp and power of scss, please remove below shown folder</p>
+												<code>Html/src</code>
+												<h6 class="mt-3"><b>Step 2 :</b></h6>
+												<p>Please replace code in gulpfile.js <code>Path:Html/gulpfile.js</code> file with below shown code</p>
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+let browsersync = require("browser-sync");
+let gulp = require("gulp");
+let rename = require("gulp-rename");
+let gulpsass = require("gulp-sass");
+let sass = require("sass");
+let autoprefixer = require("gulp-autoprefixer");
+let sourcemaps = require("gulp-sourcemaps");
+let cleanCSS = require("gulp-clean-css");
+const postcss = require("gulp-postcss");
+
+let sass$ = gulpsass(sass);
+let browsersync$ = browsersync.create();
+
+const isSourceMap = true;
+
+const sourceMapWrite = isSourceMap ? "./" : false;
+
+function browsersyncFn(callback) {
+	var baseDir = "./dist";
+	browsersync$.init({
+	server: {
+		baseDir: [baseDir, baseDir + "/html"], // Specify the base path of the project
+		// index: "html/index.html"										// Has to specify the initial page in case not the index.html
+	},
+	port: 1113, // Used to change the port number
+	// tunnel: 'technology', 											// Attempt to use the URL https://text.loca.lt
+	});
+	callback();
+}
+
+function browsersyncReload(callback) {
+	browsersync$.reload();
+	callback();
+}
+
+function watch() {
+	// Below  are the files which will be watched and to skip watching files use '!' before the path.
+	gulp.watch(
+	["./dist/assets/scss/**/*.scss", "!./dist/assets/switcher/*.scss"],
+	gulp.series("scss", browsersyncReload)
+	);
+}
+
+function scss(callback) {
+	// SCSS path where code was written
+	var scssFiles = "./dist/assets/scss/**/*.scss";
+	var cssDest = "./dist/assets/css/";
+	// Normal file
+	gulp
+	.src(scssFiles)
+	.pipe(sourcemaps.init()) // To create map file we should need to initiliaze.
+	.pipe(sass$.sync().on("error", sass$.logError)) // To check any error with sass sync
+	.pipe(postcss([autoprefixer]))
+	.pipe(gulp.dest(cssDest))
+	//  Minified file
+	gulp
+	.src(scssFiles)
+	.pipe(sourcemaps.init()) // To create map file we should need to initiliaze.
+	.pipe(sass$.sync().on("error", sass$.logError)) // To check any error with sass sync
+	.pipe(postcss([autoprefixer]))
+	.pipe(gulp.dest(cssDest))
+	.pipe(cleanCSS({ debug: true }, (details) => {}))
+	.pipe(
+		rename({
+		suffix: ".min",
+		})
+	)
+	.pipe(sourcemaps.write(sourceMapWrite)) // To create map file
+	.pipe(gulp.dest(cssDest))
+	return callback();
+}
+
+
+const build = gulp.series(gulp.parallel(scss), gulp.parallel(scss));
+
+const defaults = gulp.series(
+	gulp.parallel(watch, scss, browsersyncFn),
+	gulp.parallel(scss, browsersyncFn),
+);
+
+// Export tasks
+exports.browsersyncReload = browsersyncReload;
+exports.browsersyncFn = browsersyncFn;
+exports.scss = scss;
+
+exports.watch = watch;
+
+exports.build = build;
+exports.default = defaults;
+
+		</code>
+	</pre>
+												</figure>
+												<h6 class="mt-3"><b>Step 3 :</b></h6>
+												<p>Open terminal and run command <code>npm i gulp-postcss</code></p>
+												<h6 class="mt-3"><b>Step 4 :</b></h6>
+												<p>Finally to run the project run command <code>gulp</code> from the terminal,it will open the project in browser,if you make any changes in the project the gulp file watches for it and update the project.</p>
+											</div>
+										</div>
+									</div>
+									<div id="general">
+										<h5 class="faq mt-0">General Style</h5>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#panel-body-1">
+												<h4>How to Change Font Style ?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0" id="panel-body-1"
+												data-parent="#accordion">
+												<h5 class="mt-0">Step 1:</h5>
+												<p>Go To <b>style.scss</b> <span class="text-primary ml-3">
+														(src/assets/scss/styles.scss )</span> </p>
+												<p>if you want to change another font-family Go to the site <a
+														href="https://fonts.google.com/">Google Fonts</a> And Select One
+													font Family and import in to styles.scss file </p>
+
+												<h4>How to Select font Family</h4>
+												<h6><b>Example:</b></h6>
+												<p><img alt="" src="assets/images/0-2.jpg" class="border w-100"></p>
+												<h5>Step 2:</h5>
+												<p>And paste Your Selected font-family in style.scss</p>
+												<h6><b>Example:</b></h6>
+												<p><img alt="" src="assets/images/0-3.jpg" class="border"></p>
+												<h5>Step 3:</h5>
+												<p>And add the Your Selected font-family in
+													_variables.scss(src/assets/scss/_variables.scss)
+												</p>
+												<h6><b>Example:</b></h6>
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+--default-font-family:    							'Inter', sans-serif;
+		</code>
+	</pre>
+												</figure>
+											</div>
+										</div>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#panel-body-5">
+												<h4>How to change Menu icons ?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0" id="panel-body-5"
+												data-parent="#accordion">
+												<h6 class="mt-0 mb-2">By default menu icons are Boxicons if you
+													want to change icons please follow below <b>steps</b>
+													<h6 class="mt-3"><b>Step 1 :</b></h6>
+													<p>To change <b>Menu icons</b>, open sidebar.html page <code>Path:src/html/partials/sidebar.html</code> and go through
+														<b>app-sidebar</b>
+														section, in that section you will find Boxicons of menu in
+														<code>i</code>
+														tag, there you can replace previous icon with your icon. Example
+														as shown in below</p>
+													<!-- Prism Code -->
+											<figure class="highlight clip-widget mb-0">
+												<pre
+													class="pt-0 mt-0 line-numbers language-markup p-0 pl-3 m-0">
+	<code class="language-markup line-numbers mt-0 pt-0">
+		<script type="html-Azea/script">
+
+	Before: (Boxicons)
+
+	<li class="slide has-sub">
+		<a href="javascript:void(0);" class="side-menu__item">
+			<i class="bx bx-desktop side-menu__icon"></i>
+			<span class="side-menu__label">Dashboards<span class="badge bg-warning-transparent ms-2">12</span></span>
+		</a>
+
+	After: (Feather Icons)
+
+	<li class="slide has-sub">
+		<a href="javascript:void(0);" class="side-menu__item">
+			<i class="fe fe-bell me-0 side-menu__icon"></i>
+			<span class="side-menu__label">Dashboards<span class="badge bg-warning-transparent ms-2">12</span></span>
+		</a>
+				</script>
+			</code>
+		</pre>
+													</figure>
+													<!-- End Prism Precode -->
+
+											</div>
+										</div>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#panel-body-4">
+												<h4>How to Change Logo ?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0" id="panel-body-4"
+												data-parent="#accordion">
+												<p class="mb-0">Go To "<b>src/assets/images/brand-logos</b>" folder and replace
+													your
+													logo with Previous Logos within in image size.
+													note: Please don't increase logo sizes. Replace your logo within
+													given
+													image size. otherwise the logo will not fit in particular place it
+													disturbs the template design.
+												</p>
+											</div>
+										</div>
+									</div>
+									<div id="Localstorage">
+										<h5 class="faq">To clear LocalStorage(cookie)</h5>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#panel-body-cookie">
+												<h4>How to clear LocalStorage (cookie)?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0"
+												id="panel-body-cookie" data-parent="#accordion">
+												<div class="">
+													<h6 class="mt-3"><b>Step1:</b></h6>
+													<p> Open <b>custom-switcher.min.js</b> file
+														<code>assets/js/custom-switcher.min.js</code></p>
+													<p>To clear LocalStorage loading functions you need to remove
+														<b>localStorageBackup2()</b> function in custom-switcher.min.js as shown
+														below</p>
+
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+function localStorageBackup2(){
+	if (localStorage.bodyBgRGB || localStorage.bodylightRGB){
+		document.querySelector('#switcher-dark-theme').checked = true;
+		document.querySelector('#switcher-menu-dark').checked = true;
+		document.querySelector('#switcher-header-dark').checked = true;
+	}
+
+	if (localStorage.bodyBgRGB && localStorage.bodylightRGB) {
+		if(localStorage.bodyBgRGB == "20, 30, 96"){
+			document.querySelector("#switcher-background").checked = true
+		}
+		if(localStorage.bodyBgRGB == "8, 78, 115"){
+			document.querySelector("#switcher-background1").checked = true
+		}
+		if(localStorage.bodyBgRGB == "90, 37, 135"){
+			document.querySelector("#switcher-background2").checked = true
+		}
+		if(localStorage.bodyBgRGB == "24, 101, 51"){
+			document.querySelector("#switcher-background3").checked = true
+		}
+		if(localStorage.bodyBgRGB == "120, 66, 20"){
+			document.querySelector("#switcher-background4").checked = true
+		}
+	}
+
+	if (localStorage.primaryRGB) {
+		if(localStorage.primaryRGB == "58, 88, 146"){
+			document.querySelector("#switcher-primary").checked = true
+		}
+		if(localStorage.primaryRGB == "92, 144, 163"){
+			document.querySelector("#switcher-primary1").checked = true
+		}
+		if(localStorage.primaryRGB == "172, 172, 80"){
+			document.querySelector("#switcher-primary2").checked = true
+		}
+		if(localStorage.primaryRGB == "165, 94, 131"){
+			document.querySelector("#switcher-primary3").checked = true
+		}
+		if(localStorage.primaryRGB == "87, 68, 117"){
+			document.querySelector("#switcher-primary4").checked = true
+		}
+	}
+}
+
+								</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+													<h6 class="mt-3"><b>Step2:</b></h6>
+													<p>To remove complete <b>LocalStorage</b> saving you need to remove
+														all localstorage related calling functions in
+														<b>custom-switcher.js</b>
+														<code>assets/js/custom-switcher.min.js</code>file.
+													</p>
+													<p><b>LocalStorage</b> related functions like localStorage.setItem,
+														localStorage.removeItem, localStorage.getItem,
+														localStorage.clear. Below are the some examples to find out.
+													</p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+localStorage.setItem( );
+localStorage.removeItem( );
+localStorage.getItem( )
+localStorage.clear();
+localStorageBackup();
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+
+													<h6 class="mt-3"><b>Step3:</b></h6>
+													<p>To remove complete <b>LocalStorage</b> saving you also need to remove
+														<b>main.js</b> link present in mainhead.html <code>Path:html/partials/mainhead.html</code> as shown below
+													</p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+
+&lt;script src="../assets/js/main.js"&gt;&lt;/script&gt;
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div id="Localstorage1">
+										<h5 class="faq">Disabling Switcher</h5>
+										<div class="accordion">
+											<div class="accordion-header" data-toggle="collapse"
+												data-target="#panel-body-cookie1">
+												<h4>How To Disable Switcher In All Pages ?</h4>
+											</div>
+											<div class="accordion-body collapse border border-top-0"
+												id="panel-body-cookie1" data-parent="#accordion">
+												<div class="">
+													<h6 class="mt-3"><b>Step1:</b></h6>
+													<p> Open <b>header.html</b> file
+														<code>html/partials/header.html</code></p>
+													<p>To remove switcher icons remove below code shown in <code>header.html</code> file</p>
+
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-html">
+ &lt;!-- Start::header-element --&gt;
+ &lt;div class="header-element"&gt;
+	&lt;!-- Start::header-link|switcher-icon --&gt;
+	&lt;a href="#" class="header-link switcher-icon" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas"&gt;
+		&lt;i class="bx bx-cog header-link-icon"&gt;&lt;/i&gt;
+	&lt;/a&gt;
+	&lt;!-- End::header-link|switcher-icon --&gt;
+&lt;/div&gt;
+<!-- End::header-element -->
+
+								</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+													<h6 class="mt-3"><b>Step2:</b></h6>
+													<p>After removing code in <code>header.html</code> page remove switcher.html partial link shown below in every html page </p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+@SPK@include("partials/switcher.html")
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+
+													<h6 class="mt-3"><b>Step3:</b></h6>
+													<p>After removing switcher partial in every page also remove <code>custom_switcherjs.html</code> partial ini every html page</p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+
+@SPK@include("partials/custom_switcherjs.html")
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+
+													<h6 class="mt-3"><b>Step4:</b></h6>
+													<p>Remove main.js link present in mainhead.html <code>Path:html/partials/mainhead.html</code> as show below</p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+
+&lt;script src="../assets/js/main.js"&gt;&lt;/script&gt;
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+
+													<h6 class="mt-3"><b>Step5:</b></h6>
+													<p>Finally remove below shown code in custom.js file <code>Path:assets/js/custom.js</code></p>
+													<!-- Prism Code -->
+													<figure class="highlight clip-widget mb-0">
+														<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-javascript">
+
+/* for theme primary */
+const nanoThemes = [
+	[
+		'nano',
+		{
+
+			defaultRepresentation: 'RGB',
+			components: {
+				preview: true,
+				opacity: false,
+				hue: true,
+
+				interaction: {
+					hex: false,
+					rgba: true,
+					hsva: false,
+					input: true,
+					clear: false,
+					save: false
+				}
+			}
+		}
+	]
+];
+const nanoButtons = [];
+let nanoPickr = null;
+for (const [theme, config] of nanoThemes) {
+	const button = document.createElement('button');
+	button.innerHTML = theme;
+	nanoButtons.push(button);
+
+	button.addEventListener('click', () => {
+		const el = document.createElement('p');
+		pickrContainerPrimary.appendChild(el);
+
+		/* Delete previous instance */
+		if (nanoPickr) {
+			nanoPickr.destroyAndRemove();
+		}
+
+		/* Apply active class */
+		for (const btn of nanoButtons) {
+			btn.classList[btn === button ? 'add' : 'remove']('active');
+		}
+
+		/* Create fresh instance */
+		nanoPickr = new Pickr(Object.assign({
+			el,
+			theme,
+			default: '#845adf'
+		}, config));
+
+		/* Set events */
+		nanoPickr.on('changestop', (source, instance) => {
+			let color = instance.getColor().toRGBA();
+			let html = document.querySelector('html');
+			html.style.setProperty('--primary-rgb', `${Math.floor(color[0])}, ${Math.floor(color[1])}, ${Math.floor(color[2])}`);
+			/* theme color picker */
+			localStorage.setItem('primaryRGB', `${Math.floor(color[0])}, ${Math.floor(color[1])}, ${Math.floor(color[2])}`);
+			updateColors();
+		});
+	});
+
+	themeContainerPrimary.appendChild(button);
+}
+nanoButtons[0].click();
+/* for theme primary */
+
+/* for theme background */
+const nanoThemes1 = [
+	[
+		'nano',
+		{
+
+			defaultRepresentation: 'RGB',
+			components: {
+				preview: true,
+				opacity: false,
+				hue: true,
+
+				interaction: {
+					hex: false,
+					rgba: true,
+					hsva: false,
+					input: true,
+					clear: false,
+					save: false
+				}
+			}
+		}
+	]
+];
+const nanoButtons1 = [];
+let nanoPickr1 = null;
+for (const [theme, config] of nanoThemes) {
+	const button = document.createElement('button');
+	button.innerHTML = theme;
+	nanoButtons1.push(button);
+
+	button.addEventListener('click', () => {
+		const el = document.createElement('p');
+		pickrContainerBackground.appendChild(el);
+
+		/* Delete previous instance */
+		if (nanoPickr1) {
+			nanoPickr1.destroyAndRemove();
+		}
+
+		/* Apply active class */
+		for (const btn of nanoButtons) {
+			btn.classList[btn === button ? 'add' : 'remove']('active');
+		}
+
+		/* Create fresh instance */
+		nanoPickr1 = new Pickr(Object.assign({
+			el,
+			theme,
+			default: '#845adf'
+		}, config));
+
+		/* Set events */
+		nanoPickr1.on('changestop', (source, instance) => {
+			let color = instance.getColor().toRGBA();
+			let html = document.querySelector('html');
+			html.style.setProperty('--body-bg-rgb', `${color[0]}, ${color[1]}, ${color[2]}`);
+			document.querySelector('html').style.setProperty('--light-rgb', `${color[0]+14}, ${color[1]+14}, ${color[2]+14}`);
+			document.querySelector('html').style.setProperty('--form-control-bg', `rgb(${color[0]+14}, ${color[1]+14}, ${color[2]+14})`);
+			localStorage.removeItem("bgtheme");
+			updateColors();
+			html.setAttribute('data-theme-mode', 'dark');
+			html.setAttribute('data-menu-styles', 'dark');
+			html.setAttribute('data-header-styles', 'dark');
+			document.querySelector('#switcher-dark-theme').checked = true;
+			localStorage.setItem('bodyBgRGB', `${color[0]}, ${color[1]}, ${color[2]}`);
+			localStorage.setItem('bodylightRGB', `${color[0]+14}, ${color[1]+14}, ${color[2]+14}`);
+		});
+	});
+	themeContainerBackground.appendChild(button);
+}
+nanoButtons1[0].click();
+/* for theme background */
+			</script></code></pre>
+													</figure>
+													<!-- End Prism Precode -->
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="accordion">
+										<div class="accordion-header" data-toggle="collapse"
+											data-target="#panel-body-cookie2">
+											<h4>How To Remove Switcher In Landing Page ?</h4>
+										</div>
+										<div class="accordion-body collapse border border-top-0"
+											id="panel-body-cookie2" data-parent="#accordion">
+											<div class="">
+												<h6 class="mt-3"><b>Step1:</b></h6>
+												<p> Remove below shown code in <code>head</code> part of the landing.html file <code>Path:src/html/landing.html</code></p>
+
+												<!-- Prism Code -->
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-html">
+ &lt;script&gt;
+	if(localStorage.ynexlandingdarktheme){
+		document.querySelector("html").setAttribute("data-theme-mode","dark")
+	}
+	if(localStorage.ynexlandingrtl){
+		document.querySelector("html").setAttribute("dir","rtl")
+		document.querySelector("#style")?.setAttribute("href", "../assets/libs/bootstrap/css/bootstrap.rtl.min.css");
+	}
+&lt;/script&gt;
+
+							</script></code></pre>
+												</figure>
+												<!-- End Prism Precode -->
+
+												<h6 class="mt-3"><b>Step2:</b></h6>
+												<p> Remove landing.js link in landing.html file <code>Path:src/html/landing.html</code></p>
+
+												<!-- Prism Code -->
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-html">
+ <!-- Internal Landing JS -->
+ &lt;script src="../assets/js/landing.js"&gt;&lt;/script&gt;
+
+							</script></code></pre>
+												</figure>
+												<!-- End Prism Precode -->
+
+												<h6 class="mt-3"><b>Step3:</b></h6>
+												<p> Remove below shown code in<code>app-sidebar</code> of landing.html file <code>Path:src/html/landing.html</code></p>
+
+												<!-- Prism Code -->
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-html">
+
+&lt;button class="btn btn-wave btn-icon btn-success" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas"&gt;
+	&lt;i class="ri-settings-3-line"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+							</script></code></pre>
+												</figure>
+
+												<!-- End Prism Precode -->
+												<h6 class="mt-3"><b>Step3:</b></h6>
+												<p> Remove below shown code in <code>app-header</code> section of landing.html file <code>Path:src/html/landing.html</code></p>
+
+												<!-- Prism Code -->
+												<figure class="highlight clip-widget mb-0">
+													<pre title="jQuery" class="javascript" data-codetype="JQueryku"><code class="language-html">
+
+&lt;button class="btn btn-icon btn-success" data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas"&gt;
+	&lt;i class="ri-settings-3-line"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+							</script></code></pre>
+												</figure>
+												<!-- End Prism Precode -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<div class="color-bg">
+		<div class="sidebar__toggle" data-toggle="sidebar">
+			<a class="open-toggle" href="javascript:void(0);"><i class="fe fe-menu"></i></a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li class="nav-item mr-8"><a class="btn btn-secondary btn-header d-sm-block d-none" href="https://1.envato.market/MGEaN"
+					target="_blank"><i class="icon-bag3"></i> Portfolio</a></li>
+			<li class="nav-item mr-8"><a class="btn btn-success text-white" href=" https://support.spruko.com/" target="_blank"><i
+						class="icon-help2"></i>Support</a></li>
+			<li class="nav-item"><a class="btn btn-danger text-white mr-3 btn-header"
+					href="https://spruko.com/licenses" target="_blank"><i class="icon-bag3"></i> Licenses</a></li>
+		</ul>
+	</div>
+
+	<!-- Jquery Core Js -->
+	<script src="assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+	<script src="assets/bundles/morphingsearchscripts.bundle.js"></script> <!-- morphing search Js -->
+	<script src="assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+	<script src="assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
+	<script src="assets/bundles/morphingscripts.bundle.js"></script><!-- morphing search page js -->
+
+	<!-- Internal Prism js-->
+	<script src="assets/plugins/prism/prism.js"></script>
+
+	<!-- Treeview js-->
+	<script src="assets/plugins/treeview-prism/prism.js"></script>
+	<script src="assets/plugins/treeview-prism/prism-treeview.js"></script>
+
+	<!-- Perfectscroll js-->
+	<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+
+	<!-- Custom js-->
+	<script src="assets/js/custom-switcher.js"></script>
+	<script src="assets/js/menuspy.min.js.js"></script>
+
+	<script>
+		var elm = document.querySelector('#main-menu');
+		var ms = new MenuSpy(elm);
+
+		(function () {
+
+			if (typeof self === 'undefined' || !self.Prism || !self.document) {
+				return;
+			}
+
+			/**
+			 * Class name for <pre> which is activating the plugin
+			 * @type {String}
+			 */
+			var PLUGIN_CLASS = 'line-numbers';
+
+			/**
+			 * Resizes line numbers spans according to height of line of code
+			 * @param  {Element} element <pre> element
+			 */
+			var _resizeElement = function (element) {
+				var codeStyles = getStyles(element);
+				var whiteSpace = codeStyles['white-space'];
+
+				if (whiteSpace === 'pre-wrap' || whiteSpace === 'pre-line') {
+					var codeElement = element.querySelector('code');
+					var lineNumbersWrapper = element.querySelector('.line-numbers-rows');
+					var lineNumberSizer = element.querySelector('.line-numbers-sizer');
+					var codeLines = element.textContent.split('\n');
+
+					if (!lineNumberSizer) {
+						lineNumberSizer = document.createElement('span');
+						lineNumberSizer.className = 'line-numbers-sizer';
+
+						codeElement.appendChild(lineNumberSizer);
+					}
+
+					lineNumberSizer.style.display = 'block';
+
+					codeLines.forEach(function (line, lineNumber) {
+						lineNumberSizer.textContent = line || '\n';
+						var lineSize = lineNumberSizer.getBoundingClientRect().height;
+						lineNumbersWrapper.children[lineNumber].style.height = lineSize + 'px';
+					});
+
+					lineNumberSizer.textContent = '';
+					lineNumberSizer.style.display = 'none';
+				}
+			};
+
+			/**
+			 * Returns style declarations for the element
+			 * @param {Element} element
+			 */
+			var getStyles = function (element) {
+				if (!element) {
+					return null;
+				}
+
+				return window.getComputedStyle ? getComputedStyle(element) : (element.currentStyle || null);
+			};
+
+			window.addEventListener('resize', function () {
+				Array.prototype.forEach.call(document.querySelectorAll('pre.' + PLUGIN_CLASS), _resizeElement);
+			});
+
+			Prism.hooks.add('complete', function (env) {
+				if (!env.code) {
+					return;
+				}
+
+				// works only for <code> wrapped inside <pre> (not inline)
+				var pre = env.element.parentNode;
+				// Original regex check for class, leaving it here
+				// for its redundancy check
+				var clsReg = /\s*\bline-numbers\b\s*/;
+				// New regex check for opt-out class
+				var clsRegB = /\s*\bno-line-numbers\b\s*/;
+
+				if (env.element.querySelector(".line-numbers-rows")) {
+					// Abort if line numbers already exists
+					return;
+				}
+
+				// Added to facilitate opting out
+				if (clsRegB.test(pre.className)) {
+					// Respect the opt-out
+					return;
+				}
+
+				if (clsReg.test(env.element.className)) {
+					// Remove the class "line-numbers" from the <code>
+					env.element.className = env.element.className.replace(clsReg, ' ');
+				}
+				if (!clsReg.test(pre.className)) {
+					// Add the class "line-numbers" to the <pre>
+					pre.className += ' line-numbers';
+				}
+
+				var match = env.code.match(/\n(?!$)/g);
+				var linesNum = match ? match.length + 1 : 1;
+				var lineNumbersWrapper;
+
+				var lines = new Array(linesNum + 1);
+				lines = lines.join('<span></span>');
+
+				lineNumbersWrapper = document.createElement('span');
+				lineNumbersWrapper.setAttribute('aria-hidden', 'true');
+				lineNumbersWrapper.className = 'line-numbers-rows';
+				lineNumbersWrapper.innerHTML = lines;
+
+				if (pre.hasAttribute('data-start')) {
+					pre.style.counterReset = 'linenumber ' + (parseInt(pre.getAttribute('data-start'), 10) - 1);
+				}
+
+				env.element.appendChild(lineNumbersWrapper);
+
+				_resizeElement(pre);
+			});
+
+		}());
+	</script>
+
+</body>
+
+</html>

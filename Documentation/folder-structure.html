@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Meta data -->
+<meta charset="UTF-8">
+<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Velvet – Premium Bootstrap-5 Admin Template">
+<meta name="author" content="Spruko Technologies Private Limited">
+<meta name="keywords" content="admin template,admin dashboard,bootstrap 5 admin template,html template,html admin template,admin,bootstrap 5 html template,html dashboard,dashboard,crm,admin pane,admin dashboard template,html responsive template,crm admin template,dashboard template.">
+<!-- Title -->
+<title>Velvet – Premium Bootstrap-5 Admin Template</title>
+<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+<link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+<link href="assets/plugins/iconfonts/icons.css" rel="stylesheet" />
+<!-- Custom Css -->
+<link href="assets/css/main.css" rel="stylesheet">
+<!---Internal  Prism css-->
+<link href="assets/plugins/prism/prism.css" rel="stylesheet">
+<link href="assets/plugins/treeview-prism/prism.css" rel="stylesheet">
+<link href="assets/plugins/treeview-prism/prism-treeview.css" rel="stylesheet">
+<link href="assets/css/themes/all-themes.css" rel="stylesheet" />
+</head>
+
+<body class="theme-blush">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-blush">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+
+<!-- Sidebarover lay -->
+<div class="sidebar-overlay" data-toggle="sidebar"></div>
+
+<!-- #Top Bar -->
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <!-- User Info -->
+        <div class="admin-image"> <img src="assets/images/logo.png" alt="" > </div>
+        <!-- Menu -->
+        <div class="menu main-sidebar">
+			<ul class="list" id="documenter_nav">
+				<li class="nav-item"><a class="nav-link" href="gulp.html"><i class="fe fe-github sidemenu-icon"></i><span class="sidemenu-label">Getting Started</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="faqs.html"><i class="fe fe-help-circle sidemenu-icon"></i><span class="sidemenu-label fw-bold mr-5">Faqs </span><i class="fa fa-star float-right sidemenu-icon-2 text-warning"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="index.html"><i class="fe fe-airplay sidemenu-icon"></i><span class="sidemenu-label">Introduction</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="folder-structure.html"><i class="fe fe-folder sidemenu-icon"></i><span class="sidemenu-label">Folder structure</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="html-structure.html"><i class="fe fe-codepen sidemenu-icon"></i><span class="sidemenu-label">html-structure</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="switcher-styles.html"><i class="fe fe-layout sidemenu-icon"></i><span class="sidemenu-label">Switcher Styles</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="credits.html"><i class="fe fe-anchor sidemenu-icon"></i><span class="sidemenu-label">Credits</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="plugins.html"><i class="fe fe-droplet sidemenu-icon"></i><span class="sidemenu-label">Plugins</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="theme.html"><i class="fe fe-layers sidemenu-icon"></i><span class="sidemenu-label">Theme Style</span></a></li>
+			</ul>
+		</div>
+        <!-- #Menu -->
+    </aside>
+    <!-- #END# Left Sidebar -->
+</section>
+
+<section class="content home">
+    <div class="container">
+        <div class="block-header mt-3">
+            <h4 class="mb-0">Velvet – Premium Bootstrap-5 Admin Template</h4>
+
+        </div>
+
+		<div class="row clearfix">
+			<div class="col-sm-12 col-lg-12 col-xl-12">
+				<div class="card" id="folder_structure">
+					<div class="body pb-0">
+						<h5 class="mt-0">Folder Structure</h5>
+					</div>
+					<pre><code class="language-treeview tab-size-0">src/
+						├── assets/
+						├── |-- css/
+						|   |-- |-- fotns.css
+						|   |-- |-- icons.css
+						|   |-- |-- icons.min.css
+						|   |-- |-- icons.min.css.map
+						|   |-- |-- styles.css
+						|   |-- |-- styles.min.css
+						|   |-- |-- styles.min.css.map
+						├── |-- icon-fonts/
+						|   |-- |-- bootstrap-icons/
+						|   |-- |-- boxicons/
+						|   |-- |-- feather/
+						|   |-- |-- line-awesome/
+						|   |-- |-- Remixicons/
+						|   |-- |-- tabler-icons/
+						├── |-- images/
+						├── |-- js/
+						├── |-- scss/
+						|   |-- |-- bootstrap/
+						|   |-- |-- custom/
+						|   |-- |-- menu-styles/
+						|   |-- |-- Pages/
+						|   |-- |-- Util/
+						|   |-- |-- _switcher.scss
+						|   |-- |-- _variables.scss
+						|   |-- |-- styles.scss
+						├── |-- video/
+						├── html/
+						|   |-- partials/
+						|   |-- |-- commonjs.html
+						|   |-- |-- custom_switcherjs.html
+						|   |-- |-- dashbord-page-header.html
+						|   |-- |-- footer.html
+						|   |-- |-- header.html
+						|   |-- |-- headersearch_modal.html
+						|   |-- |-- mainhead.html
+						|   |-- |-- page-header.html
+						|   |-- |-- sidebar.html
+						|   |-- |-- side-bar.html
+						|   |-- |-- switcher.html
+						gulpfile.js
+						package-lock.json
+						package.json</code></pre>
+				</div>
+				<div class="card">
+					<div class="body pb-0">
+						<h5 class="mt-0">Folders Description</h5>
+					</div>
+					<div class="pt-4 pb-3">
+					<ul>
+						<li class="mb-1">
+						   <code>Velvet – Premium Bootstrap-5 Admin Template /</code> : Root template folder contain all html, js, css, scss, images
+						   and other files.
+						</li>
+						<li>
+							<ul class="folder-structure">
+								<li>
+									<code>assets/</code> : Folder contain all the Velvet Template assets which has css, js, scss, and images.
+								</li>
+								<li class="list">
+									<ul class="sub-structure">
+										<li>
+											<code>css/</code>: Folder contain assets which has complete styles.
+										</li>
+										<li>
+											<ul class="sub-structure">
+												<li><code>icons.css</code> : It has all template icon links are importated.</li>
+												<li><code>styles.css</code> : Main style sheet for template</li>
+											</ul>
+										</li>
+										<li class="list">
+											<code>icon-fonts/</code>: Folder contain all types of icons which is used in this template.
+										</li>
+										<li class="list">
+											<code>images/</code> : Template images.
+										</li>
+										<li class="list">
+											<code>js/</code> : Folder contain all the template pages js files.
+										</li>
+										<li class="list">
+											<code>scss/</code> : Folder contain all pages scss files and all plugins scss files also included.
+										</li>
+										<li class="list">
+											<code>Video/</code> : Folder contains video used in this template.
+										</li>
+									</ul>
+								</li>
+								<li>
+									<li class="list mt-3 mb-3"><code>html</code> : All HTML Pages.</li>
+									<li>
+										<ul>
+											<li class="list">
+												<code>Partials/</code>:
+												<p class="mt-2"> 1. This folder have all common html files which we commonly used in all html pages. If you want to add content which you need in all html pages you just create new file and add content to that. No need to add that whole content to every page, you just add that link into all html pages.</p>
+												<p>2. Import that created file link into all html pages with <code> @SPK@include("partials/sample.html")</code></p>
+											</li>
+										</ul>
+									</li>
+								</li>
+							</ul>
+						</li>
+						<li class="list mt-3 mb-3"><code>gulpfile.js</code> : Gulp tasks js file.</li>
+						<li class="list"><code>package.gulp.json</code> : Gulp package json file.</li>
+					</ul>
+				</div>
+				</div>
+				<div class="card" id="cssformat">
+					<div class="body">
+						<h5 class="mt-0">How to remove SCSS Format.</h5>
+						<p class="mt-4"><strong>Note:</strong> If you want to use only CSS format then you should follow below process.</p>
+						<p><strong>Step-1: </strong> Remove complete scss folder.<span class="ps-5"> <b>Root path: (../assets/scss)</b> </span></p>
+						<p><strong>Step-2: </strong> Change styles.min.css link to styles.css in mainhead.html<span class="ps-5"> <b>Root path: (html/partials/mainhead.html)</b> </span></p>
+						<p><strong>Step-3: </strong> Remove .scss and .css.map extension related files in css folder.<span class="ps-5"> <b>Root path: (../assets/css/*.scss) and (../assets/css/*.css.map)</b> </span></p>
+						<p><strong>Step-4: </strong> Remove "gulpfile.js", "package.json", "package-lock.json" files.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer opened -->
+	<div class="main-footer ht-40">
+		<div class="pd-t-0-f ht-100p">
+			<span>Copyright © <span id="year"></span> <a href="#">Ynex</a>. Designed with <span class="fa fa-heart text-danger"></span> by <a href="#"> Spruko </a> All rights reserved.</span>
+		</div>
+	</div>
+	<!-- Footer closed -->
+</section>
+
+<div class="color-bg">
+	<div class="sidebar__toggle" data-toggle="sidebar">
+		<a class="open-toggle" href="javascript:void(0);"><i class="fe fe-menu"></i></a>
+	</div>
+	<ul class="nav navbar-nav">
+	  <li class="nav-item mr-8"><a class="btn btn-secondary btn-header d-sm-block d-none" href="https://1.envato.market/MGEaN" target="_blank"><i class="icon-bag3"></i> Portfolio</a></li>
+			<li class="nav-item mr-8"><a class="btn btn-success text-white" href=" https://support.spruko.com/" target="_blank"><i
+						class="icon-help2"></i>Support</a></li>
+	  <li class="nav-item"><a class="btn btn-danger text-white mr-3 btn-header" href="https://spruko.com/licenses" target="_blank"><i class="icon-bag3"></i> Licenses</a></li>
+	</ul>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+<script src="assets/bundles/morphingsearchscripts.bundle.js"></script> <!-- morphing search Js -->
+<script src="assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+<script src="assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
+<!-- <script src="assets/bundles/morphingscripts.bundle.js"></script>morphing search page js -->
+
+<!-- Internal Prism js-->
+<script src="assets/plugins/prism/prism.js"></script>
+
+<!-- Treeview js-->
+<script src="assets/plugins/treeview-prism/prism.js"></script>
+<script src="assets/plugins/treeview-prism/prism-treeview.js"></script>
+
+<!-- Perfectscroll js-->
+<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+
+<!-- Custom js-->
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/menuspy.min.js.js"></script>
+
+<script>
+    var elm = document.querySelector('#main-menu');
+    var ms = new MenuSpy(elm);
+</script>
+
+</body>
+</html>

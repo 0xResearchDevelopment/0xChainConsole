@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Meta data -->
+<meta charset="UTF-8">
+<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Velvet – Premium Bootstrap-5 Admin Template">
+<meta name="author" content="Spruko Technologies Private Limited">
+<meta name="keywords" content="admin template,admin dashboard,bootstrap 5 admin template,html template,html admin template,admin,bootstrap 5 html template,html dashboard,dashboard,crm,admin pane,admin dashboard template,html responsive template,crm admin template,dashboard template.">
+<!-- Title -->
+<title>Velvet – Premium Bootstrap-5 Admin Template</title>
+<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+<link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+<link href="assets/plugins/iconfonts/icons.css" rel="stylesheet" />
+<!-- Custom Css -->
+<link href="assets/css/main.css" rel="stylesheet">
+<!---Internal  Prism css-->
+<link href="assets/plugins/prism/prism.css" rel="stylesheet">
+<link href="assets/plugins/treeview-prism/prism.css" rel="stylesheet">
+<link href="assets/plugins/treeview-prism/prism-treeview.css" rel="stylesheet">
+<link href="assets/css/themes/all-themes.css" rel="stylesheet" />
+</head>
+
+<body class="theme-blush">
+<!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-blush">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- #END# Page Loader -->
+
+<!-- Overlay For Sidebars -->
+<div class="overlay"></div>
+<!-- #END# Overlay For Sidebars -->
+
+<!-- Sidebarover lay -->
+<div class="sidebar-overlay" data-toggle="sidebar"></div>
+
+<!-- #Top Bar -->
+<section>
+    <!-- Left Sidebar -->
+    <aside id="leftsidebar" class="sidebar">
+        <!-- User Info -->
+        <div class="admin-image"> <img src="assets/images/logo.png" alt="" > </div>
+        <!-- Menu -->
+        <div class="menu main-sidebar">
+			<ul class="list" id="documenter_nav">
+				<li class="nav-item"><a class="nav-link" href="gulp.html"><i class="fe fe-github sidemenu-icon"></i><span class="sidemenu-label">Getting Started</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="faqs.html"><i class="fe fe-help-circle sidemenu-icon"></i><span class="sidemenu-label fw-bold mr-5">Faqs </span><i class="fa fa-star float-right sidemenu-icon-2 text-warning"></i></a></li>
+				<li class="nav-item"><a class="nav-link" href="index.html"><i class="fe fe-airplay sidemenu-icon"></i><span class="sidemenu-label">Introduction</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="folder-structure.html"><i class="fe fe-folder sidemenu-icon"></i><span class="sidemenu-label">Folder structure</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="html-structure.html"><i class="fe fe-codepen sidemenu-icon"></i><span class="sidemenu-label">html-structure</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="switcher-styles.html"><i class="fe fe-layout sidemenu-icon"></i><span class="sidemenu-label">Switcher Styles</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="credits.html"><i class="fe fe-anchor sidemenu-icon"></i><span class="sidemenu-label">Credits</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="plugins.html"><i class="fe fe-droplet sidemenu-icon"></i><span class="sidemenu-label">Plugins</span></a></li>
+				<li class="nav-item"><a class="nav-link" href="theme.html"><i class="fe fe-layers sidemenu-icon"></i><span class="sidemenu-label">Theme Style</span></a></li>
+			</ul>
+		</div>
+        <!-- #Menu -->
+    </aside>
+    <!-- #END# Left Sidebar -->
+</section>
+
+<section class="content home">
+    <div class="container">
+        <div class="block-header">
+			<h4 class="mb-0">Velvet – Premium Bootstrap-5 Admin Template</h4>
+		</div>
+		<div class="row clearfix">
+			<div class="col-xl-12">
+				<div class="row clearfix">
+					<div class="col-sm-12">
+						<div class="card" id="Layouts">
+							<div class="body">
+								<h5 class="mt-0">Theme Styles :</h5>
+							</div>
+							<div class="alert bg-primary mx-4" role="alert">
+								You can change the <strong class="text-decoration-underline">Theme Styles</strong> by adding the attribute to the html tag in mainhead.html <code class="ms-2">(Root:html/partials/mainhead.html)</code>
+							</div>
+							<div class="body pt-0">
+								<code class="language-markup p-0">
+									<script type="html-Zem/script">
+										<html lang="en" dir="ltr" data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="gradient" data-menu-styles="dark">
+									</script>
+								</code>
+								<table class="table table-bordered m-0 mt-3">
+									<thead>
+										<tr>
+											<th style="width: 50%;">Attribute
+											</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<code>data-theme-mode="light"</code>
+												<code>data-header-styles="gradient"</code>
+												<code>data-menu-styles="light"</code>
+											</td>
+											<td>
+												To set the <strong>light theme</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-theme-mode="dark"</code>
+												<code>data-header-styles="gradient"</code>
+												<code>data-menu-styles="dark"</code>
+											</td>
+											<td>
+												To set the <strong>Dark theme</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>dir="ltr"</code>
+											</td>
+											<td>
+												To set <strong>LTR</strong> version default
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>dir="rtl"</code>
+											</td>
+											<td>
+												To set <strong>LTR</strong> version to <strong>RTL</strong> version
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-layout="vertical"</code>
+											</td>
+											<td>
+												To set menu layout to <strong>vertical</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-layout="horizontal"</code>
+												<code>data-nav-style="menu-click"</code>
+											</td>
+											<td>
+												To set menu layout to <strong>horizontal</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-style="menu-click"</code>
+											</td>
+											<td>
+												To set navigation style to <strong>menu click</strong> - <span class="text-danger"><sup>*</sup>Works same for both vertical and horizontal</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-style="menu-hover"</code>
+											</td>
+											<td>
+												To set navigation style to <strong>menu hover</strong> - <span class="text-danger"><sup>*</sup>Works same for both vertical and horizontal</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-style="icon-click"</code>
+											</td>
+											<td>
+												To set navigation style to <strong>icon click</strong> - <span class="text-danger"><sup>*</sup>Works same for both vertical and horizontal</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-nav-style="icon-hover"</code>
+											</td>
+											<td>
+												To set navigation style to <strong>icon hover</strong> - <span class="text-danger"><sup>*</sup>Works same for both vertical and horizontal</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-page-style="regular"</code>
+											</td>
+											<td>
+												To set page style to <strong>Default</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-page-style="classic"</code>
+											</td>
+											<td>
+												To set page style to <strong>Classic</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-page-style="modern"</code>
+											</td>
+											<td>
+												To set page style to <strong>modern</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-width="fullwidth"</code>
+											</td>
+											<td>
+												To set page width to <strong>Full Width</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-width="boxed"</code>
+											</td>
+											<td>
+												To set page width to <strong>Boxed</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-menu-position="fixed"</code>
+											</td>
+											<td>
+												To set menu position <strong>Fixed</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-menu-position="scrollable"</code>
+											</td>
+											<td>
+												To set menu position <strong>Scrollable</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-position="fixed"</code>
+											</td>
+											<td>
+												To set header position <strong>Fixed</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-position="rounded"</code>
+											</td>
+											<td>
+												To set header position <strong>rounded</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-position="scrollable"</code>
+											</td>
+											<td>
+												To set header position <strong>Scrollable</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-vertical-style="closed"</code>
+											</td>
+											<td>
+												To set sidemenu layout style <strong>Closed</strong> - <span class="text-danger"><sup>*</sup>Does not work for horizontal
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-vertical-style="icontext"</code>
+											</td>
+											<td>
+												To set sidemenu layout style <strong>Icon Text</strong> - <span class="text-danger"><sup>*</sup>Does not work for horizontal
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-vertical-style="overlay"</code>
+											</td>
+											<td>
+												To set sidemenu layout style <strong>Icon Overlay</strong> - <span class="text-danger"><sup>*</sup>Does not work for horizontal
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-vertical-style="detached"</code>
+											</td>
+											<td>
+												To set sidemenu layout style <strong>Detached</strong> - <span class="text-danger"><sup>*</sup>Does not work for horizontal
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-vertical-style="doublemenu"</code>
+											</td>
+											<td>
+												To set sidemenu layout style <strong>Double Menu</strong> - <span class="text-danger"><sup>*</sup>Does not work for horizontal
+											</td>
+										</tr><tr>
+											<td>
+												<code>loader="enable"</code>
+											</td>
+											<td>
+												To enable loader by default 
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="body">
+								<h5 class="mt-0">Theme Colors :</h5>
+							</div>
+							<div class="body pt-0">
+								<div class="alert bg-primary mx-1" role="alert">
+									You can change the <strong class="text-decoration-underline">Theme Colors</strong> by adding the attribute to the html tag in mainhead.html <code class="ms-2">(Root:html/partials/mainhead.html)</code>
+								</div>
+								<code class="language-markup p-0">
+									<script type="html-Zem/script">
+										<html lang="en" dir="ltr" data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="gradient" data-menu-styles="light">
+									</script>
+								</code>
+								<table class="table table-bordered m-0 mt-3">
+									<thead>
+										<tr>
+											<th style="width: 40%;">Attribute
+											</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<code>data-menu-styles="light"</code>
+											</td>
+											<td>
+												To set the menu style to <strong>light</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-menu-styles="dark"</code>
+											</td>
+											<td>
+												To set the menu style to <strong>dark</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-styles="dark"</code>
+											</td>
+											<td>
+												To set the Header & Bredcrumb style to <strong>dark</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-styles="color"</code>
+											</td>
+											<td>
+												To set the Header & Bredcrumb style to <strong>color</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-styles="gradient"</code>
+											</td>
+											<td>
+												To set the Header & Bredcrumb style to <strong>gradient</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-header-styles="transparent"</code>
+											</td>
+											<td>
+												To set the Header & Bredcrumb style to <strong>transparent</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-default-header-styles="light"</code>
+											</td>
+											<td>
+												To set the header style to <strong>light</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-default-header-styles="dark"</code>
+											</td>
+											<td>
+												To set the header style to <strong>dark</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-default-header-styles="color"</code>
+											</td>
+											<td>
+												To set the header style to <strong>color</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-default-header-styles="gradient"</code>
+											</td>
+											<td>
+												To set the header style to <strong>gradient</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-default-header-styles="transparent"</code>
+											</td>
+											<td>
+												To set the header style to <strong>transparent</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-bg-img="bgimg1"</code>
+											</td>
+											<td>
+												To set menu background <strong>image1</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-bg-img="bgimg2"</code>
+											</td>
+											<td>
+												To set menu background <strong>image2</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-bg-img="bgimg3"</code>
+											</td>
+											<td>
+												To set menu background <strong>image3</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-bg-img="bgimg4"</code>
+											</td>
+											<td>
+												To set menu background <strong>image4</strong>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<code>data-bg-img="bgimg5"</code>
+											</td>
+											<td>
+												To set menu background <strong>image5</strong>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Footer opened -->
+	<div class="main-footer ht-40">
+		<div class="pd-t-0-f ht-100p">
+			<span>Copyright &copy; 2022 <a href="javascript:void(0);">Zem</a>. Designed by <a href="https://www.spruko.com/">Spruko</a> All rights reserved.</span>
+		</div>
+	</div>
+	<!-- Footer closed -->
+</section>
+
+
+
+<div class="color-bg">
+	<div class="sidebar__toggle" data-toggle="sidebar">
+		<a class="open-toggle" href="javascript:void(0);"><i class="fe fe-menu"></i></a>
+	</div>
+	<ul class="nav navbar-nav">
+	  <li class="nav-item mr-8"><a class="btn btn-secondary btn-header d-sm-block d-none" href="https://1.envato.market/MGEaN" target="_blank"><i class="icon-bag3"></i> Portfolio</a></li>
+			<li class="nav-item mr-8"><a class="btn btn-success text-white" href=" https://support.spruko.com/" target="_blank"><i
+						class="icon-help2"></i>Support</a></li>
+	  <li class="nav-item"><a class="btn btn-danger text-white mr-3 btn-header" href="https://spruko.com/licenses" target="_blank"><i class="icon-bag3"></i> Licenses</a></li>
+	</ul>
+</div>
+
+<!-- Jquery Core Js -->
+<script src="assets/bundles/libscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+<script src="assets/bundles/morphingsearchscripts.bundle.js"></script> <!-- morphing search Js -->
+<script src="assets/bundles/vendorscripts.bundle.js"></script> <!-- Lib Scripts Plugin Js -->
+<script src="assets/bundles/mainscripts.bundle.js"></script><!-- Custom Js -->
+<script src="assets/bundles/morphingscripts.bundle.js"></script><!-- morphing search page js -->
+
+<!-- Internal Prism js-->
+<script src="assets/plugins/prism/prism.js"></script>
+
+<!-- Treeview js-->
+<script src="assets/plugins/treeview-prism/prism.js"></script>
+<script src="assets/plugins/treeview-prism/prism-treeview.js"></script>
+
+<!-- Perfectscroll js-->
+<script src="assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="assets/plugins/perfect-scrollbar/p-scroll.js"></script>
+
+<!-- Custom js-->
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/menuspy.min.js.js"></script>
+
+<script>
+    var elm = document.querySelector('#main-menu');
+    var ms = new MenuSpy(elm);
+
+	(function () {
+
+	if (typeof self === 'undefined' || !self.Prism || !self.document) {
+		return;
+	}
+
+	/**
+	 * Class name for <pre> which is activating the plugin
+	 * @type {String}
+	 */
+	var PLUGIN_CLASS = 'line-numbers';
+
+	/**
+	 * Resizes line numbers spans according to height of line of code
+	 * @param  {Element} element <pre> element
+	 */
+	var _resizeElement = function (element) {
+		var codeStyles = getStyles(element);
+		var whiteSpace = codeStyles['white-space'];
+
+		if (whiteSpace === 'pre-wrap' || whiteSpace === 'pre-line') {
+			var codeElement = element.querySelector('code');
+			var lineNumbersWrapper = element.querySelector('.line-numbers-rows');
+			var lineNumberSizer = element.querySelector('.line-numbers-sizer');
+			var codeLines = element.textContent.split('\n');
+
+			if (!lineNumberSizer) {
+				lineNumberSizer = document.createElement('span');
+				lineNumberSizer.className = 'line-numbers-sizer';
+
+				codeElement.appendChild(lineNumberSizer);
+			}
+
+			lineNumberSizer.style.display = 'block';
+
+			codeLines.forEach(function (line, lineNumber) {
+				lineNumberSizer.textContent = line || '\n';
+				var lineSize = lineNumberSizer.getBoundingClientRect().height;
+				lineNumbersWrapper.children[lineNumber].style.height = lineSize + 'px';
+			});
+
+			lineNumberSizer.textContent = '';
+			lineNumberSizer.style.display = 'none';
+		}
+	};
+
+	/**
+	 * Returns style declarations for the element
+	 * @param {Element} element
+	 */
+	var getStyles = function (element) {
+		if (!element) {
+			return null;
+		}
+
+		return window.getComputedStyle ? getComputedStyle(element) : (element.currentStyle || null);
+	};
+
+	window.addEventListener('resize', function () {
+		Array.prototype.forEach.call(document.querySelectorAll('pre.' + PLUGIN_CLASS), _resizeElement);
+	});
+
+}());
+</script>
+
+</body>
+</html>
