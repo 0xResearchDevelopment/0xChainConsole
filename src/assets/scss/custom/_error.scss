@@ -1,0 +1,235 @@
+#particles-js {
+    // background-image: url(../images/authentication/5.png);
+    background-size: cover;
+    background-position: inherit;
+    background-repeat: round;
+    position: relative;
+    z-index: 9;
+    &::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: var(--white-9);
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    z-index: -1;
+
+    }
+}
+.error-page,
+.error-page-basic {
+    position: absolute;
+    width: 100%;
+    .card.custom-card {
+        box-shadow: 0 1rem 2.1rem rgb(0 0 0 / 5%);
+    }
+}
+.error-image {
+    img {
+        width: 25rem;
+        height: 18.75rem;
+    }
+}
+@media (max-width: 575.98px) {
+    .error-image img {
+        width: 18.75rem;
+        height: 15.625rem;
+    }
+    .error-page .authentication-style{
+        padding: 2rem;
+        margin: 2rem;
+    }
+    .error-page .text-large{
+        font-size: 5rem !important;
+    }
+    
+}
+@media (max-width: 400.98px) {
+    .constract2.error-page .authentication-style{
+        margin: 0px;
+    }
+    .constract3.error-page .authentication-style{
+        margin: 0px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .error-page .text-large{
+        font-size: 6rem;
+    }
+    
+}
+@media (min-width: 574px) {
+    .rectangle2::before {
+        content: "";
+        width: 130px;
+        height: 130px;
+        position: absolute;
+        background: $primary-01;
+        top: -13%;
+        z-index: -1;
+        border-radius: 10px;
+        left: -4%;
+        opacity: .4;
+    }
+    .rectangle2::after{
+        content: "";
+        width: 130px;
+        height: 130px;
+        position: absolute;
+        background-color: transparent;
+        border: 0.125rem dashed $primary-03;
+        top: -5%;
+        z-index: -1;
+        border-radius: 10px;
+        left: -7%;
+        opacity: .4;
+
+    }
+    .rectangle3::before {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        background-color: transparent;
+        border: 0.125rem dashed $primary-03;
+        opacity: .4;
+        top: 82%;
+        z-index: -1;
+        border-radius: 10px;
+        left: 87%;
+    }
+    .rectangle3::after{
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        background:  $primary-01;
+        opacity: .4;
+        top: 90%;
+        z-index: -1;
+        border-radius: 10px;
+        left: 80%;
+
+    }
+}
+.error-basic-image img {
+    width: 25rem;
+    height: 25rem;
+}
+.error-page,
+.error-page-basic {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.error-basic-content {
+    position: relative;
+    z-index: 0;
+    text-align: center;
+}
+.error-type {
+    font-size: 7.5rem;
+    font-weight: 600;
+    color: $primary;
+    line-height: 1;
+    margin-block-end: 0.625rem;
+}
+.error-subtitle {
+    color: $secondary;
+    font-size: 1.563;
+    font-weight: 500;
+    line-height: 1;
+}
+.error-page-basic {
+    background-image: url(../images/error-basic-image.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.error-basic-background {
+    position: absolute;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+}
+.error-authentication {
+    background: $primary-01;
+    padding: 10px;
+    border-radius: 10px;
+}
+.rectangle {
+    position: relative;
+}
+.rectangle::before {
+    content: "";
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background: $primary-01;
+    top: 0;
+    z-index: 99;
+    border-radius: 10px 1px 100px 0px;
+    left: 0px;
+}
+.rectangle1::before {
+    content: "";
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background: $primary-01;
+    bottom: 0px;
+    right: 2px;
+    z-index: 99;
+    border-radius: 100px 0px 10px 0px;
+}
+.count {
+    width: 5.9375rem;
+    padding: 1rem;
+}
+.authentication-style {
+    box-shadow: 0 4px 25px 0 var(--primary005);
+    padding: 5rem;
+    background-color: $custom-white;
+    border-radius: 10px;
+    z-index: 9;
+    margin: 4rem;
+}
+.lines{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    margin: auto;
+    width: 90vw;
+    z-index: 10;
+
+}
+.cover-card{
+  padding: 9rem 2.5rem !important;
+}
+.cover-overlay .card-img {
+    height: 580px;
+}
+.cover-overlay::before{
+    content: "";
+    border-radius: 0px;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    background-color: $primary-08;
+    position: absolute;
+    border-radius: 0px 5px 5px 0px;
+}

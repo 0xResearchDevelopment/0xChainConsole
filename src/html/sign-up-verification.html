@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-nav-layout="vertical" data-vertical-style="overlay" data-theme-mode="light" data-header-styles="light" data-menu-styles="light" data-toggled="close">
+
+<head>
+
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ChainConsole</title>
+    <meta name="Description" content="ChainConsole Responsive Dashboard">
+    <meta name="Author" content="SasKglobal">
+	<meta name="keywords" content="ChainConsole Responsive Dashboard">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/brand-logos/fav.ico" type="image/x-icon">
+
+    <!-- Main Theme Js -->
+    <script src="../assets/js/authentication-main.js"></script>
+
+    <!-- Bootstrap Css -->
+    <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
+
+    <!-- Style Css -->
+    <link href="../assets/css/styles.min.css" rel="stylesheet" >
+
+    <!-- Icons Css -->
+    <link href="../assets/css/icons.min.css" rel="stylesheet" >
+
+
+</head>
+
+<body>
+    
+    @SPK@include("partials/switcher.html")
+
+    <div class="page error-bg" id="particles-js">
+        <!-- Start::error-page -->
+        <div class="error-page  ">
+            <div class="container-lg">
+                <div class="row justify-content-center align-items-center  authentication authentication-basic h-100">
+                    <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-6 col-sm-8 col-12">
+                        <div class="my-5 d-flex justify-content-center">
+                            <a href="index.html">
+                                <img src="../assets/images/brand-logos/desktop-logo.png" alt="logo" class="desktop-logo">
+                                <img src="../assets/images/brand-logos/desktop-dark.png" alt="logo" class="desktop-dark">
+                            </a>
+                        </div>
+                        <div class="card custom-card rectangle2">
+                            <div class="card-body p-5 rectangle3">
+                                <p class="h5 fw-semibold mb-2 text-center">Verify Your Account</p>
+                                <p class="mb-4 text-muted op-7 fw-normal text-center">We will change this approach later. For now let us keep Verify button to invoke the API</p>
+                                <div class="row gy-3">
+                                    <div class="col-xl-12 mb-2">
+                                    <div class="col-xl-12 d-grid mt-2">
+                                        <a href="sign-in-cover.html" class="btn btn-lg btn-primary">Verify</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End::error-page -->
+    </div>
+
+
+    <!-- Custom-Switcher JS -->
+    <script src="../assets/js/custom-switcher.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="../assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Internal Two Step Verification JS -->
+    <script src="../assets/js/two-step-verification.js"></script>
+
+</body>
+
+</html>

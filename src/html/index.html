@@ -1,0 +1,143 @@
+@SPK@include("partials/mainhead.html")
+</head>
+<body>
+    @SPK@include("partials/switcher.html")
+    <div class="page">
+        @SPK@include("partials/header.html")
+        @SPK@include("partials/page-header.html", {"title": "Dashboard", "subtitle": 'Pages'})
+        @SPK@include("partials/sidebar.html")
+
+        <!-- Start::app-content -->
+        <div class="main-content app-content">
+            <div class="container-fluid">
+
+                <!-- Start::row-1 -->
+
+                <div class="row">
+                    <div class="col-xxl-3 col-lg-6">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-body">
+                                <div class="d-flex align-items-top justify-content-between">
+                                    <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-light p-2">
+                                            <img src="../assets/images/crypto-currencies/regular/Bitcoin.svg" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <p class="text-muted mb-0">Bitcoin
+                                                    <span
+                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+25.8%</span>
+                                                </p>
+                                                <h3 class="fw-semibold mb-0">
+                                                    $12,800
+                                                </h3>
+                                            </div>
+                                            <div>
+                                                <span id="crm-total-customers"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-lg-6">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-body">
+                                <div class="d-flex align-items-top justify-content-between">
+                                    <div>
+                                        <span class="avatar avatar-md avatar-rounded me-2 p-2 bg-light">
+                                            <img src="../assets/images/crypto-currencies/regular/Ethereum.svg" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="flex-fill ms-3">
+
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <p class="text-muted mb-0">Ethereum
+                                                    <span
+                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+35.9%</span>
+                                                </p>
+                                                <h3 class="fw-semibold mb-0">$18,600
+                                                </h3>
+                                            </div>
+                                            <div id="crm-total-revenue"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-lg-6">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-body">
+                                <div class="d-flex align-items-top justify-content-between">
+                                    <div>
+                                        <span class="avatar avatar-md avatar-rounded bg-light p-2">
+                                            <img src="../assets/images/crypto-currencies/regular/Dash.svg" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <p class="text-muted mb-0">Dash
+                                                    <span
+                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+15.9%</span>
+                                                </p>
+                                                <h3 class="fw-semibold mb-0">$16,580
+                                                </h3>
+                                            </div>
+                                            <div id="crm-conversion-ratio"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-3 col-lg-6">
+                        <div class="card custom-card overflow-hidden">
+                            <div class="card-body">
+                                <div class="d-flex align-items-top justify-content-between">
+                                    <div>
+                                        <span class="avatar avatar-md avatar-rounded me-2 p-2 bg-light">
+                                            <img src="../assets/images/crypto-currencies/regular/Euro.svg" alt="">
+                                        </span>
+                                    </div>
+                                    <div class="flex-fill ms-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap">
+                                            <div>
+                                                <p class="text-muted mb-0">Euro
+                                                    <span
+                                                        class="ms-1 badge bg-success-transparent badge-sm rounded-pill">+35.7%</span>
+                                                </p>
+                                                <h3 class="fw-semibold mb-0">$76,560
+                                                </h3>
+                                            </div>
+                                            <div id="crm-total-deals"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End::row-1 -->
+
+            </div>
+        </div>
+        <!-- End::app-content -->
+
+        @SPK@include("partials/headersearch_modal.html")
+        @SPK@include("partials/footer.html")
+        @SPK@include("partials/side-bar.html")
+
+    </div>
+
+    @SPK@include("partials/commonjs.html")
+
+    @SPK@include("partials/custom_switcherjs.html")
+
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js">

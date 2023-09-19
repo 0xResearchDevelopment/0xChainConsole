@@ -1,0 +1,1165 @@
+/* Start:: Sales Dashboard Styles */
+
+.main-card-icon {
+  inset-block-end: 0.75rem;
+  inset-inline-end: 1rem;
+  position: absolute;
+  padding: 0.75rem;
+  border-radius: $default-radius;
+}
+
+.timeline-main {
+  padding-inline-start: 1.77rem;
+}
+
+.latest-timeline ul.timeline-main {
+  position: relative;
+
+  &::before {
+    content: "";
+    border-inline-start: 0.125rem dotted $default-border;
+    position: absolute;
+    inset-inline-start: 0.25rem;
+    width: 1px;
+    height: 84%;
+    z-index: 0;
+    inset-block-start: 0.75rem;
+  }
+}
+
+.latest-timeline .timeline-main li.activity {
+  padding: 0;
+  position: relative;
+  margin-block-end: 0.5rem;
+}
+
+.featured_icon1 {
+  width: 0.438rem;
+  height: 0.438rem;
+  line-height: 3.75rem;
+  margin-inline-start: -1.625rem !important;
+  color: $black;
+  font-size: 0.625rem;
+  background-color: $primary;
+  position: relative;
+  border-radius: 1.125rem;
+  inset-block-start: 0.75rem;
+}
+
+.featured_icon1.featured-danger {
+  background-color: $danger;
+}
+
+.featured_icon1.featured-success {
+  background-color: $success;
+}
+
+.tansaction-icon {
+  padding: 0.375rem;
+  border-radius: $default-radius;
+  margin-inline-end: 0.75rem;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.recent-transactions-card {
+  .list-group-item {
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+.nav.panel-tabs-task a.active {
+  border-radius: $default-radius;
+  color: $info !important;
+  background-color: rgba(var(--info-rgb), 0.1);
+}
+
+.nav.panel-tabs-task a {
+  background-color: $custom-white;
+  padding: 0.4rem 0.5rem !important;
+  font-size: 0.711rem;
+  transition: all ease 0.3s;
+}
+
+.billing-invoice-details {
+  width: 11rem;
+}
+
+#visitors-countries {
+  height: 23.9rem;
+
+  #jvm-markers-labels-group {
+    display: none;
+  }
+}
+
+#visitors-countries circle:nth-child(1) {
+  fill: $primary;
+  stroke: $primary-03;
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(2) {
+  fill: $secondary;
+  stroke: rgba(var(--secondary-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(3) {
+  fill: $danger;
+  stroke: rgba(var(--danger-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(4) {
+  fill: $info;
+  stroke: rgba(var(--info-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(5) {
+  fill: $orange;
+  stroke: rgba(var(--orange-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(6) {
+  fill: $warning;
+  stroke: rgba(var(--warning-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(7) {
+  fill: $success;
+  stroke: rgba(var(--success-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(8) {
+  fill: $pink;
+  stroke: rgba(var(--pink-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(9) {
+  fill: $dark;
+  stroke: rgba(var(--dark-rgb), 0.2);
+  stroke-width: 30;
+}
+
+#visitors-countries circle:nth-child(10) {
+  fill: $indigo;
+  stroke: rgba($indigo, 0.2);
+  stroke-width: 30;
+}
+
+.panel-tabs-billing li a.active {
+  background-color: rgba(var(--success-rgb), 0.1);
+  font-weight: 500;
+  color: $success;
+}
+
+.panel-tabs-billing li a {
+  padding: 0.25rem 0.5rem;
+  border-radius: $default-radius;
+  font-size: 0.75rem;
+}
+
+#sale-value {
+  .apexcharts-radialbar-hollow {
+    fill: $custom-white;
+  }
+
+  #apexcharts-radialbarTrack-0 {
+    stroke: $light;
+  }
+}
+
+.latest-timeline {
+  max-height: 24rem;
+}
+
+#sale-value {
+  .apexcharts-datalabels-group text {
+    fill: $primary !important;
+  }
+}
+
+/* End:: Sales Dashboard Styles */
+
+/* Start:: Ecommerce Dashboard Styles */
+@media screen and (max-width: 1400px) {
+  #trademeter {
+    .apexcharts-canvas {
+      margin: 0px auto;
+    }
+  }
+}
+#country-sales {
+  height: 14.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  #jvm-markers-labels-group {
+    display: none;
+  }
+
+  #jvm-regions-group path {
+    fill: $light !important;
+  }
+}
+
+#country-sales circle:nth-child(1) {
+  fill: $primary;
+  stroke: $primary-03;
+  stroke-width: 20;
+}
+
+#country-sales circle:nth-child(2) {
+  fill: $secondary;
+  stroke: rgba(var(--secondary-rgb), 0.2);
+  stroke-width: 20;
+}
+
+#country-sales circle:nth-child(3) {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+#country-sales circle:nth-child(4) {
+  fill: $info;
+  stroke: rgba(var(--info-rgb), 0.2);
+  stroke-width: 20;
+}
+
+#country-sales circle:nth-child(5) {
+  fill: $warning;
+  stroke: rgba(var(--warning-rgb), 0.2);
+  stroke-width: 20;
+}
+
+#country-sales circle:nth-child(6) {
+  fill: $success;
+  stroke: rgba(var(--success-rgb), 0.2);
+  stroke-width: 20;
+}
+.ecommerce-icon {
+  svg {
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0.35rem;
+    border-radius: $default-radius;
+    &.primary {
+      background-color: $primary;
+    }
+    &.secondary {
+      background-color: $secondary;
+    }
+    &.success {
+      background-color: $success;
+    }
+    &.warning {
+      background-color: $warning;
+    }
+  }
+}
+
+.ecommerce-sale-image {
+  img {
+    height: 16.625rem;
+  }
+
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.ecommerce-bankoffer-details {
+  font-size: 0.75rem;
+  width: 70%;
+  border-radius: $default-radius;
+  background-color: rgba(255, 255, 255, 0.25);
+  opacity: 0.8;
+  padding: 0.625rem;
+  backdrop-filter: blur(1.875rem);
+}
+
+.ecommerce-sale-days {
+  position: absolute;
+  bottom: 1.25rem;
+  font-size: 0.75rem;
+  border-radius: $default-radius;
+  background-color: rgba(255, 255, 255, 0.25);
+  opacity: 0.8;
+  padding: 0.25rem 0.625rem;
+  backdrop-filter: blur(1.875rem);
+}
+
+.ecommerce-sales-calendar {
+  position: absolute;
+  inset-inline-end: 1.875rem;
+  background-color: rgba(255, 255, 255, 0.25);
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.3rem;
+  backdrop-filter: blur(1.875rem);
+}
+
+.active-tab tr:hover .orders-arrow i {
+  color: $primary;
+  font-weight: 600;
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.top-country-name {
+  width: 4.5rem;
+}
+
+/* End:: Ecommerce Dashboard Styles */
+
+/* Start:: Crypto Dashboard Styles */
+.crypto-buy-sell-input {
+  width: 60% !important;
+}
+
+.crypto-buy-sell {
+  .choices__inner {
+    min-width: 5rem !important;
+  }
+  .choices__list--dropdown .choices__item--selectable::after,
+  .choices__list[aria-expanded] .choices__item--selectable::after {
+    display: none !important;
+  }
+
+  .choices__list--dropdown .choices__item--selectable,
+  .choices__list[aria-expanded] .choices__item--selectable {
+    padding-inline-end: 10px !important;
+  }
+}
+
+#btc-chart,
+#eth-chart,
+#dash-chart {
+  .apexcharts-grid {
+    display: none;
+  }
+}
+
+/* End:: Crypto Dashboard Styles */
+
+/* Start:: Jobs Dashboard Styles */
+
+.job-tracking-card {
+  background-color: $white-1;
+  border-radius: 50%;
+  position: relative;
+
+  .card-body {
+    z-index: 1;
+  }
+
+  img {
+    width: 7.5rem;
+    height: 6rem;
+    inset-inline-end: 30px;
+    position: inherit;
+  }
+}
+.basic-subscription,
+.pro-subscription {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    inset-inline-start: -0.938rem;
+    border-radius: 0.3rem;
+    inset-block-start: 0.6rem;
+  }
+}
+
+.basic-subscription:before {
+  background-color: $primary;
+}
+
+.pro-subscription:before {
+  background-color: $secondary;
+}
+
+#recent-jobs {
+  max-height: 22.5rem;
+}
+
+#candidates-chart {
+  .apexcharts-datalabels-group text {
+    fill: $default-text-color !important;
+  }
+}
+
+.recent-recruiter {
+  max-width: 7rem;
+}
+
+/* End:: Jobs Dashboard Styles */
+
+/* Start:: NFT Dashboard */
+#nft-balance-chart svg {
+  overflow: inherit;
+}
+
+.nft-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid $default-border;
+  border-radius: 50rem;
+  background-color: $custom-white;
+  color: $gray-6;
+  box-shadow: -1px 2px 7px 0px rgba(#919090, 0.165);
+  margin-bottom: 1.75rem;
+
+  .nft-tag-icon {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border-radius: 50%;
+    background-color: $gray-1;
+  }
+  .nft-tag-text {
+    font-weight: 500;
+    display: inline-block;
+    padding-block-start: 0px;
+    padding-inline-end: 1.25rem;
+    padding-block-end: 0px;
+    padding-inline-start: 0.5rem;
+  }
+
+  &:hover {
+    color: $default-text-color;
+  }
+
+  &.nft-tag-primary {
+    .nft-tag-icon {
+      color: $primary;
+    }
+    &:hover,
+    &.active {
+      color: $primary;
+      .nft-tag-icon {
+        background-color: $primary;
+        color: #fff;
+      }
+    }
+  }
+
+  &.nft-tag-secondary {
+    .nft-tag-icon {
+      color: $secondary;
+    }
+    &:hover,
+    &.active {
+      color: $secondary;
+      .nft-tag-icon {
+        background-color: $secondary;
+        color: #fff;
+      }
+    }
+  }
+
+  &.nft-tag-info {
+    .nft-tag-icon {
+      color: $info;
+    }
+    &:hover,
+    &.active {
+      color: $info;
+      .nft-tag-icon {
+        background-color: $info;
+        color: #fff;
+      }
+    }
+  }
+
+  &.nft-tag-success {
+    .nft-tag-icon {
+      color: $success;
+    }
+    &:hover,
+    &.active {
+      color: $success;
+      .nft-tag-icon {
+        background-color: $success;
+        color: #fff;
+      }
+    }
+  }
+
+  &.nft-tag-warning {
+    .nft-tag-icon {
+      color: $warning;
+    }
+    &:hover,
+    &.active {
+      color: $warning;
+      .nft-tag-icon {
+        background-color: $warning;
+        color: #fff;
+      }
+    }
+  }
+
+  &.nft-tag-purple {
+    .nft-tag-icon {
+      color: $pink;
+    }
+    &:hover,
+    &.active {
+      color: $pink;
+      .nft-tag-icon {
+        background-color: $pink;
+        color: #fff;
+      }
+    }
+  }
+}
+.featured-nft {
+  width: 100%;
+  height: 13rem;
+  border-radius: $default-radius;
+
+  img {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    border-radius: $default-radius;
+  }
+}
+
+.nft-auction-time {
+  position: absolute;
+  top: 3.5rem;
+  inset-inline-start: 0rem;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(225, 225, 225, 0.15);
+  border-start-start-radius: 0px;
+  border-start-end-radius: 6px;
+  border-end-end-radius: 6px;
+  border-end-start-radius: 0px;
+  backdrop-filter: blur(1.875rem);
+}
+
+.nft-like-section {
+  position: absolute;
+  inset-block-start: 1rem;
+}
+
+.nft-like-badge {
+  background-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(1.875rem);
+}
+
+.nft-collector-progress {
+  width: 3.125rem;
+}
+
+.nft-featuredcollect-image {
+  height: 9.513rem !important;
+  border-radius: $default-radius;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+#top-collector {
+  max-height: 28.375rem;
+}
+
+#nft-balance-chart {
+  .apexcharts-grid {
+    display: none;
+  }
+}
+
+.nft-choices {
+  .choices {
+    margin-bottom: 0;
+  }
+  .choices__inner {
+    min-width: 5rem;
+  }
+  @media (min-width: 640px) {
+    .choices__list--dropdown .choices__item--selectable,
+    .choices__list[aria-expanded] .choices__item--selectable {
+      padding: 10px !important;
+    }
+    .choices__list--dropdown .choices__item--selectable::after,
+    .choices__list[aria-expanded] .choices__item--selectable::after {
+      display: none;
+    }
+  }
+}
+/* End:: NFT Dashboard */
+
+/* Start:: Analytics Dashboard */
+#analytics-bouncerate {
+  position: absolute;
+  inset-block-end: 0;
+}
+
+#sessions .apexcharts-datalabels-group text {
+  fill: $default-text-color !important;
+}
+
+#analytics-views,
+#analytics-followers {
+  circle {
+    fill: $custom-white;
+  }
+
+  #apexcharts-radialbarTrack-0 {
+    stroke: $light;
+  }
+}
+
+#analytics-views {
+  .apexcharts-datalabels-group text {
+    fill: $warning;
+  }
+}
+
+#analytics-followers {
+  .apexcharts-datalabels-group text {
+    fill: $secondary;
+  }
+}
+
+.analytics-visitors-countries li {
+  margin-block-end: 1.27rem;
+
+  &:last-child {
+    margin-block-end: 0;
+  }
+
+  .progress {
+    width: 6.25rem;
+  }
+}
+
+#analytics-users {
+  .apexcharts-grid {
+    display: none;
+  }
+}
+.analytics-timeline ul.timeline-1:before {
+  content: " ";
+  margin: 20px 20px 0 22px;
+  display: inline-block;
+  position: absolute;
+  inset-inline-start: -4px;
+  height: 100%;
+  z-index: 0;
+  inset-block-end: 0;
+  border-inline-start: 2px dotted $light;
+}
+.analytics-timeline ul.timeline-1 > li .analytics-icon {
+  text-align: center;
+  border-radius: 50%;
+  position: absolute;
+  inset-inline-start: 3px;
+  font-size: 19px;
+  line-height: 32px;
+  width: 32px;
+  height: 32px;
+}
+.analytics-timeline ul.timeline-1 {
+  list-style-type: none;
+  position: relative;
+}
+.analytics-timeline ul.timeline-1 > li {
+  margin: 21.7px 0;
+  padding-inline-start: 3rem;
+}
+#popTrades .apexcharts-canvas {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+/* End:: Analytics Dashboard */
+
+/* Start:: Projects Dashboard */
+.team-members-card {
+  li {
+    margin-block-end: 1.5rem;
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  #user1,
+  #user2,
+  #user3,
+  #user4,
+  #user5 {
+    .apexcharts-grid {
+      display: none;
+    }
+  }
+}
+
+.daily-task-card,
+.projects-maintask-card {
+  margin-block-end: 0;
+
+  li {
+    margin-block-end: 1.25rem;
+
+    &:last-child,
+    .card {
+      margin-block-end: 0;
+    }
+  }
+}
+
+.project-transactions-card {
+  margin-block-end: 0;
+
+  li {
+    margin-block-end: 1.45rem;
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}
+
+.projects-tracking-card {
+  background-color: $white;
+  position: relative;
+
+  .card-body {
+    z-index: 1;
+  }
+
+  img {
+    width: 9rem;
+    height: 10.5rem;
+  }
+}
+.nav-pills .nav-link.active {
+  color: #fff;
+  border-color: $primary !important;
+  background-color: $primary;
+}
+.upcoming-shedule .sh-link {
+  padding: 0.6rem;
+  border-radius: 3px !important;
+  min-width: 55px;
+  max-width: 55px;
+  transition: all ease 0.3s;
+}
+.upcoming-shedule .sh-shedule {
+  position: relative;
+  padding-inline-start: 1.25rem;
+}
+.upcoming-shedule .sh-shedule::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  height: 100%;
+  width: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: $success;
+}
+.upcoming-shedule
+  .sh-shedule-container
+  > .list-item:nth-child(2)
+  .sh-shedule::before {
+  background-color: $primary;
+}
+.upcoming-shedule
+  .sh-shedule-container
+  > .list-item:nth-child(3)
+  .sh-shedule::before {
+  background-color: $warning;
+}
+
+.upcoming-shedule
+  .sh-shedule-container
+  > .list-item:nth-child(4)
+  .sh-shedule::before {
+  background-color: $info;
+}
+.sh-calendar {
+  height: 35px;
+  line-height: 1;
+  width: 80px;
+}
+
+.project-list {
+  list-style: none;
+  position: relative;
+  margin: 0;
+  padding: 0px 0 0;
+  color: $custom-black;
+}
+.project-list:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 0;
+  height: 90%;
+  inset-inline-start: 9px;
+  border-inline-start: 1px dashed $default-border;
+}
+.project-list li .task-icon {
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 5px;
+  border-radius: 50px;
+  padding: 2px;
+  width: 17px;
+  height: 17px;
+  z-index: 2;
+  border: $light 4px solid;
+  transform: rotate(315deg);
+}
+.project-list li {
+  position: relative;
+}
+.project-list li {
+  margin-block-end: 30px;
+  padding-inline-start: 40px;
+  position: relative;
+}
+
+/* End:: Projects Dashboard */
+
+/* Start:: sales Dashboard */
+.todo-tab {
+  .nav-tabs {
+    li {
+      margin-block-start: 0.25rem;
+    }
+  }
+  .tabs-menu ul {
+    padding: 5px 10px !important;
+    background: $default-background;
+    border-radius: 8px;
+    border-bottom: 0 $default-border;
+  }
+  .tab-menu-heading {
+    padding: 0px;
+    border-bottom: 0px solid !important;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .tabs-menu ul li a {
+    padding: 7px 20px;
+  }
+  .tabs-menu ul li a.active {
+    background: $white;
+    border-radius: 8px;
+  }
+  .nav.panel-tabs a.active {
+    color: $primary;
+  }
+  .tabs-menu ul li a {
+    padding: 10px 12px 11px 13px;
+    display: block;
+    color: $custom-black;
+  }
+  .todolist label {
+    margin-block-end: 1.2rem;
+    padding-inline-start: 1.2rem;
+  }
+  .todolist :last-child {
+    margin-block-end: 0;
+  }
+  .todolist :last-child {
+    margin-block-end: 0;
+  }
+  .custom-control-label {
+    margin-inline-start: 10px;
+  }
+}
+.task-list {
+  list-style: none;
+  position: relative;
+  margin: 0;
+  padding: 0px 0 0;
+  color: $custom-black;
+}
+.task-list:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 0;
+  height: 90%;
+  inset-inline-start: 9px;
+  border-inline-start: 1px dashed $default-border;
+}
+.task-list li .task-icon {
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 5px;
+  border-radius: 1px;
+  padding: 2px;
+  width: 17px;
+  height: 17px;
+  z-index: 2;
+  border: $light 4px solid;
+  transform: rotate(315deg);
+}
+.task-list li {
+  position: relative;
+}
+.task-list li {
+  margin-block-end: 21px;
+  padding-inline-start: 40px;
+  position: relative;
+}
+ul {
+  list-style-type: none;
+  padding: 0px;
+  // margin: 0px;
+}
+.svg-icon {
+  width: 47px;
+  height: 47px;
+  padding: 10px;
+  border-radius: 5px;
+}
+#avgsales .apexcharts-radialbar-track.apexcharts-track path {
+  stroke: $primary-02;
+}
+.apexcharts-datalabels-group .apexcharts-text.apexcharts-datalabel-value {
+  fill: $default-text-color !important;
+  font-size: 22px;
+  font-weight: 700;
+}
+.apexcharts-datalabel-label {
+  fill: $default-text-color !important;
+}
+#sparkline8 svg {
+  overflow: inherit;
+  .apexcharts-grid line {
+    stroke: none;
+  }
+}
+#applicantStats .apexcharts-marker {
+  stroke: #fff;
+}
+.apexcharts-toolbar {
+  display: none !important;
+}
+
+.card.custom-card.crm-highlight-card {
+  position: relative;
+  overflow: hidden;
+  background-color: $primary;
+  box-shadow: none;
+
+  &::after {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    background-image: url(../images/media/media-65.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+    opacity: 0.2;
+  }
+
+  &::before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background-color: $custom-white;
+  }
+
+  .card-body {
+    z-index: 10;
+  }
+}
+/* End:: sales Dashboard */
+
+/* Start:: HRM Dashboard */
+
+.up-event-container {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background-color: $light;
+    top: 0;
+    inset-inline-start: 68px;
+  }
+  > .up-event {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      padding: 2px;
+      height: 10px;
+      width: 10px;
+      border-radius: 10px;
+      border: 2px solid $primary-02;
+      background-color: $custom-white;
+      inset-inline-start: 64px;
+      top: 6px;
+    }
+    > .sub-event {
+      margin-block-start: 1.5rem;
+      padding-inline-start: 4.5rem;
+    }
+  }
+}
+
+.up-event-calendar {
+  height: 35px;
+  line-height: 1;
+
+  &:not(option) {
+    font-weight: 500;
+  }
+}
+
+/* End:: HRM Dashboard */
+
+/* Start:: Personal  Dashboard */
+#personal-balance {
+  .apexcharts-canvas {
+    width: 100% !important;
+  }
+  svg {
+    width: 100%;
+  }
+}
+/* End:: Personal Dashboard */
+
+/* Start:: Course Dashboard */
+.category-link {
+  padding: 1.25rem;
+  border-radius: 7px;
+  border: 1px solid $default-border;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $default-text-color;
+  transition: all ease 0.3s;
+}
+.category-link .category-svg {
+  height: 30px;
+  width: 30px;
+  fill: $primary;
+  margin-bottom: 0.6rem;
+  display: block;
+  margin: 0 auto;
+}
+.category-link:not(.active):hover,
+.category-link.active {
+  color: #fff !important;
+  background-color: $primary;
+  border-color: $primary;
+}
+.category-link:not(.active):hover .category-svg,
+.category-link.active .category-svg {
+  fill: #fff !important;
+}
+#payoutsReport {
+  .apexcharts-legend {
+    display: none;
+  }
+  .apexcharts-xaxis {
+    display: none;
+  }
+}
+
+.course-schedule {
+  position: relative;
+}
+.course-schedule::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -10px;
+  top: 0;
+  height: 90%;
+  width: 0.2rem;
+  border-radius: 0.25rem;
+  background-color: rgb(var(--success-rgb));
+}
+.Upcoming-courses-schedule > .list-item:nth-child(2) .course-schedule::before {
+  background-color: $pink;
+}
+.Upcoming-courses-schedule > .list-item:nth-child(3) .course-schedule::before {
+  background-color: $warning;
+}
+.Upcoming-courses-schedule > .list-item:nth-child(4) .course-schedule::before {
+  background-color: $info;
+}
+.Upcoming-courses-schedule > .list-item:nth-child(5) .course-schedule::before {
+  background-color: $secondary;
+}
+#payoutsReport {
+  min-height: 0 !important;
+  .apexcharts-canvas {
+    height: 210px !important;
+  }
+}
+/* End:: Course Dashboard */
+#crm-total-deals,
+#crm-total-customers,
+#crm-total-revenue,
+#crm-conversion-ratio,
+#analytics-visitors,
+#Bounce-Rate,
+#Page-Views,
+#personal-balance {
+  .apexcharts-grid line {
+    stroke: none;
+  }
+}
+#personal-balance {
+  .apexcharts-legend {
+    display: none;
+  }
+}
+.sales-transaction-history-list {
+  li {
+    margin-block-end: 1.45rem;
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}
+
+[dir=rtl] #dealsSource .apexcharts-canvas .apexcharts-yaxis .apexcharts-yaxis-texts-g{
+  transform: translate(-2.75rem, 0);
+}

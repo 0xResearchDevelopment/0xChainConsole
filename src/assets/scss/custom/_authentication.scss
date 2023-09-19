@@ -1,0 +1,214 @@
+.authentication {
+    .card.custom-card {
+        box-shadow: 0 1rem 2.1rem rgb(0 0 0 / 5%);
+        margin-block-end: 6rem;
+    }
+    min-height: 100vh;
+    .authentication-brand {
+        &.desktop-logo {
+            display: block;
+        }
+        &.desktop-dark {
+            display: none;
+        }
+    }
+    .swiper-button-next, .swiper-button-prv {
+        background-color: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.5) !important;
+    }
+    .swiper-pagination-bullet {
+        opacity: 0.1;
+    }
+    .swiper-pagination-bullet-active {
+        opacity: 0.5;
+    }
+    &.coming-soon,&.under-maintenance {
+        .authentication-cover {
+            background-image: url(../images/media/media-19.jpg);
+            .aunthentication-cover-content {
+                width: 100%;
+                height: 100%;
+                padding: 3rem;
+                backdrop-filter: none;
+                background-color: $custom-white;
+                &:before,&:after {
+                    display: none;
+                }
+                .coming-soon-time,.under-maintenance-time {
+                    border: 2px dashed $black-1;
+                }
+                .authentication-brand {
+                    width: auto;
+                    height: auto;
+                    border: 0;
+                }
+            }
+        }
+    }
+    .coming-soom-image-container,.under-maintenance-image-container {
+        img{
+            width: 100%;
+            height: auto;
+        }
+    }
+    .authentication-cover {
+        background-image: url(../images/authentication/1.jpg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        
+        &:before {
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            inset-block-start: 0;
+            inset-block-end: 0;
+            background-color: rgba(38, 44, 60, 0.98);
+            // background-color: $primary;
+            opacity: 0.97;
+            border-inline-start: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .aunthentication-cover-content {
+            width: 70%;
+            height: 37.5rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(1.875rem);
+            padding: 2rem;
+            position: relative;
+            img {
+                margin: 0 auto;
+                width: 13.75rem;
+                height: 13.75rem;
+            }
+        }
+        .authentication1{
+            width: 140px;
+            position: absolute;
+            z-index: 0;
+            opacity: .06;
+            inset-block-start: 0rem;
+            inset-inline-end: 15rem;
+        }
+        .authentication2{
+            width: 300px;
+            bottom: 5px;
+            position: absolute;
+            opacity: .02;
+            left: 0px;
+            transform: rotate(358deg);
+         }
+        .cover-dark-logo{
+            position: absolute;
+            inset-block-start: 2rem;
+            inset-inline-start: 2rem;
+        }
+        .authentication-footer{
+            position: absolute;
+            inset-inline-end: 2rem;
+            inset-block-end: 2rem;
+        }
+    }
+    &.authentication-basic {
+        .desktop-dark {
+            display: none;
+        }
+        .desktop-logo {
+            display: block;
+        }
+    }
+}
+
+.authentication-barrier {
+    position: relative;
+    span {
+        position: relative;
+        z-index: 2;
+    }
+    &:before {
+        position: absolute;
+        content: "";
+        width: 45%;
+        height: 0.125rem;
+        background-image: linear-gradient(to left, transparent, $light);
+        border-radius: 50%;
+        inset-inline-end: 0;
+        inset-block-start: 0.563rem;
+        z-index: 1;
+    }
+    &:after {
+        position: absolute;
+        content: "";
+        width: 45%;
+        height: 0.125rem;
+        background-image: linear-gradient(to left, $light, transparent);
+        border-radius: 50%;
+        inset-inline-start: 0;
+        inset-block-start: 0.563rem;
+        z-index: 1;
+    }
+}
+
+.cover-background{
+    background-image: url(../images/authentication/4.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 0;
+    // border-radius: 0px $default-radius $default-radius 0px;
+    
+    &:before {
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
+        background-color: $primary-08;
+        z-index: -1;
+        // border-radius: 0px $default-radius $default-radius 0px;
+    }
+
+}
+
+.google-svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-inline-end: 0.5rem;
+}
+[data-theme-mode="dark"] {
+    .authentication {
+        &.authentication-basic {
+            .desktop-dark {
+                display: block;
+            }
+            .desktop-logo {
+                display: none;
+            }
+        }
+        .authentication-brand {
+            &.desktop-logo {
+                display: none;
+            }
+            &.desktop-dark {
+                display: block;
+            }
+        }
+    }
+}
