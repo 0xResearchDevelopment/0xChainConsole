@@ -30,7 +30,7 @@ function browsersyncFn(callback) {
 			baseDir: [baseDir, baseDir + '/html'],							// Specify the base path of the project
 			// index: "html/index.html"										// Has to specify the initial page in case not the index.html
 		},
-		port: 1111,															// Used to change the port number
+		port: 2000,															// Used to change the port number
 		// tunnel: 'technology', 											// Attempt to use the URL https://someTunnelName.loca.lt
 	});
 	callback();
