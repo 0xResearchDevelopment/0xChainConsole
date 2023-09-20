@@ -17,6 +17,7 @@
 
     <!-- Main Theme Js -->
     <script src="../assets/js/authentication-main.js"></script>
+    <script src="../assets/js/services-integration.js"></script>
 
     <!-- Bootstrap Css -->
     <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
@@ -50,15 +51,19 @@
                                                 <p class="mb-3 text-muted op-7 fw-normal">Welcome & Join us by creating a free account !</p>
                                                 <div class="row gy-3 mt-3">
                                                     <div class="col-xl-12 mt-0">
-                                                        <label for="signin-username" class="form-label text-default">Full Name</label>
-                                                        <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="user name">
+                                                        <label for="signup-fullname" class="form-label text-default">Full Name</label>
+                                                        <input type="text" class="form-control form-control-lg" id="signup-fullname" placeholder="user name">
                                                     </div>
                                                     <div class="col-xl-12">
-                                                        <label for="signup-lastname" class="form-label text-default">Email</label>
-                                                        <input type="email" class="form-control form-control-lg" id="signup-lastname" placeholder="emali">
+                                                        <label for="signup-email" class="form-label text-default">Email</label>
+                                                        <input type="email" class="form-control form-control-lg" id="signup-email" placeholder="email">
+                                                    </div>
+                                                    <div class="col-xl-12">
+                                                        <label for="signup-password" class="form-label text-default">Password</label>
+                                                        <input type="password" class="form-control form-control-lg" id="signup-password" placeholder="password">
                                                     </div>
                                                     <div class="col-xl-12 d-grid mt-2">
-                                                        <a href="sign-up-verification.html" class="btn btn-lg btn-primary">Create Account</a>
+                                                        <a onclick="signup()" class="btn btn-lg btn-primary">Create Account</a>
                                                     </div>
                                                 </div>
                                                 <div class="text-center">
