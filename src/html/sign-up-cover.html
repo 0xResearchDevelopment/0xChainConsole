@@ -17,6 +17,11 @@
 
     <!-- Main Theme Js -->
     <script src="../assets/js/authentication-main.js"></script>
+
+    <!-- Axios dependency-->
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+    <!-- API Integration & functionalities-->
     <script src="../assets/js/services-integration.js"></script>
 
     <!-- Bootstrap Css -->
@@ -43,6 +48,20 @@
                     <div class="row justify-content-center ">
                         <div class="col-xl-8 col-md-12 col-sm-10 ">
                             <div class="card custom-card  rectangle2">
+
+                <!--toast here start-->
+                <div class="toast align-self-center align-items-center text-bg-success border-0 fade show mb-1"
+                    role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            Hello, world! This is the Success toast message.
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+                <!--toast end start-->
+
                                 <div class="card-body p-0 ">
                                     <div class="row">
                                         <div class="col-xl-6 col-md-6 pe-sm-0 d-flex">
@@ -51,8 +70,12 @@
                                                 <p class="mb-3 text-muted op-7 fw-normal">Welcome & Join us by creating a free account !</p>
                                                 <div class="row gy-3 mt-3">
                                                     <div class="col-xl-12 mt-0">
-                                                        <label for="signup-fullname" class="form-label text-default">Full Name</label>
-                                                        <input type="text" class="form-control form-control-lg" id="signup-fullname" placeholder="user name">
+                                                        <label for="signup-fname" class="form-label text-default">First Name</label>
+                                                        <input type="text" class="form-control form-control-lg" id="signup-fname" placeholder="first name">
+                                                    </div>
+                                                    <div class="col-xl-12 mt-0">
+                                                        <label for="signup-lname" class="form-label text-default">Last Name</label>
+                                                        <input type="text" class="form-control form-control-lg" id="signup-lname" placeholder="last name">
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <label for="signup-email" class="form-label text-default">Email</label>
@@ -63,7 +86,7 @@
                                                         <input type="password" class="form-control form-control-lg" id="signup-password" placeholder="password">
                                                     </div>
                                                     <div class="col-xl-12 d-grid mt-2">
-                                                        <a onclick="signup()" class="btn btn-lg btn-primary">Create Account</a>
+                                                        <a onclick="signUp()" class="btn btn-lg btn-primary">Create Account</a>
                                                     </div>
                                                 </div>
                                                 <div class="text-center">

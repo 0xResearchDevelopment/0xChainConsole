@@ -18,6 +18,12 @@
     <!-- Main Theme Js -->
     <script src="../assets/js/authentication-main.js"></script>
 
+    <!-- Axios dependency-->
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+    <!-- API Integration & functionalities-->
+    <script src="../assets/js/services-integration.js"></script>
+
     <!-- Bootstrap Css -->
     <link id="style" href="../assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" >
 
@@ -53,7 +59,7 @@
                                 <div class="row gy-3">
                                     <div class="col-xl-12 mb-2">
                                     <div class="col-xl-12 d-grid mt-2">
-                                        <a href="sign-in-cover.html" class="btn btn-lg btn-primary">Verify</a>
+                                        <a onclick="verifyAccount()" class="btn btn-lg btn-primary">Verify</a>
                                     </div>
                                 </div>
                             </div>
