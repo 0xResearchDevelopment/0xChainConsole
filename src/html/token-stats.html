@@ -1,0 +1,79 @@
+@SPK@include("partials/mainhead.html")
+
+</head>
+
+<body>
+
+    @SPK@include("partials/switcher.html")
+    @SPK@include("partials/loader.html")
+
+    <div class="page">
+        @SPK@include("partials/header.html")
+        @SPK@include("partials/sidebar.html")
+        @SPK@include("partials/page-header.html", {"title": "Token Stats", "subtitle": 'MATICBTC'})
+
+        <!-- Start::app-content -->
+        <div class="main-content app-content">
+            <div class="container-fluid">
+
+
+                <!-- Start::row-1 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-0">Show token-name, icons, progress-gaph, recent activities, stats</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End::row-1 -->
+
+                <!-- Start::row-1 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-0">Show token-name, icons, progress-gaph, recent activities, stats</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End::row-1 -->
+
+
+                <!-- Start::row-1 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-body">
+                                <h6 class="card-title fw-semibold mb-0">Show token-name, icons, progress-gaph, recent activities, stats</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--End::row-1 -->
+                <a href="index.html" class="btn btn-primary"><i class="ri-arrow-left-line align-middle me-1 d-inline-block"></i>Back to Home</a>
+            </div>
+        </div>
+        <!-- End::app-content -->
+
+        @SPK@include("partials/headersearch_modal.html")
+        @SPK@include("partials/footer.html")
+        @SPK@include("partials/side-bar.html")
+
+    </div>
+
+    @SPK@include("partials/commonjs.html")
+
+    @SPK@include("partials/custom_switcherjs.html")
+
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
+
+    <!-- API Integration & functionalities-->
+    <script src="../assets/js/services-integration.js"></script>
+
+</body>
+
+</html>
