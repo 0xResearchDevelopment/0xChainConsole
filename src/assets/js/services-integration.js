@@ -1,5 +1,5 @@
 
-const signUp = async() =>  {
+var signUp = async() =>  {
 
     const myBody = {
         "name_first":document.getElementById("signup-fname").value,
@@ -27,7 +27,7 @@ const signUp = async() =>  {
     }
     else if(myJson.code == 201){
         alert(JSON.stringify(myJson.message)); 
-        sessionStorage.setItem('verfication-token', myJson.results.verification.token);
+        sessionStorage.setItem('verficationToken', myJson.results.verification.token);
         location.href = "sign-up-verification.html";
     }
 
@@ -51,8 +51,7 @@ const signUp = async() =>  {
         console.log(res);
         if(res.status == 201){
             alert(JSON.stringify(myJson.message)); 
-            //localStorage.setItem('verfication-token', myJson.results.verification.token);
-            sessionStorage.setItem('verfication-token', myJson.results.verification.token);
+            sessionStorage.setItem('verficationToken', myJson.results.verification.token);
             location.href = "sign-up-verification.html";
         }
     })
@@ -65,15 +64,15 @@ const signUp = async() =>  {
 
 };
 
-const verifyAccount = () =>  {
-    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/'+sessionStorage.getItem('verfication-token');
+var verifyAccount = () =>  {
+    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/'+sessionStorage.getItem('verficationToken');
 
     axios.get(verifyAccountUrl)
     .then(res=>{
         console.log(res);
         if(res.status == 200){
             alert(res.data.message);
-            sessionStorage.removeItem('verfication-token');
+            sessionStorage.removeItem('verficationToken');
             location.href = "sign-in-cover.html";
         }
     }).catch(err=>{
@@ -82,7 +81,7 @@ const verifyAccount = () =>  {
     })
 };
 
-const signIn = () => {
+var signIn = () => {
     axios
         .post(
             'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
@@ -96,7 +95,7 @@ const signIn = () => {
             if(res.status == 200){
                 alert(res.data.message);
                 console.log(res.data.results.token);
-                localStorage.setItem('auth-token', res.data.results.token);
+                localStorage.setItem('authToken', res.data.results.token);
                 location.href = "index.html";
             }
         })
@@ -104,6 +103,35 @@ const signIn = () => {
             console.log(err.response);
             if(err.response.status == 422) {
                 alert(err.response.data.errors);
+                document.getElementById("signin-username").value = '';
+                document.getElementById("signin-password").value = '';
             }
         });
 };
+
+
+var getUserProfile = () => {
+    console.log("inside getUserProfile");
+    const authToken = localStorage.getItem('authToken');
+    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+    axios
+    .get(
+        'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        }
+        )
+    .then(res=>{
+        console.log("inside res");
+        if(res.status == 200){
+            console.log(res.data);
+            document.getElementById("header-user-name").innerHTML = res.data.profile.NAME_FIRST;
+        }
+    }).catch(err=>{
+        console.log("inside err");
+        console.log(err,err.response);
+        location.href = "sign-in-cover.html";
+    })
+}

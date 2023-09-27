@@ -1,8 +1,15 @@
 @SPK@include("partials/mainhead.html")
 <link rel="stylesheet" href="../assets/libs/jsvectormap/css/jsvectormap.min.css">
 <link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
+
+<!-- Axios dependency-->
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+<!-- API Integration & functionalities-->
+<script src="../assets/js/services-integration.js"></script>
+
 </head>
-<body>
+<body onload="getUserProfile()">
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
     <div class="page">
