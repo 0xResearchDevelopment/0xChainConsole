@@ -124,10 +124,11 @@ var getUserProfile = () => {
             }
         )
         .then(res => {
-            console.log("inside res");
             if (res.status == 200) {
                 console.log(res.data);
-                document.getElementById("header-user-name").innerHTML = res.data.profile.NAME_FIRST;
+                var username = res.data.profile.NAME_FIRST + " " + res.data.profile.NAME_LAST;
+                console.log("# inside getUserProfile - res - username:", username);
+                document.getElementById("header-user-name").innerHTML = username;
             }
         }).catch(err => {
             console.log("inside err");
@@ -135,8 +136,6 @@ var getUserProfile = () => {
             location.href = "sign-in-cover.html";
         })
 }
-
-
 
 var navigateTokenStats = () => {
     location.href = "token-stats.html";
