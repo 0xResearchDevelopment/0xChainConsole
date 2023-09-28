@@ -131,7 +131,7 @@ var getUserProfile = () => {
                 for (let i = 0; i < subscribedBots.length; i++) {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT);
+                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME);
                 }
             }
         }).catch(err => {
@@ -141,7 +141,7 @@ var getUserProfile = () => {
         })
 }
 
-var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount) => {
+var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount, tradeTimeframe) => {
     const colDiv = document.createElement('div');
     colDiv.id = 'col-div';
     colDiv.setAttribute("class", "col card-background");
@@ -160,8 +160,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoO
     
     const flex1Child1Div = document.createElement('div');
     flex1Child1Div.id = 'flex1-child1-div';
-    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted">${tradeSymbol}</p>
-    <h3 class="mb-0">${lastTradeQty}</h3>`;
+    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted">${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
 
     const flex1Child2Div = document.createElement('div');
     flex1Child2Div.id = 'flex1-child2-div';
@@ -171,12 +170,17 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoO
     const flex2Div = document.createElement('div');
     flex2Div.id = 'flex2-div';
     flex2Div.setAttribute("class", "d-flex mt-2");
-    flex2Div.innerHTML = `<small style="font-weight:bold;">Trade#: ${totalNoOfTrades} (${lastTradedDate})</small>`
+    flex2Div.innerHTML = `<p class="fw-medium mb-1 text-muted">Trades : ${totalNoOfTrades}</p>`
+
+    const flex5Div = document.createElement('div');
+    flex5Div.id = 'flex5-div';
+    flex5Div.setAttribute("class", "d-flex mt-2");
+    flex5Div.innerHTML = `<small style="font-weight:bold;">As of : ${lastTradedDate}</small>`
 
     const flex3Div = document.createElement('div');
     flex3Div.id = 'flex3-div';
     flex3Div.setAttribute("class", "d-flex");
-    flex3Div.innerHTML = `<small style="font-weight:bold;">Invested: ${tokenEntryAmount}</small>`
+    flex3Div.innerHTML = `<small style="font-weight:bold;">Invested : ${tokenEntryAmount}</small>`
 
     const flex4Div = document.createElement('div');
     flex4Div.id = 'flex4-div';
@@ -190,7 +194,6 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoO
         <a href="javascript:void(0);" onclick="navigateTokenStats()" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">view more</a>`
     }
 
-
     const containerDiv = document.getElementById("dashboard-box-container");
     containerDiv.appendChild(colDiv);
     colDiv.appendChild(cardDiv);
@@ -199,6 +202,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenUrl,totalNoO
     flex1Div.appendChild(flex1Child1Div);
     flex1Div.appendChild(flex1Child2Div);
     cardBodyDiv.appendChild(flex2Div);
+    cardBodyDiv.appendChild(flex5Div);
     cardBodyDiv.appendChild(flex3Div);
     cardBodyDiv.appendChild(flex4Div);
 }
