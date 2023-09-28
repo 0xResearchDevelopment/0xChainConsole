@@ -12250,6 +12250,10 @@ ul {
   stroke: var(--primary02);
 }
 
+#avgNetProfit .apexcharts-radialbar-track.apexcharts-track path {
+  stroke: var(--primary02);
+}
+
 .apexcharts-datalabels-group .apexcharts-text.apexcharts-datalabel-value {
   fill: var(--default-text-color) !important;
   font-size: 22px;

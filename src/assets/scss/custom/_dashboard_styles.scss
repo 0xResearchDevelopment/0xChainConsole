@@ -952,6 +952,10 @@ ul {
 #avgsales .apexcharts-radialbar-track.apexcharts-track path {
   stroke: $primary-02;
 }
+
+#avgNetProfit .apexcharts-radialbar-track.apexcharts-track path {
+  stroke: $primary-02;
+}
 .apexcharts-datalabels-group .apexcharts-text.apexcharts-datalabel-value {
   fill: $default-text-color !important;
   font-size: 22px;
