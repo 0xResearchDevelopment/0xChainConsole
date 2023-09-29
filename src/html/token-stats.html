@@ -6,7 +6,7 @@
 
 </head>
 
-<body>
+<body onload="getTokenStats()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -39,12 +39,12 @@
                                                             <p class="mb-0  text-muted">Bot Name</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-18 mb-0 font-weight-normal">MATICBTC</h3> <!-- TRADE_SYMBOL -->
+                                                            <h3 class="fs-18 mb-0 font-weight-normal" id="bot-name">MATICBTC</h3> <!-- TRADE_SYMBOL -->
                                                             <div class="avatar avatar-md br-4 ms-auto">
-                                                                <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png" class="fs-20"><img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" class="fs-20"> <!-- ICONS -->
+                                                                <img id="token-icon" src="" class="fs-20"><img id="base-icon" src="" class="fs-20"> <!-- ICONS -->
                                                             </div>
                                                         </div>
-                                                        <span class="badge bg-info-transparent">30m, Binance</span> <!-- TRADE_TIMEFRAME-->
+                                                        <span class="badge bg-info-transparent" id="time-frame">30m, Binance</span> <!-- TRADE_TIMEFRAME-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -61,13 +61,13 @@
                                                     </div>
                                                     <div class="flex-1">
                                                         <div class="">
-                                                            <p class="mb-0  text-muted">Trades & Netprofit</p>
+                                                            <p class="mb-0 text-muted">Trades & Netprofit</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-20 mb-0 font-weight-normal">4238</h3> <!-- TOTAL_NUMOF_TRADES -->
-                                                            <span class="text-danger fs-18"><i class="ti ti-arrow-down-right me-1 fs-18"></i>-24.31%</span>  <!-- TOKEN_NETPROFIT -> show text-danger if negative, text-success if its positive-->
+                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="total-trades"></h3> <!-- TOTAL_NUMOF_TRADES -->
+                                                            <span class="text-danger fs-18"><i class="ti ti-arrow-down-right me-1 fs-18"></i><span id="net-profit"></span><span>%</span></span>  <!-- TOKEN_NETPROFIT -> show text-danger if negative, text-success if its positive-->
                                                         </div>
-                                                        <span class="badge bg-blue-transparent">As of: Last_TRADE_DATE</span> 
+                                                        <span class="badge bg-blue-transparent">As of: <span id="traded-date2"></span></span> 
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,10 +87,10 @@
                                                             <p class="mb-0  text-muted">Investment</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-20 mb-0 font-weight-normal">14407.76</h3>
+                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="investment"></h3>
                                                             <span class="text-blue"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>
                                                         </div>
-                                                        <span class="badge bg-blue-transparent">SUBSCRIBED_ON</span>
+                                                        <span class="badge bg-blue-transparent" id="subscribed-on"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,10 +110,10 @@
                                                             <p class="mb-0  text-muted">Last Traded & Balance</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-20 mb-0 font-weight-normal">10960.23</h3>
+                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="traded-qty"></h3>
                                                             <span class="text-purple"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>
                                                         </div>
-                                                        <span class="badge bg-purple-transparent">LAST_TRADE_DATE</span>
+                                                        <span class="badge bg-purple-transparent" id="traded-date1"></span>
                                                     </div>
                                                 </div>
                                             </div>

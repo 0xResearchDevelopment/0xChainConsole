@@ -1,7 +1,8 @@
-
+const statsSummaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
 /* starts : chainview - netprofit summary pie-chart */
+console.log("chart: ",statsSummaryObj);
 var options = {
-    series: [-14.4],  /* get this value from loacl storage */
+    series: [statsSummaryObj.AVG_USER_SUB_NETPROFIT],  /* get this value from loacl storage*/
     chart: {
         height: 295,
         type: "radialBar",

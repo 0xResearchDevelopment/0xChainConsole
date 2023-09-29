@@ -1,3 +1,4 @@
+const delayInMS = 3000;
 
 var signUp = async () => {
 
@@ -19,16 +20,19 @@ var signUp = async () => {
 
     const myJson = await response.json();
     if (myJson.code == 422) {
-        alert(JSON.stringify(myJson.errors.msg));
+        showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
         document.getElementById("signup-fname").value = '';
         document.getElementById("signup-lname").value = '';
         document.getElementById("signup-email").value = '';
         document.getElementById("signup-password").value = '';
     }
     else if (myJson.code == 201) {
-        alert(JSON.stringify(myJson.message));
+        showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
         sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-        location.href = "sign-up-verification.html";
+        setTimeout(()=> {
+            window.location.href = "sign-up-verification.html";
+         }
+         ,delayInMS);
     }
 
     /*await axios
@@ -71,9 +75,13 @@ var verifyAccount = () => {
         .then(res => {
             console.log(res);
             if (res.status == 200) {
-                alert(res.data.message);
+                showToastAlerts('verification-success','alert-success-msg',res.data.message);
                 sessionStorage.removeItem('verficationToken');
-                location.href = "sign-in-cover.html";
+                setTimeout(()=> {
+                    window.location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+
             }
         }).catch(err => {
             console.log(err, err.response);
@@ -93,16 +101,19 @@ var signIn = () => {
         .then(res => {
             console.log("res: " + res);
             if (res.status == 200) {
-                alert(res.data.message);
+                showToastAlerts('signin-success','alert-success-msg',res.data.message);
                 console.log(res.data.results.token);
                 localStorage.setItem('authToken', res.data.results.token);
-                location.href = "index.html";
+                setTimeout(()=> {
+                    window.location.href='index.html';
+                 }
+                 ,delayInMS);
             }
         })
         .catch(err => {
             console.log(err.response);
             if (err.response.status == 422) {
-                alert(err.response.data.errors);
+                showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
             }
         });
 };
@@ -127,12 +138,23 @@ var getUserProfile = () => {
                 var username = res.data.profile.NAME_FIRST + " " + res.data.profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
                 document.getElementById("header-user-name").innerHTML = username;
+                const subscribtionStatsSummary = (res.data.subscribedBots!=undefined)?res.data.subscribtionStatsSummary:{};
                 const subscribedBots = (res.data.subscribedBots!=undefined)?res.data.subscribedBots:[];
+                localStorage.setItem('subscribedBotsArr', JSON.stringify(subscribedBots));
                 for (let i = 0; i < subscribedBots.length; i++) {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME);
+                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,i);                      
                 }
+
+                document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
+                document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
+
+                const profileObj = JSON.stringify(res.data.profile);
+                const statsSummaryObj = JSON.stringify(subscribtionStatsSummary);
+
+                localStorage.setItem('profileObj', profileObj); 
+                localStorage.setItem('statsSummaryObj', statsSummaryObj);
             }
         }).catch(err => {
             console.log("inside err");
@@ -141,7 +163,7 @@ var getUserProfile = () => {
         })
 }
 
-var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount, tradeTimeframe) => {
+var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount,tradeTimeframe,index) => {
     const colDiv = document.createElement('div');
     colDiv.id = 'col-div';
     colDiv.setAttribute("class", "col card-background");
@@ -187,11 +209,11 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     flex4Div.setAttribute("class", "d-flex mt-2");
     if(netProfit>0){
         flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span>
-        <a href="javascript:void(0);" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${index})" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
     }
     else{
         flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats()" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${index})" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
     }
 
     const containerDiv = document.getElementById("dashboard-box-container");
@@ -207,6 +229,37 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex4Div);
 }
 
-var navigateTokenStats = () => {
+var navigateTokenStats = (index) => {
+    const subscribedBots = JSON.parse(localStorage.getItem('subscribedBotsArr'));
+    localStorage.setItem('selectedBotObj', JSON.stringify(subscribedBots[index]));
     location.href = "token-stats.html";
 };
+
+var showToastAlerts = (divId,spanId,msg) => {
+    document.getElementById(spanId).innerHTML = msg;
+    const middlecentertoastExample = document.getElementById(divId);
+    const toast = new bootstrap.Toast(middlecentertoastExample,{delay: delayInMS});
+	toast.show();
+}
+
+var getTokenStats = () => {
+    const profileObj = JSON.parse(localStorage.getItem('profileObj'));
+    var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
+    document.getElementById("header-user-name").innerHTML = username;
+
+    const selectedBot = JSON.parse(localStorage.getItem('selectedBotObj'));
+
+    document.getElementById("bot-name").innerHTML = selectedBot.TRADE_SYMBOL;
+    document.getElementById("base-icon").src = selectedBot.BOT_BASE_ICON;
+    document.getElementById("token-icon").src = selectedBot.BOT_TOKEN_ICON;
+    document.getElementById("time-frame").innerHTML = selectedBot.BOT_NAME;
+    document.getElementById("total-trades").innerHTML = selectedBot.TOTAL_NUMOF_TRADES;
+    document.getElementById("net-profit").innerHTML = selectedBot.TOKEN_NETPROFIT;
+    document.getElementById("traded-date1").innerHTML = selectedBot.LAST_TRADED_DATE;
+
+    document.getElementById("investment").innerHTML = selectedBot.TOKEN_ENTRY_AMOUNT;
+    document.getElementById("subscribed-on").innerHTML = selectedBot.SUBSCRIBED_ON;
+    document.getElementById("traded-qty").innerHTML = selectedBot.LAST_TRADE_QTY;
+    document.getElementById("traded-date2").innerHTML = selectedBot.LAST_TRADED_DATE;
+};
+
