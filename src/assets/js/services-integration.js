@@ -263,3 +263,32 @@ var getTokenStats = () => {
     document.getElementById("traded-date2").innerHTML = selectedBot.LAST_TRADED_DATE;
 };
 
+var updateTier = (code) => {
+    console.log("### Inside updateTier:");
+    const authToken = localStorage.getItem('authToken');
+    axios.post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/upgradeTier',
+            {
+                newPlan: code
+            },
+            {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }            
+        })
+        .then(res => {
+            console.log("### Inside updateTier:res: " + res);
+            if (res.status == 200) {
+                showToastAlerts('signin-success','alert-success-msg',res.data.message);
+                console.log("### Inside updateTier:res.message:", res.data.message);
+                setTimeout(()=> {
+                    window.location.href='index.html';
+                 }
+                 ,delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log("### Inside updateTier:err.response", err.response.data.message);
+            showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
+        });
+};
