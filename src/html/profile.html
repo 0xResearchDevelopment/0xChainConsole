@@ -11,7 +11,7 @@
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/page-header.html", {"title": "Profile", "subtitle": 'Pages'})
+        @SPK@include("partials/page-header.html", {"title": "Profile", "subtitle": 'Status'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -23,40 +23,27 @@
                     <div class="col-xxl-12 col-xl-12">
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body d-sm-flex align-items-top p-4   main-profile-cover">
-                                <p class="avatar avatar-xxl avatar-rounded online me-3 my-auto">
-                                    <img src="../assets/images/faces/5.jpg" alt="">
+                                <p class="avatar avatar-xxl avatar-rounded online me-3 my-auto"> <!-- set user profile photo here-->
+                                    <img src="https://media.licdn.com/dms/image/C5103AQGLB6YkrrbcGA/profile-displayphoto-shrink_800_800/0/1544361508300?e=2147483647&v=beta&t=vfvEvKavEwAhA9HnSf_Xn3oAvTs261L9TnWJSWprhkM" alt="">
                                 </p>
                                 <div class="flex-fill main-profile-info my-auto">
-                                    <h5 class="fw-semibold mb-1 ">Json Taylor</h5>
+                                    <h5 class="fw-semibold mb-1 ">Firstname Lastname</h5>
                                     <div>
-                                        <p class="mb-1 text-muted">Chief Executive Officer (C.E.O)</p>
+                                        <p class="mb-1 text-muted">email address</p>
                                         <div class="fs-12 op-7 mb-0 d-flex">
-                                            <p class="me-3 mb-0"><i class="ri-building-line me-1 align-middle d-inline-flex"></i>Georgia</p>
-                                            <p class="mb-0"><i class="ri-map-pin-line me-1 align-middle d-inline-flex"></i>Washington D.C</p>
+                                            <p class="me-3 mb-0"><i class="ri-building-line me-1 align-middle d-inline-flex"></i>Primary-Phone</p>
+                                            <p class="mb-0"><i class="ri-map-pin-line me-1 align-middle d-inline-flex"></i>City, State, Country</p> <!-- get from api -->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="main-profile-info ms-auto">
                                     <div class="">
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <div class="d-flex mb-0 ms-auto">
-                                                <div class="me-4">
-                                                    <p class="fw-bold fs-20  text-shadow mb-0">113</p>
-                                                    <p class="mb-0 fs-12 text-muted ">Projects</p>
-                                                </div>
-                                                <div class="me-4">
-                                                    <p class="fw-bold fs-20  text-shadow mb-0">12.2k</p>
-                                                    <p class="mb-0 fs-12 text-muted ">Followers</p>
-                                                </div>
-                                                <div class="">
-                                                    <p class="fw-bold fs-20  text-shadow mb-0">128</p>
-                                                    <p class="mb-0 fs-12 text-muted ">Following</p>
-                                                </div>
-                                            </div>
+                                            <span>Last updated on : 03-Oct-23 11:30:13</span> <!-- get UPDATED_TS from user profile-->
                                         </div>
                                     </div>
                                     <div class="mb-0  mt-2 text-end">
-                                            <button type="button" class="btn btn-secondary btn-sm btn-wave"><i class="ri-add-line me-1 align-middle"></i>Follow</button>
+                                            <button type="button" class="btn btn-success btn-lg btn-wave"><i class="align-middle"></i>Active</button>
                                     </div>
 
                                 </div>
@@ -68,71 +55,53 @@
                            <div class="">
                             <div class="p-4 border-bottom border-block-end-dashed">
                                 <div>
-                                    <p class="fs-15 mb-2 fw-semibold">Profile Status :</p>
-                                    <p class="fw-semibold mb-2">Profile 60% completed - <a href="javscript:void(0);" class="text-primary fs-12">Finish now</a></p>
+                                    <p class="fs-15 mb-2 fw-semibold">Profile Status :</p> <!-- Show as 50% if roleCode is -2, show 100% when role is greatertahn -2-->
+                                    <p class="fw-semibold mb-2">Profile 50% completed</p> <!--when click finish now, redirect/show to "update profile tab"-->
                                     <div class="progress progress-sm progress-animate ">
-                                        <div class="progress-bar bg-primary  ronded-1" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
+                                        <div class="progress-bar bg-success  ronded-1" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-4 border-bottom border-block-end-dashed">
-                                <div class="">
-                                    <p class="fs-15 mb-2 fw-semibold">Professional Bio :</p>
-                                    <p class="fs-12 text-muted op-7 mb-0">
-                                        I am <b class="text-default">Sonya Taylor,</b> here by conclude that,i am the founder and managing director of the prestigeous company name laugh at all and acts as the cheif executieve officer of the company.
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, repellendus rem rerum excepturi aperiam ipsam.
-                                    </p>
-                                </div>
-                            </div>
                             <div class="p-4  border-bottom border-block-end-dashed">
-                                <p class="fs-15 mb-2 me-4 fw-semibold">Personal Info :</p>
                                 <ul class="list-group">
                                     <li class="list-group-item border-0">
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="me-2 fw-semibold">
-                                                Name :
+                                                First Name :
                                             </div>
-                                            <span class="fs-12 text-muted">Sonya Taylor</span>
+                                            <span class="fs-12 text-muted">Firstname</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="me-2 fw-semibold">
-                                                Email :
+                                                Last Name :
                                             </div>
-                                            <span class="fs-12 text-muted">sonyataylor231@gmail.com</span>
+                                            <span class="fs-12 text-muted">Lastname</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="me-2 fw-semibold">
-                                                Phone :
+                                                Display Name :
                                             </div>
-                                            <span class="fs-12 text-muted">+(555) 555-1234</span>
+                                            <span class="fs-12 text-muted">Display Name</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="me-2 fw-semibold">
-                                                Designation :
+                                                Current Tier :
                                             </div>
-                                            <span class="fs-12 text-muted">C.E.O</span>
+                                            <span class="fs-12 text-muted">RoleCode</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
                                         <div class="d-flex flex-wrap align-items-center">
                                             <div class="me-2 fw-semibold">
-                                                Age :
+                                                Subscribed on :
                                             </div>
-                                            <span class="fs-12 text-muted">28</span>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item border-0">
-                                        <div class="d-flex flex-wrap align-items-center">
-                                            <div class="me-2 fw-semibold">
-                                                Experience :
-                                            </div>
-                                            <span class="fs-12 text-muted">10 Years</span>
+                                            <span class="fs-12 text-muted">Create_Timestamp</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -144,7 +113,7 @@
                                         <span class="avatar avatar-sm avatar-rounded me-2 bg-info-transparent">
                                             <i class="ri-mail-line align-middle fs-14"></i>
                                         </span>
-                                        sonyataylor2531@gmail.com
+                                        emailaddress@gmail.com
                                     </p>
                                     <p class="mb-3">
                                         <span class="avatar avatar-sm avatar-rounded me-2 bg-warning-transparent">
@@ -159,1254 +128,279 @@
                                             </span>
                                         </p>
                                         <p class="mb-0">
-                                        MIG-1-11, Monroe Street, Georgetown, Washington D.C, USA,20071 </p>
+                                        Address, Location, Country </p>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="p-4 border-bottom border-block-end-dashed">
-                                <p class="fs-15 mb-2 me-4 fw-semibold">Skills :</p>
+                                <p class="fs-15 mb-2 me-4 fw-semibold">Active Bots :</p>
                                 <div>
                                     <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Cloud computing</span>
+                                        <span class="badge bg-light text-muted m-2">Bot1-name</span>
                                     </a>
                                     <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Data analysis</span>
+                                        <span class="badge bg-light text-muted m-2">Bot2-name</span>
                                     </a>
                                     <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">DevOps</span>
+                                        <span class="badge bg-light text-muted m-2">Bot3-name</span>
                                     </a>
                                     <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Machine learning</span>
+                                        <span class="badge bg-light text-muted m-2">Bot4-name</span>
                                     </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Programming</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Security</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Python</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">JavaScript</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Ruby</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">PowerShell</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">Statistics</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-1">SQL</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="p-4 border-bottom border-block-end-dashed d-flex align-items-center">
-                                <p class="fs-15 mb-2 me-4 fw-semibold">Social Networks :</p>
-                                <div class="btn-list mb-0">
-                                    <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-info-light btn-wave waves-effect waves-light">
-                                        <i class="ri-facebook-line"></i>
-                                    </button>
-                                    <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-secondary-light btn-wave waves-effect waves-light">
-                                        <i class="ri-twitter-line"></i>
-                                    </button>
-                                    <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-warning-light btn-wave waves-effect waves-light">
-                                        <i class="ri-instagram-line"></i>
-                                    </button>
-                                    <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-success-light btn-wave waves-effect waves-light">
-                                        <i class="ri-github-line"></i>
-                                    </button>
-                                    <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-danger-light btn-wave waves-effect waves-light">
-                                        <i class="ri-youtube-line"></i>
-                                    </button>
                                 </div>
                             </div>
                            </div>
                         </div>
                     </div>
                     <div class="col-xxl-9 col-xl-12">
-                        <div class="row">
-                            <div class="col-xl-12">
-                                <div class=" custom-card">
-                                    <div class="card-body p-0">
-                                        <div class="border-block-end-dashed  bg-white rounded-2 p-2">
-                                            <div>
-                                                <ul class="nav nav-pills nav-justified gx-3 tab-style-6 d-sm-flex d-block " id="myTab" role="tablist">
-                                                    <li class="nav-item rounded" role="presentation">
-                                                        <button class="nav-link active" id="activity-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#activity-tab-pane" type="button" role="tab"
-                                                            aria-controls="activity-tab-pane" aria-selected="true"><i
-                                                                class="ri-gift-line me-1 align-middle d-inline-block fs-16"></i>Activity</button>
-                                                    </li>
-                                                    <li class="nav-item rounded" role="presentation">
-                                                        <button class="nav-link" id="gallery-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#gallery-tab-pane" type="button" role="tab"
-                                                            aria-controls="gallery-tab-pane" aria-selected="false"><i
-                                                                class="ri-exchange-box-line me-1 align-middle d-inline-block fs-16"></i>Gallery</button>
-                                                    </li>
-                                                    <li class="nav-item rounded" role="presentation">
-                                                        <button class="nav-link" id="posts-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#posts-tab-pane" type="button" role="tab"
-                                                            aria-controls="posts-tab-pane" aria-selected="false"><i
-                                                                class="ri-bill-line me-1 align-middle d-inline-block fs-16"></i>Projects</button>
-                                                    </li>
-                                                    <li class="nav-item rounded" role="presentation">
-                                                        <button class="nav-link" id="followers-tab" data-bs-toggle="tab"
-                                                            data-bs-target="#followers-tab-pane" type="button" role="tab"
-                                                            aria-controls="followers-tab-pane" aria-selected="false"><i
-                                                                class="ri-money-dollar-box-line me-1 align-middle d-inline-block fs-16"></i>Friends</button>
-                                                    </li>
-                                                </ul>
+                        <!-- Start::row-1 -->
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card custom-card">
+                                <div class="card-body p-0 product-checkout">
+                                    <ul class="nav nav-tabs tab-style-6 nav-justified d-sm-flex d-block border-bottom border-block-end-dashed" id="myTab1" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="order-tab" data-bs-toggle="tab"
+                                                data-bs-target="#order-tab-pane" type="button" role="tab"
+                                                aria-controls="order-tab" aria-selected="true"><i
+                                                    class="ri-user-3-line me-2 align-middle d-inline-block"></i>Personal</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab"
+                                                data-bs-target="#confirm-tab-pane" type="button" role="tab"
+                                                aria-controls="confirmed-tab" aria-selected="false"><i
+                                                    class="ri-truck-line me-2 align-middle d-inline-block"></i>Connectivity</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="shipped-tab" data-bs-toggle="tab"
+                                                data-bs-target="#shipped-tab-pane" type="button" role="tab"
+                                                aria-controls="shipped-tab" aria-selected="false"><i
+                                                    class="ri-bank-card-line me-2 align-middle d-inline-block"></i>Payment</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="delivered-tab" data-bs-toggle="tab"
+                                                data-bs-target="#delivery-tab-pane" type="button" role="tab"
+                                                aria-controls="delivered-tab" aria-selected="false"><i
+                                                    class="ri-checkbox-circle-line me-2 align-middle d-inline-block"></i>Confirmation</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active border-0 p-0" id="order-tab-pane" role="tabpanel"
+                                            aria-labelledby="order-tab-pane" tabindex="0">
+                                            <div class="p-4">
+                                                <p class="mb-1 fw-semibold text-muted op-5 fs-20">01</p>
+                                                <div class="fs-15 fw-semibold d-sm-flex d-block align-items-center justify-content-between mb-3">
+                                                    <div>Personal Details :</div>
+                                                    <div class="mt-sm-0 mt-2">
+                                                        <!-- <button aria-label="button" type="button" class="btn btn-primary btn-sm"  data-bs-toggle="modal" data-bs-target="#modal-new-address"><i class="ri-add-line me-1 align-middle fs-14 fw-semibold"></i>Add New Address</button> -->
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="row gy-4 mb-4">
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="firstname-add" value="Sasi" placeholder="firstName">
+                                                            <label for="firstname-add">First Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="lastname-add" value="Siva" placeholder="lastName">
+                                                            <label for="lastname-add">Last Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="email-add" value="name@email.com" placeholder="emailAddress" readyonly>
+                                                            <label for="email-add">Email</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="displayname-add" value="SasSiv" placeholder="displayName">
+                                                            <label for="displayname-add">Display Name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-12">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="photourl-add" value="../assets/images/faces/1.jpg" placeholder="photourl">
+                                                            <label for="photourl-add">Profile Photo</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="email" class="form-control is-valid" id="primary-phoneno-add" value="+1(555) 555-1234" placeholder="1234-XX-XXXX">
+                                                            <label for="primary-phoneno-add">Primary Phone</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="email" class="form-control" id="secondary-phoneno-add" value="+1(555) 555-1234" placeholder="1234-XX-XXXX">
+                                                            <label for="secondary-phoneno-add">Secondary Phone</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="clientid-add" value="SASSIV2301" placeholder="clientid">
+                                                            <label for="clientid-add">Client ID</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-6">
+                                                        <div class="form-floating">
+                                                            <textarea class="form-control" placeholder="Address Here" id="address-add">MIG-1-11,Monroe Street</textarea>
+                                                            <label for="address-add">Address</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-12">
+                                                        <div class="row gy-2">
+                                                            <div class="col-xl-3">
+                                                                <div class="form-floating">
+                                                                    <input type="text" class="form-control" id="pincode-add" value="28262" placeholder="Name">
+                                                                    <label for="pincode-add">Pin Code</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3">
+                                                                <div class="form-floating">
+                                                                    <input type="text" class="form-control" id="city-add" value="Charlotte" placeholder="Name">
+                                                                    <label for="city-add">City</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3">
+                                                                <div class="form-floating">
+                                                                    <input type="text" class="form-control" id="state-add" value="North Carolina" placeholder="Name">
+                                                                    <label for="state-add">State</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-xl-3">
+                                                                <div class="form-floating">
+                                                                    <input type="text" class="form-control" id="country-add" value="USA" placeholder="Name">
+                                                                    <label for="country-add">Country</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
+                                                <button type="button" class="btn btn-success d-inline-flex" id="personal-details-trigger">Connectivity<i class="ri-truck-line ms-2 align-middle"></i></button>
                                             </div>
                                         </div>
-                                        <div class="py-4">
-                                            <div class="tab-content" id="myTabContent">
-                                                <div class="tab-pane show active fade p-0 border-0 bg-white p-4 rounded-3" id="activity-tab-pane"
-                                                    role="tabpanel" aria-labelledby="activity-tab" tabindex="0">
-                                                    <ul class="list-unstyled profile-timeline">
-                                                        <li>
-                                                            <span class="fs-12 text-muted fw-semibold text-end profile-timeline-time">16,Dec 2023</span>
-                                                            <div>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/faces/1.jpg" alt="">
-                                                                </span>
-                                                                <p class="text-muted mb-2">
-                                                                    <span class="text-default"><b>Barnes vare</b> Shared project</span>
-                                                                </p>
-                                                                <p class="text-muted fs-12 mb-0">Added 1 attachment <strong>docfile.doc</strong></p>
-                                                                <div class="btn-group file-attach mt-3" role="group" aria-label="Basic example">
-                                                                    <button type="button" class="btn btn-sm btn-primary-light">
-                                                                        <span class="ri-file-line me-2"></span> Image_file.jpg
-                                                                    </button>
-                                                                    <button type="button" class="btn btn-sm btn-primary-light" aria-label="Close">
-                                                                        <span class="ri-download-2-line"></span>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end profile-timeline-time">18,Dec 2023</span>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/faces/3.jpg" alt="">
-                                                                </span>
-                                                                <p class="text-muted mb-2">
-                                                                    <span class="text-default"><b>Alzbeth Aren</b> Shared project</span>.
-                                                                </p>
-                                                                <p class="text-muted mb-0">
-                                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, repellendus rem rerum excepturi aperiam ipsam temporibus inventore ullam tempora eligendi libero sequi dignissimos cumque, et a sint tenetur consequatur omnis!
-                                                                     rerum excepturi aperiam ipsam temporibus inventore ullam tempora eligendi libero sequi dignissimos cumque, et a sint tenetur consequatur omnis!
-                                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, repellendus rem rerum excepturi aperiam ipsam temporibus inventore ullam tempora eligendi libero sequi dignissimos cumque, et a sint tenetur consequatur omnis!
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end  ">11,Dec 2023</span>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/faces/5.jpg" alt="">
-                                                                </span>
-                                                                <p class="text-muted mb-1">
-                                                                    <span class="text-default"><b>Melissa Blue</b> liked your post <b>travel excites</b></span>.
-                                                                </p>
-                                                                <p class="text-muted">you are already feeling the tense atmosphere of the video playing in the background</p>
-                                                                <p class="profile-activity-media mb-0">
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-48.jpg" class="m-1" alt="">
-                                                                    </a>
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-53.jpg" class="m-1" alt="">
-                                                                    </a>
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-27.jpg" class="m-1" alt="">
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end profile-timeline-time">18,Dec 2023</span>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/faces/11.jpg" alt="">
-                                                                </span>
-                                                                <p class="text-muted mb-2">
-                                                                    <span class="text-default"><b>Json Smith</b> reacted to the post &#128077;</span>.
-                                                                </p>
-                                                                <p class="text-muted mb-0">
-                                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae, repellendus rem rerum excepturi aperiam ipsam temporibus inventore ullam tempora eligendi libero sequi dignissimos cumque, et a sint tenetur consequatur omnis!
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end  profile-timeline-time">21,Dec 2023</span>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/faces/4.jpg" alt="">
-                                                                </span>
-                                                                <p class="text-muted mb-2">
-                                                                    <span class="text-default"><b>Alicia Keys</b> shared a document with <b>you</b></span>.
-                                                                </p>
-                                                                <p class="profile-activity-media mb-0">
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/file-manager/3.png" alt="">
-                                                                    </a>
-                                                                    <span class="fs-11 text-muted">432.87KB</span>
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end  profile-timeline-time">24,Dec 2023</span>
-                                                                <span class="avatar avatar-sm bg-primary-transparent avatar-rounded profile-timeline-avatar">
-                                                                    E
-                                                                </span>
-                                                                <p class="mb-2">
-                                                                    <b>You</b> Commented on <b>alexander taylor</b> post <a class="text-secondary" href="javascript:void(0);"><u>#beautiful day</u></a>.
-                                                                </p>
-                                                                <p class="profile-activity-media mb-0">
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-30.jpg" alt="">
-                                                                    </a>
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-28.jpg" alt="">
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end profile-timeline-time">28,Dec 2023</span>
-                                                                <span class="avatar avatar-sm bg-success-transparent avatar-rounded profile-timeline-avatar">
-                                                                    P
-                                                                </span>
-                                                                <p class="text-muted mb-2">
-                                                                    <span class="text-default"><b>You</b> shared a post with 4 people <b>Simon,Sasha,Anagha,Hishen</b></span>.
-                                                                </p>
-                                                                <p class="profile-activity-media mb-2">
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-63.jpg" alt="">
-                                                                    </a>
-                                                                </p>
-                                                                <div>
-                                                                    <div class="avatar-list-stacked">
-                                                                        <span class="avatar avatar-sm avatar-rounded">
-                                                                            <img src="../assets/images/faces/2.jpg" alt="img">
-                                                                        </span>
-                                                                        <span class="avatar avatar-sm avatar-rounded">
-                                                                            <img src="../assets/images/faces/8.jpg" alt="img">
-                                                                        </span>
-                                                                        <span class="avatar avatar-sm avatar-rounded">
-                                                                            <img src="../assets/images/faces/2.jpg" alt="img">
-                                                                        </span>
-                                                                        <span class="avatar avatar-sm avatar-rounded">
-                                                                            <img src="../assets/images/faces/10.jpg" alt="img">
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li>
-                                                            <div>
-                                                                <span class="fs-12 text-muted fw-semibold text-end profile-timeline-time">24,Dec 2023 </span>
-                                                                <span class="avatar avatar-sm avatar-rounded profile-timeline-avatar">
-                                                                    <img src="../assets/images/media/media-39.jpg" alt="">
-                                                                </span>
-                                                                <p class="mb-1">
-                                                                    <b>You</b> Commented on <b>Peter Engola</b> post <a class="text-secondary" href="javascript:void(0);"><u>#Mother Nature</u></a>.
-                                                                </p>
-                                                                <p class="text-muted">Technology id developing rapidly kepp uo your work &#128076;</p>
-                                                                <p class="profile-activity-media mb-0">
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-26.jpg" alt="">
-                                                                    </a>
-                                                                    <a aria-label="anchor" href="javascript:void(0);">
-                                                                        <img src="../assets/images/media/media-29.jpg" alt="">
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
+                                        <div class="tab-pane fade border-0 p-0" id="confirm-tab-pane" role="tabpanel" aria-labelledby="confirm-tab-pane" tabindex="0">
+                                            <div class="p-4">
+                                                <p class="mb-1 fw-semibold text-muted op-5 fs-20">02</p>
+                                                <div class="fs-15 fw-semibold d-sm-flex d-block align-items-center justify-content-between mb-3">
+                                                    <div>Connectivity :</div>
                                                 </div>
-                                                <div class="tab-pane fade p-0 border-0" id="gallery-tab-pane"
-                                                    role="tabpanel" aria-labelledby="gallery-tab" tabindex="0">
-                                                    <div class="row">
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-40.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-40.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-41.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-41.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-42.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-42.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-43.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-43.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-44.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-44.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-45.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-45.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-46.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-46.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-47.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-47.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-26.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-26.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-42.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-42.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-44.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-44.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-45.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-45.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-40.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-40.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-46.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-46.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-42.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-42.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 col-sm-12">
-                                                            <a href="../assets/images/media/media-40.jpg" class="glightbox card" data-gallery="gallery1">
-                                                                <img src="../assets/images/media/media-40.jpg" alt="image" >
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane fade p-0 border-0" id="posts-tab-pane"
-                                                    role="tabpanel" aria-labelledby="posts-tab" tabindex="0">
-                                                 <div class="row">
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-pending-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Testing</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-info">pending</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2">
-                                                                                <button type="button" aria-label="button" class="btn btn-sm btn-icon btn-wave btn-secondary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal" tabindex="-1" aria-labelledby="AddModalLabel" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor"  href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-warning-transparent d-block">Low</span>
-                                                                        </div>
-                                                                    </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div class="card custom-card shadow-none mb-1"></div>
+                                                    <div class="card-body">
+                                                        <div class="row gy-4 mb-4">
+                                                            <div class="col-xl-6">
+                                                                <label for="platform-name" class="form-label">Plaform</label>
+                                                                <input type="text" class="form-control is-valid" id="platform-name" placeholder="Platform" value="BINANCE">
+                                                            </div>
+                                                            <div class="col-xl-6">
+                                                                <label for="risklevel-name" class="form-label">Risk Level</label>
+                                                                <div class="col-12">
+                                                                    <label class="visually-hidden" for="inlineFormSelectPref">Risk Level</label>
+                                                                    <select class="form-select" id="inlineFormSelectPref">
+                                                                        <option value="1" selected>Low</option>
+                                                                        <option value="2">Medium</option>
+                                                                        <option value="3">High</option>
+                                                                    </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-completed-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Creating Home Page Website </a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-success">Completed</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-success-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal2"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal2" tabindex="-1" aria-labelledby="AddModalLabel2" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel2">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-xl-12">
+                                                                <label for="api-key-value" class="form-label">API Key</label>
+                                                                <input type="text" class="form-control" id="api-key-value" placeholder="API Key" value="cv8mqriuJYu0aaUFOVFZlz1FZx4onbO7qpFLBiIqDCkIU45h6YpX3OEmmSV1zvnTEST">
                                                             </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-pending-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Data table Design</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-info">Pending</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg" alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal3"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal3" tabindex="-1" aria-labelledby="AddModalLabel3" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel3">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-xl-12">
+                                                                <label for="api-secret-value" class="form-label">API Secret</label>
+                                                                <input type="text" class="form-control" id="api-secret-value" placeholder="API Secret" value="67WF3qRKfaKEgH3SZsZxMp94bcPzNLPaTPPTnZhkgcfcPM9jrkTqG3go4eLkd65fTEST">
                                                             </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-completed-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Design Horizontal Layout</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-success">completed</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg" alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-success-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal4"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal4" tabindex="-1" aria-labelledby="AddModalLabel4" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel4">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-inprogress-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Fix  Header issue</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-pink">Inprogress</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2">
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal5"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal5" tabindex="-1" aria-labelledby="AddModalLabel5" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel5">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-danger-transparent d-block">Heigh</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-inprogress-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Create a blog post</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-pink">Inprogress</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal6"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal6" tabindex="-1" aria-labelledby="AddModalLabel6" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel6">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-danger-transparent d-block">Heigh</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-pending-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Testing</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-info">pending</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-secondary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal7"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal7" tabindex="-1" aria-labelledby="AddModalLabel7" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel7">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-warning-transparent d-block">Low</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-completed-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Fix the Data Table Issue</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-success">Completed</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal8"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal8" tabindex="-1" aria-labelledby="AddModalLabel8" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel8">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-pending-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Fix the Data Table Issue</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-info">pending</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal9"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal9" tabindex="-1" aria-labelledby="AddModalLabe9" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabe9">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-inprogress-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Data table Design</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-pink">Inprogress</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal10"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal10" tabindex="-1" aria-labelledby="AddModalLabel10" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel10">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-danger-transparent d-block">Heigh</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-pending-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Fix the Data Table Issue</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-info">pending</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal11"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal11" tabindex="-1" aria-labelledby="AddModalLabel11" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel11">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-success-transparent d-block">Medium</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-4 col-md-6 task-card">
-                                                            <div class="card custom-card task-inprogress-card">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex justify-content-between">
-                                                                        <div>
-                                                                            <a href="javascript:void(0);" class="fs-14 fw-semibold mb-3 d-flex align-items-center">Home page design</a>
-                                                                            <p class="mb-3">Status : <span class="badge bg-pink">Inprogress</span></p>
-                                                                            <p class="mb-0">Assigned To :</p>
-                                                                                <span class="avatar-list-stacked ms-1">
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/2.jpg" alt="">
-                                                                                    </span>
-                                                                                    <span class="avatar avatar-sm avatar-rounded">
-                                                                                        <img src="../assets/images/faces/8.jpg"  alt="">
-                                                                                    </span>
-                                                                                </span>
-                                                                                <span class="me-2"><button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-primary-light waves-effect waves-light" data-bs-toggle="modal"  data-bs-target="#addpromodal12"><i class="ri-add-fill"></i></button></span>
-                                                                                <div class="modal fade" id="addpromodal12" tabindex="-1" aria-labelledby="AddModalLabel12" aria-hidden="true">
-                                                                                    <div class="modal-dialog ">
-                                                                                        <div class="modal-content">
-                                                                                            <div class="modal-header">
-                                                                                                <h6 class="modal-title" id="AddModalLabel12">Edit Assigne</h6>
-                                                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                                                    aria-label="Close"></button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                    <div class="row">
-                                                                                                        <div class="col-12">
-                                                                                                            <div class="mb-3">
-                                                                                                                <label
-                                                                                                                    class="col-form-label">Assigne To:</label>
-                                                                                                                <input type="text" class="form-control">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                            </div>
-                                                                                            <div class="modal-footer">
-                                                                                                <button type="button" class="btn btn-secondary"
-                                                                                                    data-bs-dismiss="modal">Save</button>
-                                                                                                <button type="button" class="btn btn-primary">Cancel</button>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <div class="btn-list">
-                                                                                <a aria-label="anchor" href="javascript:void(0);" class="btn btn-sm btn-icon btn-wave btn-primary-light"><i class="ri-eye-line"></i></a>
-                                                                                <button type="button" aria-label="button"  class="btn btn-sm btn-icon btn-wave btn-danger-light me-0"><i class="ri-delete-bin-line"></i></button>
-                                                                            </div>
-                                                                            <span class="footer-badge badge bg-danger-transparent d-block">Heigh</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
+                                                            <div class="col-xl-12 mt-4">
+                                                                <label for="notes-section" class="form-label ">Notes</label>
+                                                                <textarea class="form-control" id="notes-section" rows="4"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="tab-pane fade p-0 border-0" id="followers-tab-pane"
-                                                    role="tabpanel" aria-labelledby="followers-tab" tabindex="0">
-                                                    <div class="row">
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/2.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Samantha May</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">samanthamay2912@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
+                                                <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-between">
+                                                    <button type="button" class="btn btn-danger-light d-inline-flex" id="back-shipping-trigger"><i class="ri-user-3-line me-2 align-middle"></i>Back To Personal</button>
+                                                    <button type="button" class="btn btn-success mt-sm-0 mt-2 d-inline-flex" id="payment-trigger">Continue To Payment<i class="bi bi-credit-card-2-front align-middle ms-2"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade border-0 p-0" id="shipped-tab-pane" role="tabpanel"
+                                            aria-labelledby="shipped-tab-pane" tabindex="0">
+                                            <div class="p-4">
+                                                <p class="mb-1 fw-semibold text-muted op-5 fs-20">03</p>
+                                                <div class="fs-15 fw-semibold d-sm-flex d-block align-items-center justify-content-between mb-3">
+                                                    <div>Payment Details :</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xl-12">
+                                                        <div class="card custom-card border shadow-none mb-3">
+                                                            <!-- <div class="card-header">
+                                                                <div class="card-title">
+                                                                    Payment Methods
+                                                                </div>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="btn-group mb-3 d-sm-flex d-block" role="group" aria-label="Basic radio toggle button group">
+                                                                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" checked>
+                                                                    <label class="btn btn-outline-light text-default mt-sm-0 mt-1" for="btnradio3">Credit/Debit Card</label>
+                                                                </div>
+                                                                <div class="row gy-3">
+                                                                    <div class="col-xl-12">
+                                                                        <label for="payment-card-number" class="form-label">Card Number</label>
+                                                                        <input type="text" class="form-control" id="payment-card-number" placeholder="Card Number" value="1245 - 5447 - 8934 - XXXX">
+                                                                    </div>
+                                                                    <div class="col-xl-12">
+                                                                        <label for="payment-card-name" class="form-label">Name On Card</label>
+                                                                        <input type="text" class="form-control" id="payment-card-name" placeholder="Name On Card" value="JSON TAYLOR">
+                                                                    </div>
+                                                                    <div class="col-xl-6">
+                                                                        <label for="payment-cardexpiry-date" class="form-label">Expiration Date</label>
+                                                                        <input type="text" class="form-control" id="payment-cardexpiry-date" placeholder="MM/YY" value="08/2024">
+                                                                    </div>
+                                                                    <div class="col-xl-6">
+                                                                        <label for="payment-cvv" class="form-label">CVV</label>
+                                                                        <input type="text" class="form-control" id="payment-cvv" placeholder="XXX" value="341">
+                                                                    </div>
+                                                                    <div class="col-xl-12">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input form-checked-success" type="checkbox" value="" id="payment-card-save" checked>
+                                                                            <label class="form-check-label" for="payment-card-save">Save this card</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/15.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Andrew Garfield</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">andrewgarfield98@gmail.com</p>
-                                                                            <span class="badge bg-success-transparent rounded-pill">Team Lead</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/5.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Jessica Cashew</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">jessicacashew143@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/11.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Simon Cowan</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">jessicacashew143@gmail.com</p>
-                                                                            <span class="badge bg-warning-transparent rounded-pill">Team Manager</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/7.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Amanda nunes</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">amandanunes45@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/12.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Mahira Hose</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">mahirahose9456@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/2.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Samantha May</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">samanthamay2912@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/15.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Andrew Garfield</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">andrewgarfield98@gmail.com</p>
-                                                                            <span class="badge bg-success-transparent rounded-pill">Team Lead</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-12">
-                                                            <div class="card custom-card shadow-none border">
-                                                                <div class="card-body p-4">
-                                                                    <div class="text-center">
-                                                                        <span class="avatar avatar-xl avatar-rounded">
-                                                                            <img src="../assets/images/faces/5.jpg" alt="">
-                                                                        </span>
-                                                                        <div class="mt-2">
-                                                                            <p class="mb-0 fw-semibold">Jessica Cashew</p>
-                                                                            <p class="fs-12 op-7 mb-1 text-muted">jessicacashew143@gmail.com</p>
-                                                                            <span class="badge bg-info-transparent rounded-pill">Team Member</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-footer text-center">
-                                                                    <div class="btn-list">
-                                                                        <button type="button" class="btn btn-sm btn-light btn-wave">Block</button>
-                                                                        <button type="button" class="btn btn-sm btn-primary btn-wave">Unfollow</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                            </div> -->
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-between">
+                                                <button type="button" class="btn btn-danger-light d-inline-flex" id="back-personal-trigger"><i class="ri-user-3-line me-2 align-middle"></i>Back To Connectivity</button>
+                                                <button type="button" class="btn btn-success mt-sm-0 mt-2" id="continue-payment-trigger">Continue Review & Submit<i class="bi bi-credit-card-2-front align-middle ms-2"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade border-0 p-0" id="delivery-tab-pane" role="tabpanel"
+                                            aria-labelledby="delivery-tab-pane" tabindex="0">
+                                            <div class="p-5 checkout-payment-success my-3">
+                                                <a href="index.html" class="btn btn-success">Submit</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <!--End::row-1 -->
                     </div>
                 </div>
                 <!--End::row-1 -->
@@ -1430,6 +424,9 @@
 
     <!-- Internal Profile JS -->
     <script src="../assets/js/profile.js"></script>
+    
+    <!-- Internal Checkout JS -->
+    <script src="../assets/js/checkout.js"></script>
 
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>

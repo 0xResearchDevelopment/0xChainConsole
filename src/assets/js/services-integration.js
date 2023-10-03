@@ -290,5 +290,11 @@ var updateTier = (code) => {
         .catch(err => {
             console.log("### Inside updateTier:err.response", err.response.data.message);
             showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
+            if(err.response.status == 401) {
+                setTimeout(()=> {
+                    window.location.href='sign-in-cover.html';
+                 }
+                 ,delayInMS);
+            }
         });
 };
