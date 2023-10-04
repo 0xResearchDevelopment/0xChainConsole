@@ -1,4 +1,4 @@
-const delayInMS = 3000;
+var delayInMS = 3000;
 
 var signUp = async () => {
 
@@ -118,9 +118,7 @@ var signIn = () => {
         });
 };
 
-
 var getUserProfile = () => {
-    console.log("inside getUserProfile");
     const authToken = localStorage.getItem('authToken');
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
@@ -135,26 +133,60 @@ var getUserProfile = () => {
         .then(res => {
             if (res.status == 200) {
                 console.log(res.data);
-                var username = res.data.profile.NAME_FIRST + " " + res.data.profile.NAME_LAST;
+
+                const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:{};
+                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:{};
+                const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:[];
+                const netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:[];
+                const netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:[];
+                const netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:[];
+
+                var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
                 document.getElementById("header-user-name").innerHTML = username;
-                const subscribtionStatsSummary = (res.data.subscribedBots!=undefined)?res.data.subscribtionStatsSummary:{};
-                const subscribedBots = (res.data.subscribedBots!=undefined)?res.data.subscribedBots:[];
+                document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+
+                localStorage.setItem('profileObj', JSON.stringify(profile)); 
+                localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
                 localStorage.setItem('subscribedBotsArr', JSON.stringify(subscribedBots));
-                for (let i = 0; i < subscribedBots.length; i++) {
-                    createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
-                                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,i);                      
+                localStorage.setItem('netProfitHourlyArr', JSON.stringify(netProfitHourly)); 
+                localStorage.setItem('netProfitDailyArr', JSON.stringify(netProfitDaily));
+                localStorage.setItem('netProfitMonthlyArr', JSON.stringify(netProfitMonthly));
+
+                if(window.location.pathname == '/index.html' ){
+                    for (let i = 0; i < subscribedBots.length; i++) {
+                        createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
+                                                subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
+                                                subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,i);                      
+                    }
+    
+                    document.getElementById("as-of-summary").innerHTML = subscribtionStatsSummary.AS_OF_SUMMARY;
+                    document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
+                    document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
+    
+                    const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
+                    //localStorage.setItem('subscribedBotsArr', JSON.stringify(subscribedBots));
+                    for (let i = 0; i < recentActivities.length; i++) {
+                        populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
+                                            recentActivities[i].ACTIVITY_TS,'info');                      
+                    }
+
+                    //generateSummary(subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT);
+                    //generateStatistics(netProfitHourly);
                 }
-
-                document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
-                document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
-
-                const profileObj = JSON.stringify(res.data.profile);
-                const statsSummaryObj = JSON.stringify(subscribtionStatsSummary);
-
-                localStorage.setItem('profileObj', profileObj); 
-                localStorage.setItem('statsSummaryObj', statsSummaryObj);
+                else if(window.location.pathname == '/profile.html'){
+                    document.getElementById("profile-photo").src = profile.PROFILE_PHOTO;
+                    document.getElementById("profile-name").innerHTML = username;
+                    document.getElementById("profile-email").innerHTML = profile.EMAIL_ID;     
+                    document.getElementById("primary-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";  
+                    document.getElementById("profile-city").innerHTML = (profile.CITY != null && profile.CITY != undefined) ? profile.CITY : "City"; 
+                    document.getElementById("profile-state").innerHTML = (profile.STATE != null && profile.STATE != undefined) ? profile.STATE : "State";  
+                    document.getElementById("profile-country").innerHTML = (profile.COUNTRY != null && profile.COUNTRY != undefined) ? profile.COUNTRY : "Country";
+                    document.getElementById("last-updated-on").innerHTML = profile.UPDATED_TS;
+                    
+                    const profileStatus = (profile.ROLE_CODE > -2) ? 100: (profile.ROLE_CODE == -2) ? 50 : 0;
+                    showProfileStatus(profileStatus);
+                }
             }
         }).catch(err => {
             console.log("inside err");
@@ -298,3 +330,57 @@ var updateTier = (code) => {
             }
         });
 };
+
+var populateRecentActivities = (description,module,timestamp,theme) => {
+    
+    const list = document.createElement('li');
+    list.id = 'activity-li';
+    list.innerHTML = `<div class="">
+                            <i class="task-icon bg-${theme}"></i>
+                            <h6 class="fw-semibold mb-0">${description}</h6>
+                            <div
+                                class="flex-grow-1 d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="fs-12 text-muted">${module}
+                                        <a href="javascript:void(0)"
+                                            class="fw-semibold text-${description}"></a></span>
+                                </div>
+                                <div class="min-w-fit-content ms-2 text-end">
+
+                                    <p class="mb-0 text-muted fs-11">${timestamp}</p>
+                                </div>
+                            </div>
+                        </div>`
+
+    const ulist = document.getElementById("activities-ul");
+    ulist.appendChild(list);
+}
+
+var showProfileStatus = (percentCompletion) => {
+    const profileStatusDiv = document.createElement('div');
+    profileStatusDiv.innerHTML = `<p class="fs-15 mb-2 fw-semibold">Profile Status :</p>
+                                  <p class="fw-semibold mb-2">Profile ${percentCompletion}% completed</p>
+                                  <div class="progress progress-sm progress-animate ">
+                                    <div class="progress-bar bg-success  ronded-1" role="progressbar" aria-valuenow="${percentCompletion}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentCompletion}%"></div>
+                                  </div>`
+
+    const profileStatusContainer = document.getElementById("profile-status");
+    profileStatusContainer.appendChild(profileStatusDiv);
+}
+
+/* var generateSummary = (avgNetProfit) => {
+    var chart3 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
+    chart3.render();
+    chart3.updateOptions({
+        colors: ["rgba(" + myVarVal + ", 0.95)"],
+        series: [avgNetProfit]
+    });
+}
+
+var generateStatistics = (hourlyData) => {
+    var graphData = formatGraphData(hourlyData);
+    inputNetprofit = graphData.netProfitArray;
+    inputXAxisData = graphData.xAxisDataArray;
+
+    updateChartData(inputNetprofit,inputXAxisData);
+} */

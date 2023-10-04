@@ -1,8 +1,16 @@
-const statsSummaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
 /* starts : chainview - netprofit summary pie-chart */
-console.log("chart: ",statsSummaryObj);
-var options = {
-    series: [statsSummaryObj.AVG_USER_SUB_NETPROFIT],  /* get this value from loacl storage*/
+var avgNetProfit;
+
+if(localStorage.getItem("statsSummaryObj") === null){
+    avgNetProfit = 0;
+}
+else{
+    var summaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
+    avgNetProfit = summaryObj.AVG_USER_SUB_NETPROFIT;
+}
+
+var pieChartData = {
+    series: [avgNetProfit],  /* get this value from loacl storage*/
     chart: {
         height: 295,
         type: "radialBar",
@@ -17,7 +25,7 @@ var options = {
     },
     labels: ["Net Profit"],
 };
-var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), options);
+var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
 chart2.render();
 function index1() {
     chart2.updateOptions({
@@ -26,10 +34,79 @@ function index1() {
 }
 /* ends : chainview - netprofit summary pie-chart */
 
+var formatGraphData = (rawNetProfitArr) => {
+    var netProfit = [];
+    var xAxisData = [];
+    for (let i = 0; i < rawNetProfitArr.length; i++) {
+        netProfit.push(rawNetProfitArr[i].NETPROFIT);
+        xAxisData.push(rawNetProfitArr[i].AS_OF);
+    }
 
+    return {
+        netProfitArray: netProfit,
+        xAxisDataArray: xAxisData
+       };
+}
+
+var updateChartData = (dataInput, XAxisInput) => {
+    var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
+        chart.render();
+        chart.updateOptions({
+            series: [
+                {
+                    name: 'Token Netprofit',
+                    data: dataInput,
+                    type: 'line',
+                }
+            ],
+            xaxis: {
+                type: 'day',
+                categories: XAxisInput,
+                axisBorder: {
+                    show: true,
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    offsetX: 0,
+                    offsetY: 0,
+                },
+                axisTicks: {
+                    show: true,
+                    borderType: 'solid',
+                    color: 'rgba(119, 119, 142, 0.05)',
+                    width: 6,
+                    offsetX: 0,
+                    offsetY: 0
+                },
+                labels: {
+                    rotate: -90,
+                    style: {
+                        colors: "#8c9097",
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        cssClass: 'apexcharts-xaxis-label',
+                    },
+                }
+            }
+        });
+}
 
 /* starts : chainview - Netprofit stats line-chart */
-var options = {
+var inputNetprofit = [];
+var inputXAxisData = [];
+
+if(localStorage.getItem("netProfitHourlyArr") === null){
+    inputNetprofit = [];
+    inputXAxisData = [];
+}
+else{
+    var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitHourlyArr')));
+    inputNetprofit = graphData.netProfitArray;
+    inputXAxisData = graphData.xAxisDataArray;
+}
+
+console.log("1: ",inputNetprofit);
+console.log("2: ",inputXAxisData);
+
+var chartData = {
     chart: {
         height: 300,
         toolbar: {
@@ -41,7 +118,7 @@ var options = {
             top: 5,
             left: 0,
             blur: 3,
-            color: ['var(--primary02)', 'rgba(245 ,187 ,116, 0.2)', "rgba(255,255,255,0)"],
+            color: ['rgba(245 ,187 ,116, 0.2)'],
             opacity: 0.5
         },
     },
@@ -54,7 +131,7 @@ var options = {
         enabled: false
     },
     stroke: {
-        width: [0, 2.5, 2.5],
+        width: [2.5],
         curve: "smooth",
     },
     legend: {
@@ -80,23 +157,15 @@ var options = {
     },
     series: [
         {
-            name: "Total Trades",
-            data: [66, 85, 50, 105, 65, 74, 70, 105, 100, 125, 85, 110, 85, 58, 112],
-            type: 'bar',
-        }, {
             name: 'Token Netprofit',
-            data: [65, 20, -40, -55, -80, -90, -59, -86, -120, -165, -115, -120, -50, -70, 85],
-            type: 'line',
-        }, {
-            name: "Base Netprofit",
-            data: [20, 65, -85, 38, 55, 25, 25, 165, 75, 64, 70, 75, 85, 85, 115],
+            data: inputNetprofit,
             type: 'line',
         }],
-    colors: ["rgba(119, 119, 142, 0.075)", "rgba(0, 144, 172, 0.95)", "rgba(245 ,187 ,116)",],
+    colors: ["rgba(0, 144, 172, 0.95)",],
     fill: {
-        type: ['solid', 'gradient', 'gradient'],
+        type: ['gradient'],
         gradient: {
-            gradientToColors: ["transparent", '#4776E6', '#f5bb74']
+            gradientToColors: ['#4776E6']
         },
     },
     yaxis: {
@@ -124,7 +193,7 @@ var options = {
     },
     xaxis: {
         type: 'day',
-        categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan', '10 Jan', '11 Jan', '12 Jan', '13 Jan', '14 Jan', '15 Jan'],
+        categories: inputXAxisData,
         axisBorder: {
             show: true,
             color: 'rgba(119, 119, 142, 0.05)',
@@ -150,18 +219,44 @@ var options = {
         }
     },
 }
+
 document.getElementById("earnings").innerHTML = "";
-var chart = new ApexCharts(document.querySelector("#earnings"), options);
+var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
 chart.render();
+
+updateChartData(inputNetprofit,inputXAxisData);
 
 function earnings() {
     chart.updateOptions({
         colors: [
-            "rgba(119, 119, 142, 0.075)",
-            "rgba(" + myVarVal + ", 0.95)",
-            "rgba(245 ,187 ,116)",
+            "rgba(" + myVarVal + ", 0.95)"
         ],
     });
+}
+
+var changeLayout = (layout) => {
+
+    if(layout == 2){
+        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitMonthlyArr')));
+        inputNetprofit = graphData.netProfitArray;
+        inputXAxisData = graphData.xAxisDataArray;
+
+        updateChartData(inputNetprofit,inputXAxisData);
+    }
+    else if(layout == 1){
+        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitDailyArr')));
+        inputNetprofit = graphData.netProfitArray;
+        inputXAxisData = graphData.xAxisDataArray;
+
+        updateChartData(inputNetprofit,inputXAxisData);
+    }
+    else {
+        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitHourlyArr')));
+        inputNetprofit = graphData.netProfitArray;
+        inputXAxisData = graphData.xAxisDataArray;
+
+        updateChartData(inputNetprofit,inputXAxisData);
+    }
 }
 
 /* ends : chainview - Netprofit stats line-chart */
