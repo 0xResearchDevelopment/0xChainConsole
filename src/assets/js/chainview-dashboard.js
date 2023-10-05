@@ -128,7 +128,7 @@ var chartData = {
         strokeDashArray: 4,
     },
     dataLabels: {
-        enabled: false
+        enabled: true
     },
     stroke: {
         width: [2.5],

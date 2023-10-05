@@ -384,3 +384,22 @@ var generateStatistics = (hourlyData) => {
 
     updateChartData(inputNetprofit,inputXAxisData);
 } */
+
+
+
+var signout = () => {
+    console.log("### Inside signout:");
+    const authToken = localStorage.getItem('authToken');
+    axios.post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/logout',{},
+            {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }            
+        })
+        .then(res => {
+            console.log("### Inside signout:res: " + res);
+            localStorage.clear();
+            window.location.href='sign-in-cover.html';
+        });
+};
