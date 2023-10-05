@@ -2,13 +2,18 @@ var delayInMS = 3000;
 
 var signUp = async () => {
 
+    var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
+    //console.log("### accountOtpGenerated:", accountOtpGenerated);
+    sessionStorage.setItem('otpCode', accountOtpGenerated);
+
     const myBody = {
         "name_first": document.getElementById("signup-fname").value,
         "name_last": document.getElementById("signup-lname").value,
         "email": document.getElementById("signup-email").value,
-        "password": document.getElementById("signup-password").value
+        "password": document.getElementById("signup-password").value,
+        "accountOtpGenerated" : accountOtpGenerated
     };
-    console.log(myBody);
+    //console.log("## signUp-request-object:",myBody);
     const response = await fetch('https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register', {
         method: 'POST',
         headers: {
@@ -68,25 +73,51 @@ var signUp = async () => {
 
 };
 
+
+var verifyOtp = () => {
+    var otpCode = sessionStorage.getItem('otpCode');
+    console.log("## inside verify - otpCode:", otpCode);
+
+    var digit1 = document.getElementById("one").value;
+    var digit2 = document.getElementById("two").value;
+    var digit3 = document.getElementById("three").value;
+    var digit4 = document.getElementById("four").value;
+    digit1 = digit1.length == 1 ? digit1 : 0;
+    digit2 = digit2.length == 1 ? digit2 : 0;
+    digit3 = digit3.length == 1 ? digit3 : 0;
+    digit4 = digit4.length == 1 ? digit4 : 0;
+    var userEnteredCode = digit1+digit2+digit3+digit4;
+    console.log("## inside verify - userEnteredCode:", userEnteredCode);
+    if(userEnteredCode == otpCode) {
+        showToastAlerts('verification-success','alert-success-msg',"OTP validation successful");
+        setTimeout(() => {
+            verifyAccount();
+        }, delayInMS);
+        //alert("valid otp");
+    } else {
+        //alert("invalid otp");
+        showToastAlerts('verification-error','alert-error-msg',"Invalid OTP");
+    }    
+};
+
 var verifyAccount = () => {
-    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+        var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
 
-    axios.get(verifyAccountUrl)
-        .then(res => {
-            console.log(res);
-            if (res.status == 200) {
+        axios.get(verifyAccountUrl)
+            .then(res => {
+                console.log(res);
+                if (res.status == 200) {
                 showToastAlerts('verification-success','alert-success-msg',res.data.message);
-                sessionStorage.removeItem('verficationToken');
+                    sessionStorage.removeItem('verficationToken');
                 setTimeout(()=> {
-                    window.location.href = "sign-in-cover.html";
-                 }
-                 ,delayInMS);
+                        window.location.href = "sign-in-cover.html";
+                 },delayInMS);
 
-            }
-        }).catch(err => {
-            console.log(err, err.response);
-            alert(err);
-        })
+                }
+            }).catch(err => {
+                console.log(err, err.response);
+                alert(err);
+        });
 };
 
 var signIn = () => {
