@@ -9,7 +9,7 @@
 
 </head>
 
-<body onload="getUserProfile()">
+<body onload="updateProfilePage()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -30,22 +30,22 @@
                         <div class="card custom-card overflow-hidden">
                             <div class="card-body d-sm-flex align-items-top p-4   main-profile-cover">
                                 <p class="avatar avatar-xxl avatar-rounded online me-3 my-auto"> <!-- set user profile photo here-->
-                                    <img id="profile-photo" src="" alt="">
+                                    <img id="profile-header-photo" src="" alt="">
                                 </p>
                                 <div class="flex-fill main-profile-info my-auto">
-                                    <h5 class="fw-semibold mb-1" id="profile-name"></h5>
+                                    <h5 class="fw-semibold mb-1" id="profile-header-name"></h5>
                                     <div>
-                                        <p class="mb-1 text-muted" id="profile-email"></p>
+                                        <p class="mb-1 text-muted" id="profile-header-email"></p>
                                         <div class="fs-12 op-7 mb-0 d-flex">
-                                            <p class="me-3 mb-0"><i class="ri-building-line me-1 align-middle d-inline-flex"></i><span id="primary-phone"></span></p>
-                                            <p class="mb-0"><i class="ri-map-pin-line me-1 align-middle d-inline-flex"></i><span id="profile-city"></span>, <span id="profile-state"></span>, <span id="profile-country"></span></p> <!-- get from api -->
+                                            <p class="me-3 mb-0"><i class="ri-building-line me-1 align-middle d-inline-flex"></i><span id="profile-header-phone"></span></p>
+                                            <p class="mb-0"><i class="ri-map-pin-line me-1 align-middle d-inline-flex"></i><span id="profile-header-city"></span>, <span id="profile-header-state"></span>, <span id="profile-header-country"></span></p> <!-- get from api -->
                                         </div>
                                     </div>
                                 </div>
                                 <div class="main-profile-info ms-auto">
                                     <div class="">
                                         <div class="d-flex align-items-center justify-content-between">
-                                            <span>Last updated on : <span id="last-updated-on"></span></span> <!-- get UPDATED_TS from user profile-->
+                                            <span>Last updated on : <span id="profile-last-updated-on"></span></span> <!-- get UPDATED_TS from user profile-->
                                         </div>
                                     </div>
                                     <div class="mb-0  mt-2 text-end">
@@ -69,7 +69,7 @@
                                             <div class="me-2 fw-semibold">
                                                 First Name :
                                             </div>
-                                            <span class="fs-12 text-muted">Firstname</span>
+                                            <span class="fs-12 text-muted" id="profile-firstname">Firstname</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
@@ -77,7 +77,7 @@
                                             <div class="me-2 fw-semibold">
                                                 Last Name :
                                             </div>
-                                            <span class="fs-12 text-muted">Lastname</span>
+                                            <span class="fs-12 text-muted" id="profile-lastname">Lastname</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
@@ -85,7 +85,7 @@
                                             <div class="me-2 fw-semibold">
                                                 Display Name :
                                             </div>
-                                            <span class="fs-12 text-muted">Display Name</span>
+                                            <span class="fs-12 text-muted" id="profile-displayname">Display Name</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
@@ -93,7 +93,7 @@
                                             <div class="me-2 fw-semibold">
                                                 Current Tier :
                                             </div>
-                                            <span class="fs-12 text-muted">RoleCode</span>
+                                            <span class="fs-12 text-muted" id="profile-rolecode">RoleCode</span>
                                         </div>
                                     </li>
                                     <li class="list-group-item border-0">
@@ -101,7 +101,7 @@
                                             <div class="me-2 fw-semibold">
                                                 Subscribed on :
                                             </div>
-                                            <span class="fs-12 text-muted">Create_Timestamp</span>
+                                            <span class="fs-12 text-muted" id="profile-timestamp">Create_Timestamp</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -113,13 +113,13 @@
                                         <span class="avatar avatar-sm avatar-rounded me-2 bg-info-transparent">
                                             <i class="ri-mail-line align-middle fs-14"></i>
                                         </span>
-                                        emailaddress@gmail.com
+                                        <span id="profile-email"></span>
                                     </p>
                                     <p class="mb-3">
                                         <span class="avatar avatar-sm avatar-rounded me-2 bg-warning-transparent">
                                             <i class="ri-phone-line align-middle fs-14"></i>
                                         </span>
-                                        +(555) 555-1234
+                                        <span id="profile-phone"></span>
                                     </p>
                                     <div class="d-flex">
                                         <p class="mb-0">
@@ -128,26 +128,14 @@
                                             </span>
                                         </p>
                                         <p class="mb-0">
-                                        Address, Location, Country </p>
-
+                                            <span id="profile-city"></span>, <span id="profile-state"></span>, <span id="profile-country"></span>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="p-4 border-bottom border-block-end-dashed">
                                 <p class="fs-15 mb-2 me-4 fw-semibold">Active Bots :</p>
-                                <div>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-2">Bot1-name</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-2">Bot2-name</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-2">Bot3-name</span>
-                                    </a>
-                                    <a href="javascript:void(0);">
-                                        <span class="badge bg-light text-muted m-2">Bot4-name</span>
-                                    </a>
+                                <div id="bot-list">
                                 </div>
                             </div>
                            </div>
@@ -170,7 +158,7 @@
                                             <button class="nav-link" id="confirmed-tab" data-bs-toggle="tab"
                                                 data-bs-target="#confirm-tab-pane" type="button" role="tab"
                                                 aria-controls="confirmed-tab" aria-selected="false"><i
-                                                    class="ri-terminal-box-line me-2 align-middle d-inline-block"></i>Connectivity</button>
+                                                    class="ri-truck-line me-2 align-middle d-inline-block"></i>Connectivity</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
                                             <button class="nav-link" id="shipped-tab" data-bs-toggle="tab"
@@ -200,55 +188,70 @@
                                                 <div class="row gy-4 mb-4">
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="firstname-add" value="Sasi" placeholder="firstName">
+                                                            <input type="text" class="form-control" id="firstname-add" placeholder="firstName">
                                                             <label for="firstname-add">First Name</label>
+                                                            <div class="invalid-feedback" id="firstname-empty" style="display:none;">
+                                                                First name cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="lastname-add" value="Siva" placeholder="lastName">
+                                                            <input type="text" class="form-control" id="lastname-add" placeholder="lastName">
                                                             <label for="lastname-add">Last Name</label>
+                                                            <div class="invalid-feedback" id="lastname-empty" style="display:none;">
+                                                                Last name cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="email-add" value="name@email.com" placeholder="emailAddress" readyonly>
+                                                            <input type="text" class="form-control" id="email-add" placeholder="emailAddress" readonly="readonly">
                                                             <label for="email-add">Email</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="displayname-add" value="SasSiv" placeholder="displayName">
+                                                            <input type="text" class="form-control" id="displayname-add" placeholder="displayName">
                                                             <label for="displayname-add">Display Name</label>
+                                                            <div class="invalid-feedback" id="displayname-empty" style="display:none;">
+                                                                Display name cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="photourl-add" value="../assets/images/faces/1.jpg" placeholder="photourl">
+                                                            <input type="text" class="form-control" id="photourl-add" placeholder="photourl">
                                                             <label for="photourl-add">Profile Photo</label>
+                                                            <div class="invalid-feedback" id="photourl-empty" style="display:none;">
+                                                                Profile photo URL cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="email" class="form-control is-valid" id="primary-phoneno-add" value="+1(555) 555-1234" placeholder="1234-XX-XXXX">
+                                                            <input type="email" class="form-control" id="primary-phoneno-add" placeholder="1234-XX-XXXX">
                                                             <label for="primary-phoneno-add">Primary Phone</label>
+                                                            <div class="invalid-feedback" id="primary-phoneno-empty" style="display:none;">
+                                                                Primary phone cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="email" class="form-control" id="secondary-phoneno-add" value="+1(555) 555-1234" placeholder="1234-XX-XXXX">
+                                                            <input type="email" class="form-control" id="secondary-phoneno-add" placeholder="1234-XX-XXXX">
                                                             <label for="secondary-phoneno-add">Secondary Phone</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="clientid-add" value="SASSIV2301" placeholder="clientid">
+                                                            <input type="text" class="form-control" id="clientid-add" placeholder="clientid">
                                                             <label for="clientid-add">Client ID</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <textarea class="form-control" placeholder="Address Here" id="address-add">MIG-1-11,Monroe Street</textarea>
+                                                            <textarea class="form-control" placeholder="Address Here" id="address-add"></textarea>
                                                             <label for="address-add">Address</label>
                                                         </div>
                                                     </div>
@@ -256,26 +259,38 @@
                                                         <div class="row gy-2">
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="pincode-add" value="28262" placeholder="Name">
+                                                                    <input type="number" class="form-control" id="pincode-add" placeholder="Name">
                                                                     <label for="pincode-add">Pin Code</label>
+                                                                    <div class="invalid-feedback" id="pincode-empty" style="display:none;">
+                                                                        Pin code cannot be emtpty.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="city-add" value="Charlotte" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="city-add" placeholder="Name">
                                                                     <label for="city-add">City</label>
+                                                                    <div class="invalid-feedback" id="city-empty" style="display:none;">
+                                                                        City cannot be emtpty.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="state-add" value="North Carolina" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="state-add" placeholder="Name">
                                                                     <label for="state-add">State</label>
+                                                                    <div class="invalid-feedback" id="state-empty" style="display:none;">
+                                                                        State cannot be emtpty.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="country-add" value="USA" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="country-add" placeholder="Name">
                                                                     <label for="country-add">Country</label>
+                                                                    <div class="invalid-feedback" id="country-empty" style="display:none;">
+                                                                        Country cannot be emtpty.
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -283,7 +298,7 @@
                                                 </div>
                                             </div>
                                             <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
-                                                <button type="button" class="btn btn-success d-inline-flex" id="personal-details-trigger">Connectivity<i class="ri-terminal-box-line ms-2 align-middle"></i></button>
+                                                <button type="button" class="btn btn-success d-inline-flex" id="personal-details-trigger">Connectivity<i class="ri-truck-line ms-2 align-middle"></i></button>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade border-0 p-0" id="confirm-tab-pane" role="tabpanel" aria-labelledby="confirm-tab-pane" tabindex="0">
@@ -301,13 +316,13 @@
                                                         <div class="row gy-4 mb-4">
                                                             <div class="col-xl-6">
                                                                 <label for="platform-name" class="form-label">Plaform</label>
-                                                                <input type="text" class="form-control is-valid" id="platform-name" placeholder="Platform" value="BINANCE">
+                                                                <input type="text" class="form-control" id="platform-name" placeholder="Platform" value="">
                                                             </div>
                                                             <div class="col-xl-6">
                                                                 <label for="risklevel-name" class="form-label">Risk Level</label>
                                                                 <div class="col-12">
-                                                                    <label class="visually-hidden" for="inlineFormSelectPref">Risk Level</label>
-                                                                    <select class="form-select" id="inlineFormSelectPref">
+                                                                    <label class="visually-hidden" for="risk-level">Risk Level</label>
+                                                                    <select class="form-select" id="risk-level">
                                                                         <option value="1" selected>Low</option>
                                                                         <option value="2">Medium</option>
                                                                         <option value="3">High</option>
@@ -316,11 +331,11 @@
                                                             </div>
                                                             <div class="col-xl-12">
                                                                 <label for="api-key-value" class="form-label">API Key</label>
-                                                                <input type="text" class="form-control" id="api-key-value" placeholder="API Key" value="cv8mqriuJYu0aaUFOVFZlz1FZx4onbO7qpFLBiIqDCkIU45h6YpX3OEmmSV1zvnTEST">
+                                                                <input type="text" class="form-control" id="api-key-value" placeholder="API Key" value="">
                                                             </div>
                                                             <div class="col-xl-12">
                                                                 <label for="api-secret-value" class="form-label">API Secret</label>
-                                                                <input type="text" class="form-control" id="api-secret-value" placeholder="API Secret" value="67WF3qRKfaKEgH3SZsZxMp94bcPzNLPaTPPTnZhkgcfcPM9jrkTqG3go4eLkd65fTEST">
+                                                                <input type="text" class="form-control" id="api-secret-value" placeholder="API Secret" value="">
                                                             </div>
                                                             <div class="col-xl-12 mt-4">
                                                                 <label for="notes-section" class="form-label ">Notes</label>
@@ -385,14 +400,14 @@
                                                 </div>
                                             </div>
                                             <div class="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-between">
-                                                <button type="button" class="btn btn-danger-light d-inline-flex" id="back-personal-trigger"><i class="ri-terminal-box-line me-2 align-middle"></i>Back To Connectivity</button>
+                                                <button type="button" class="btn btn-danger-light d-inline-flex" id="back-personal-trigger"><i class="ri-user-3-line me-2 align-middle"></i>Back To Connectivity</button>
                                                 <button type="button" class="btn btn-success mt-sm-0 mt-2" id="continue-payment-trigger">Continue Review & Submit<i class="bi bi-credit-card-2-front align-middle ms-2"></i></button>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade border-0 p-0" id="delivery-tab-pane" role="tabpanel"
                                             aria-labelledby="delivery-tab-pane" tabindex="0">
                                             <div class="p-5 checkout-payment-success my-3">
-                                                <a href="index.html" class="btn btn-success">Submit</a>
+                                                <a onclick="updateProfile()" class="btn btn-success">Submit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -419,6 +434,28 @@
 
     @SPK@include("partials/custom_switcherjs.html")
 
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+        <div id="update-profile-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="alert-success-msg"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+        <div id="update-profile-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive"
+            aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="alert-error-msg"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Gallery JS -->
     <script src="../assets/libs/glightbox/js/glightbox.min.js"></script>
 
@@ -426,7 +463,7 @@
     <script src="../assets/js/profile.js"></script>
     
     <!-- Internal Checkout JS -->
-    <script src="../assets/js/checkout.js"></script>
+    <script src="../assets/js/profile-stepper.js"></script>
 
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>

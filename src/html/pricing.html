@@ -2,7 +2,7 @@
 
 </head>
 
-<body>
+<body onload="updatePricingPage()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -745,7 +745,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(0);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(0);" id="tier-free-1m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -795,7 +795,7 @@
                                                                     </li>
                                                                 </ul>
                                                                 <div class="d-grid">
-                                                                    <button type="button" onclick="updateTier(1);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                    <button type="button" onclick="updateTier(1);" id="tier-1core-1m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -851,7 +851,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(2);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(2);" id="tier-2core-1m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -916,7 +916,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(5);" class="btn btn-primary btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(5);" id="tier-5core-1m" class="btn btn-primary btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -977,7 +977,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(0);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(0);" id="tier-free-3m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1027,7 +1027,7 @@
                                                                     </li>
                                                                 </ul>
                                                                 <div class="d-grid">
-                                                                    <button type="button" onclick="updateTier(1);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                    <button type="button" onclick="updateTier(1);" id="tier-1core-3m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -1083,7 +1083,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(2);" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(2);" id="tier-2core-3m" class="btn btn-primary-light btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1148,7 +1148,7 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(5);" class="btn btn-primary btn-wave">Get Started</button>
+                                                                <button type="button" onclick="updateTier(5);" id="tier-5core-3m" class="btn btn-primary btn-wave">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>

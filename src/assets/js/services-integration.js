@@ -133,7 +133,7 @@ var getUserProfile = () => {
         .then(res => {
             if (res.status == 200) {
                 console.log(res.data);
-
+                
                 const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:{};
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:{};
                 const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:[];
@@ -153,40 +153,42 @@ var getUserProfile = () => {
                 localStorage.setItem('netProfitDailyArr', JSON.stringify(netProfitDaily));
                 localStorage.setItem('netProfitMonthlyArr', JSON.stringify(netProfitMonthly));
 
-                if(window.location.pathname == '/index.html' ){
-                    for (let i = 0; i < subscribedBots.length; i++) {
-                        createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
-                                                subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
-                                                subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,i);                      
-                    }
-    
-                    document.getElementById("as-of-summary").innerHTML = subscribtionStatsSummary.AS_OF_SUMMARY;
-                    document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
-                    document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
-    
-                    const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
-                    //localStorage.setItem('subscribedBotsArr', JSON.stringify(subscribedBots));
-                    for (let i = 0; i < recentActivities.length; i++) {
-                        populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
-                                            recentActivities[i].ACTIVITY_TS,'info');                      
-                    }
+                if(profile.ROLE_CODE == -2){
+                    location.href = "profile.html";
+                }
+                else if(profile.ROLE_CODE == -1){
+                    location.href = "pricing.html";
+                }
+                else if(profile.ROLE_CODE < -2 && profile.ROLE_CODE > 5){
+                    location.href = "sign-in-cover.html";
+                }
 
-                    //generateSummary(subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT);
-                    //generateStatistics(netProfitHourly);
+                for (let i = 0; i < subscribedBots.length; i++) {
+                    createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
+                                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
+                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,i);                      
                 }
-                else if(window.location.pathname == '/profile.html'){
-                    document.getElementById("profile-photo").src = profile.PROFILE_PHOTO;
-                    document.getElementById("profile-name").innerHTML = username;
-                    document.getElementById("profile-email").innerHTML = profile.EMAIL_ID;     
-                    document.getElementById("primary-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";  
-                    document.getElementById("profile-city").innerHTML = (profile.CITY != null && profile.CITY != undefined) ? profile.CITY : "City"; 
-                    document.getElementById("profile-state").innerHTML = (profile.STATE != null && profile.STATE != undefined) ? profile.STATE : "State";  
-                    document.getElementById("profile-country").innerHTML = (profile.COUNTRY != null && profile.COUNTRY != undefined) ? profile.COUNTRY : "Country";
-                    document.getElementById("last-updated-on").innerHTML = profile.UPDATED_TS;
-                    
-                    const profileStatus = (profile.ROLE_CODE > -2) ? 100: (profile.ROLE_CODE == -2) ? 50 : 0;
-                    showProfileStatus(profileStatus);
+
+                document.getElementById("as-of-summary").innerHTML = subscribtionStatsSummary.AS_OF_SUMMARY;
+                document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
+                document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
+
+                const theme = new Map([
+                    ["PROFILE", 'success'],
+                    ["SUBSCRIBE", 'secondary'],
+                    ["BOTS", 'secondary']
+                    //["BOTS", 'info']
+                    //["BOTS", 'warning']
+                  ]);
+
+                const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
+                for (let i = 0; i < recentActivities.length; i++) {
+                    populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
+                                        recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
+
+                //generateSummary(subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT);
+                //generateStatistics(netProfitHourly);
             }
         }).catch(err => {
             console.log("inside err");
@@ -368,24 +370,169 @@ var showProfileStatus = (percentCompletion) => {
     profileStatusContainer.appendChild(profileStatusDiv);
 }
 
-/* var generateSummary = (avgNetProfit) => {
-    var chart3 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
-    chart3.render();
-    chart3.updateOptions({
-        colors: ["rgba(" + myVarVal + ", 0.95)"],
-        series: [avgNetProfit]
-    });
+var updateProfilePage = () => {
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
+    const subscribedBots = JSON.parse(localStorage.getItem('subscribedBotsArr'));
+
+    const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
+    document.getElementById("header-user-name").innerHTML = username;
+    document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+    document.getElementById("profile-header-photo").src = profile.PROFILE_PHOTO;
+    document.getElementById("profile-header-name").innerHTML = username;
+    document.getElementById("profile-header-email").innerHTML = profile.EMAIL_ID;     
+    document.getElementById("profile-header-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";  
+    document.getElementById("profile-header-city").innerHTML = (profile.CITY != null && profile.CITY != undefined) ? profile.CITY : "City"; 
+    document.getElementById("profile-header-state").innerHTML = (profile.STATE != null && profile.STATE != undefined) ? profile.STATE : "State";  
+    document.getElementById("profile-header-country").innerHTML = (profile.COUNTRY != null && profile.COUNTRY != undefined) ? profile.COUNTRY : "Country";
+    document.getElementById("profile-last-updated-on").innerHTML = profile.UPDATED_TS;
+
+    const profileStatus = (profile.ROLE_CODE > -2) ? 100: (profile.ROLE_CODE == -2) ? 50 : 0;
+    showProfileStatus(profileStatus);
+
+    document.getElementById("profile-firstname").innerHTML = profile.NAME_FIRST;
+    document.getElementById("profile-lastname").innerHTML = profile.NAME_LAST;
+    document.getElementById("profile-displayname").innerHTML = (profile.NAME_DISPLAY != null && profile.NAME_DISPLAY != undefined) ? profile.NAME_DISPLAY : "Display Name"; 
+    document.getElementById("profile-rolecode").innerHTML = profile.ROLE_CODE;
+    document.getElementById("profile-timestamp").innerHTML = profile.CREATED_TS;
+
+    document.getElementById("profile-email").innerHTML = profile.EMAIL_ID;     
+    document.getElementById("profile-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";
+    document.getElementById("profile-city").innerHTML = (profile.CITY != null && profile.CITY != undefined) ? profile.CITY : "City"; 
+    document.getElementById("profile-state").innerHTML = (profile.STATE != null && profile.STATE != undefined) ? profile.STATE : "State";  
+    document.getElementById("profile-country").innerHTML = (profile.COUNTRY != null && profile.COUNTRY != undefined) ? profile.COUNTRY : "Country";
+
+    for (let i = 0; i < subscribedBots.length; i++) {
+        createBotNameBoxes(subscribedBots[i].BOT_NAME);                      
+    }
+
+    document.getElementById("firstname-add").value = profile.NAME_FIRST;
+    document.getElementById("lastname-add").value = profile.NAME_LAST;
+    document.getElementById("email-add").value = profile.EMAIL_ID;
+    document.getElementById("displayname-add").value = profile.NAME_DISPLAY;
+    document.getElementById("photourl-add").value = profile.PROFILE_PHOTO;
+    document.getElementById("primary-phoneno-add").value = profile.PHONE_PRIMARY;
+    document.getElementById("secondary-phoneno-add").value = profile.PHONE_SECONDARY;
+    document.getElementById("clientid-add").value = profile.NAME_CLIENT_ID;
+    document.getElementById("address-add").value = profile.ADDRESS;
+    document.getElementById("pincode-add").value = profile.PINCODE;
+    document.getElementById("city-add").value = profile.CITY;
+    document.getElementById("state-add").value = profile.STATE;
+    document.getElementById("country-add").value = profile.COUNTRY;
+
+    if(profile.RISK_PLAN != undefined && profile.RISK_PLAN != null){
+        var options = document.getElementById("risk-level").options;
+        for (var i = 0; i < options.length; i++) {
+            if (options[i].text.toLowerCase() == profile.RISK_PLAN.toLowerCase()) {
+                options[i].selected = true;
+                break;
+            }
+        }
+    }
+    
+    document.getElementById("platform-name").value = profile.API_EXCHANGE;
+    document.getElementById("api-key-value").value = profile.API_KEY;
+    document.getElementById("api-secret-value").value = profile.API_SECRET;
+    document.getElementById("notes-section").value = profile.NOTES;
 }
 
-var generateStatistics = (hourlyData) => {
-    var graphData = formatGraphData(hourlyData);
-    inputNetprofit = graphData.netProfitArray;
-    inputXAxisData = graphData.xAxisDataArray;
+var createBotNameBoxes = (botName) => {
+    const anchor = document.createElement('a');
+    anchor.href = 'javascript:void(0);';
+    anchor.innerHTML = `<span class="badge bg-light text-muted m-2">${botName}</span>`
 
-    updateChartData(inputNetprofit,inputXAxisData);
-} */
+    const botListDiv = document.getElementById("bot-list");
+    botListDiv.appendChild(anchor);
+}
 
+var updateProfile = () => {
 
+     const userDetails = {
+                        name_first: document.getElementById("firstname-add").value,
+                        name_last: document.getElementById("lastname-add").value,
+                        name_display: document.getElementById("displayname-add").value,
+                        name_client_id: document.getElementById("clientid-add").value,
+                        profile_photo: document.getElementById("photourl-add").value,
+                        address: document.getElementById("address-add").value,
+                        city: document.getElementById("city-add").value,
+                        state: document.getElementById("state-add").value,
+                        country: document.getElementById("country-add").value,
+                        pincode: document.getElementById("pincode-add").value,
+                        phone_primary: document.getElementById("primary-phoneno-add").value,
+                        phone_secondary: document.getElementById("secondary-phoneno-add").value,
+                        api_exchange: document.getElementById("platform-name").value,
+                        api_key: document.getElementById("api-key-value").value,
+                        api_secret: document.getElementById("api-secret-value").value,
+                        risk_plan: document.getElementById("risk-level").options[document.getElementById("risk-level").selectedIndex].text,
+                        notes: document.getElementById("notes-section").value,
+                        role_code: -1
+                    }
+
+    const authToken = localStorage.getItem('authToken');
+    axios
+        .post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/updateProfile',
+            userDetails,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        )
+        .then(res => {
+            console.log("res: " + JSON.stringify(res.data));
+            if (res.status == 200) {
+                showToastAlerts('update-profile-success','alert-success-msg',res.data.message);
+                setTimeout(()=> {
+                    window.location.href='pricing.html';
+                 }
+                 ,delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            /* if (err.response.status == 422) {
+                showToastAlerts('update-profile-error','alert-error-msg',err.response.data.errors);
+            } */
+        });
+};
+
+var updatePricingPage = () => {
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
+    const statsSummary = JSON.parse(localStorage.getItem('statsSummaryObj'));
+
+    const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
+    document.getElementById("header-user-name").innerHTML = username;
+    document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+
+    if(statsSummary.ACTIVE_BOTS == 1){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
+    }
+    else if(statsSummary.ACTIVE_BOTS >= 2 && statsSummary.ACTIVE_BOTS < 5){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+        document.getElementById("tier-2core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
+        document.getElementById("tier-2core-3m").disabled = true;
+    }
+
+    else if(statsSummary.ACTIVE_BOTS >= 5){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+        document.getElementById("tier-2core-1m").disabled = true;
+        document.getElementById("tier-5core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
+        document.getElementById("tier-2core-3m").disabled = true;
+        document.getElementById("tier-5core-3m").disabled = true;
+    }
+}
 
 var signout = () => {
     console.log("### Inside signout:");
@@ -403,3 +550,20 @@ var signout = () => {
             window.location.href='sign-in-cover.html';
         });
 };
+
+/* var generateSummary = (avgNetProfit) => {
+    var chart3 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
+    chart3.render();
+    chart3.updateOptions({
+        colors: ["rgba(" + myVarVal + ", 0.95)"],
+        series: [avgNetProfit]
+    });
+}
+
+var generateStatistics = (hourlyData) => {
+    var graphData = formatGraphData(hourlyData);
+    inputNetprofit = graphData.netProfitArray;
+    inputXAxisData = graphData.xAxisDataArray;
+
+    updateChartData(inputNetprofit,inputXAxisData);
+} */
