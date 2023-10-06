@@ -9,7 +9,7 @@
 
 </head>
 
-<body onload="updateProfilePage()">
+<body onload="loadProfilePage()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -214,9 +214,6 @@
                                                         <div class="form-floating">
                                                             <input type="text" class="form-control" id="displayname-add" placeholder="displayName">
                                                             <label for="displayname-add">Display Name</label>
-                                                            <div class="invalid-feedback" id="displayname-empty" style="display:none;">
-                                                                Display name cannot be emtpty.
-                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-12">
@@ -253,6 +250,9 @@
                                                         <div class="form-floating">
                                                             <textarea class="form-control" placeholder="Address Here" id="address-add"></textarea>
                                                             <label for="address-add">Address</label>
+                                                            <div class="invalid-feedback" id="address-empty" style="display:none;">
+                                                                Address cannot be emtpty.
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-12">
