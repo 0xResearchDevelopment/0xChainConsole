@@ -207,8 +207,8 @@ var getUserProfile = () => {
                 const theme = new Map([
                     ["PROFILE", 'success'],
                     ["SUBSCRIBE", 'secondary'],
-                    ["BOTS", 'secondary']
-                    //["BOTS", 'info']
+                    ["BOTS", 'secondary'],
+                    ["NOTIFICATION", 'info']
                     //["BOTS", 'warning']
                   ]);
 
