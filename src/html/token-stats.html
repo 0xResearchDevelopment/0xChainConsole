@@ -30,8 +30,8 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-2">
-                                                        <div class="avatar avatar-lg bg-info-transparent text-info">
-                                                            <i class="fe fe-users"></i>
+                                                        <div class="avatar avatar-lg bg-primary-transparent text-primary">
+                                                            <i class="fe fe-settings"></i>
                                                         </div>
                                                     </div>
                                                     <div class="flex-1">
@@ -55,7 +55,7 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-2">
-                                                        <div class="avatar avatar-lg bg-warning-transparent text-warning">
+                                                        <div class="avatar avatar-lg bg-primary-transparent text-primary">
                                                             <i class="fe fe-mail"></i>
                                                         </div>
                                                     </div>
@@ -64,8 +64,10 @@
                                                             <p class="mb-0 text-muted">Trades & Netprofit</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="total-no-of-trades"></h3> <!-- TOTAL_NUMOF_TRADES -->
-                                                            <span class="text-danger fs-18"><i class="ti ti-arrow-down-right me-1 fs-18"></i><span id="net-profit"></span><span>%</span></span>  <!-- TOKEN_NETPROFIT -> show text-danger if negative, text-success if its positive-->
+                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="total-no-of-trades"></h3> 
+                                                            <div class="avatar avatar-md br-4 ms-auto">
+                                                                <span class="text-danger fs-18"><span id="net-profit"></span></span> 
+                                                            </div>
                                                         </div>
                                                         <span class="badge bg-blue-transparent">As of: <span id="traded-date2"></span></span> 
                                                     </div>
@@ -78,8 +80,8 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-2">
-                                                        <div class="avatar avatar-lg bg-teal-transparent text-teal">
-                                                            <i class="fe fe-user-plus"></i>
+                                                        <div class="avatar avatar-lg bg-primary-transparent text-primary">
+                                                            <i class="fe fe-dollar-sign"></i>
                                                         </div>
                                                     </div>
                                                     <div class="flex-1">
@@ -88,7 +90,7 @@
                                                         </div>
                                                         <div class="flex-between">
                                                             <h3 class="fs-20 mb-0 font-weight-normal" id="investment"></h3>
-                                                            <span class="text-blue"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>
+                                                            <span class="text-blue"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>  
                                                         </div>
                                                         <span class="badge bg-blue-transparent" id="subscribed-on"></span>
                                                     </div>
@@ -101,7 +103,7 @@
                                             <div class="card-body">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-2">
-                                                        <div class="avatar avatar-lg bg-pink-transparent text-pink">
+                                                        <div class="avatar avatar-lg bg-primary-transparent text-primary">
                                                             <i class="fe fe-map"></i>
                                                         </div>
                                                     </div>
@@ -151,6 +153,7 @@
                                                                 <i class="fe fe-user-plus"></i>
                                                             </div>
                                                         </div>
+                                                        <!-- FIXME: responsive design issue -->
                                                         <div class="">
                                                             <p class="mb-0 text-muted">Total Trades</p>
                                                             <h3 class="mb-0 numberfont" id="total-trades"></h3>
@@ -218,7 +221,8 @@
                                                             </div>
                                                         </a>
                                                         <div class="ms-auto">
-                                                            <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button>
+                                                            <!-- <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button> -->
+                                                            <span class="avatar radius-5 bg-primary"><i class="fe fe-activity"></i></span>
                                                         </div>
                                                     </li>
                                                     <li class="list-group-item d-flex">
@@ -227,7 +231,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-2 lh-1">
                                                                         <span class="avatar avatar-md">
-                                                                            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" alt=""> <!-- BOT_BASE_ICON url-->
+                                                                            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" alt=""> <!-- FIXME: we need use BOT_BASE_ICON url-->
                                                                         </span>
                                                                     </div>
                                                                     <div>
@@ -238,7 +242,8 @@
                                                             </div>
                                                         </a>
                                                         <div class="ms-auto">
-                                                            <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button>
+                                                            <!-- <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button> -->
+                                                            <span class="avatar radius-5 bg-warning"><i class="fe fe-activity"></i></span>
                                                         </div>
                                                     </li>
                                                     <li class=" list-group-item d-flex">
@@ -247,18 +252,19 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-2 lh-1">
                                                                         <span class="avatar avatar-md">
-                                                                            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png" alt="">  <!-- BOT_TOKEN_ICON url-->
+                                                                            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png" alt="">  <!-- FIXME: we need use BOT_TOKEN_ICON url-->
                                                                         </span>
                                                                     </div>
                                                                     <div>
-                                                                        <p class="fw-semibold mb-0 fs-15" id="token-trade-fee">TOKEN_TRADE_FEE TOKEN_CURRENCY_CODE</p>
-                                                                        <span class="text-muted fs-12" id="base-trade-fee">BASE_TRADE_FEE BASE_CURRENCY_CODE</span>
+                                                                        <p class="fw-semibold mb-0 fs-15" id="token-trade-fee">Token Currency</p>
+                                                                        <span class="text-muted fs-12" id="base-trade-fee">Base Currency</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </a>
                                                         <div class="ms-auto">
-                                                            <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button>
+                                                            <!-- <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button> -->
+                                                            <span class="avatar radius-5 bg-info"><i class="fe fe-activity"></i></span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -288,20 +294,20 @@
                                             <div class="row mt-4 justify-content-center">
                                                 <div class="col-xl-4 col-md-4  m-1 m-md-0 d-block text-center">
                                                     <div class="px-4 py-2 border rounded-1">
-                                                        <h4 class="mb-1">$73,970</h4>
-                                                        <p class="mb-0 text-muted"><i class="bx bxs-circle text-primary fs-13  me-1"></i>TOKEN_NETPROFIT</p>
+                                                        <h5 class="mb-1" id="tokenAsOfNowtNetProfit">0%</h5>
+                                                        <p class="mb-0 text-muted" id="tokenAsOfNowtNetProfitLbl"><i class="bx bxs-circle text-primary fs-12  me-1"></i>TOKEN_NETPROFIT</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-4 col-md-4  m-1 m-md-0  d-block text-center">
                                                     <div class="px-4 py-2  border rounded-1">
-                                                        <h4 class="mb-1">45,389</h4>
-                                                        <p class="mb-0 text-muted"><i class="bx bxs-circle text-secondary fs-13 me-1"></i>BASE_NETPROFIT</p>
+                                                        <h5 class="mb-1" id="baseAsOfNowtNetProfit">0%</h5>
+                                                        <p class="mb-0 text-muted" id="baseAsOfNowtNetProfitLbl"><i class="bx bxs-circle text-secondary fs-12 me-1"></i>BASE_NETPROFIT</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-4  col-md-4  m-1  m-md-0 d-block text-center">
                                                     <div class="px-4 py-2  border rounded-1">
-                                                        <h4 class="mb-1">19,685</h4>
-                                                        <p class="mb-0 text-muted"> <i class="bx bxs-circle text-light fs-13 me-1"></i>OVERALL_PROFITABLE</p>
+                                                        <h5 class="mb-1" id="overallAsOfNowtNetProfit">0%</h5>
+                                                        <p class="mb-0 text-muted" id="overallAsOfNowtNetProfitLbl"> <i class="bx bxs-circle text-light fs-12 me-1"></i>OVERALL_PROFITABLE</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -515,7 +521,7 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold"> Total No of Days</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Total number of days :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
                                                         <span class="text-primary fs-17" id="total-no-of-days"></span>
@@ -530,10 +536,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold"> Proft per Month</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Profit per Month (approx.) :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-secondary fs-17" id="profit-per-month"></span>
+                                                        <span class="text-primary fs-17" id="profit-per-month"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -545,10 +551,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Profit per Trade</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Profit per Trade (approx.) :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-success fs-17" id="profit-per-trade"></span>
+                                                        <span class="text-primary fs-17" id="profit-per-trade"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -560,10 +566,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Overall Profitable</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Overall Trade success rate :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-warning fs-17" id="overall-profitable"></span>
+                                                        <span class="text-primary fs-17" id="overall-profitable"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -575,10 +581,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Trades per Month</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Trades per Month (approx.) :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-danger fs-17" id="trades-per-month"></span>
+                                                        <span class="text-primary fs-17" id="trades-per-month"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -590,10 +596,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Max Wins</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Maximum number of WINs in a row :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-success fs-17" id="max-wins"></span>
+                                                        <span class="text-primary fs-17" id="max-wins"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -605,10 +611,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Max Losses</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Maximum number of LOSSes in a row :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-info fs-17" id="max-losses"></span>
+                                                        <span class="text-primary fs-17" id="max-losses"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -620,10 +626,10 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Max Tokens held</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Maximum Tokens held at one stage :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
-                                                        <span class="text-warning fs-17" id="max-tokens-held"></span>
+                                                        <span class="text-primary fs-17" id="max-tokens-held"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -635,7 +641,7 @@
                                                 </a>
                                                 <div class="flex-1 flex-between pos-relative">
                                                     <div class="">
-                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Average Time per Trade</a>
+                                                        <a href="javascript:void(0);" class="fs-13 fw-semibold">Average Time taken per Trade :</a>
                                                     </div>
                                                     <div class="min-w-fit-content text-end">
                                                         <span class="text-primary fs-17" id="avg-time-per-trade"></span>

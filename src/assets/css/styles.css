@@ -12322,6 +12322,7 @@ ul {
   background-color: rgb(var(--light-rgb));
   top: 0;
   inset-inline-start: 68px;
+  left: 30%;
 }
 .up-event-container > .up-event {
   position: relative;
@@ -12337,6 +12338,7 @@ ul {
   background-color: var(--custom-white);
   inset-inline-start: 64px;
   top: 6px;
+  left: 30%;
 }
 .up-event-container > .up-event > .sub-event {
   margin-block-start: 1.5rem;

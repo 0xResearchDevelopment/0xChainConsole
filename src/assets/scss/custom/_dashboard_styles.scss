@@ -1023,6 +1023,7 @@ ul {
     background-color: $light;
     top: 0;
     inset-inline-start: 68px;
+    left: 30%;
   }
   > .up-event {
     position: relative;
@@ -1037,6 +1038,7 @@ ul {
       background-color: $custom-white;
       inset-inline-start: 64px;
       top: 6px;
+      left: 30%;
     }
     > .sub-event {
       margin-block-start: 1.5rem;
