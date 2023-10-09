@@ -188,7 +188,7 @@
                                                 <div class="row gy-4 mb-4">
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="firstname-add" placeholder="firstName">
+                                                            <input type="text" class="form-control" id="firstname-add" placeholder="firstName" required>
                                                             <label for="firstname-add">First Name</label>
                                                             <div class="invalid-feedback" id="firstname-empty" style="display:none;">
                                                                 First name cannot be emtpty.
@@ -197,7 +197,7 @@
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="lastname-add" placeholder="lastName">
+                                                            <input type="text" class="form-control" id="lastname-add" placeholder="lastName" required>
                                                             <label for="lastname-add">Last Name</label>
                                                             <div class="invalid-feedback" id="lastname-empty" style="display:none;">
                                                                 Last name cannot be emtpty.
@@ -206,7 +206,7 @@
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="email-add" placeholder="emailAddress" readonly="readonly">
+                                                            <input type="text" class="form-control" id="email-add" placeholder="emailAddress" readonly="readonly" required>
                                                             <label for="email-add">Email</label>
                                                         </div>
                                                     </div>
@@ -218,7 +218,7 @@
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="photourl-add" placeholder="photourl">
+                                                            <input type="text" class="form-control" id="photourl-add" placeholder="photourl" required>
                                                             <label for="photourl-add">Profile Photo</label>
                                                             <div class="invalid-feedback" id="photourl-empty" style="display:none;">
                                                                 Profile photo URL cannot be emtpty.
@@ -227,7 +227,7 @@
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <input type="email" class="form-control" id="primary-phoneno-add" placeholder="1234-XX-XXXX">
+                                                            <input type="email" class="form-control" id="primary-phoneno-add" placeholder="1234-XX-XXXX" required>
                                                             <label for="primary-phoneno-add">Primary Phone</label>
                                                             <div class="invalid-feedback" id="primary-phoneno-empty" style="display:none;">
                                                                 Primary phone cannot be emtpty.
@@ -248,7 +248,7 @@
                                                     </div>
                                                     <div class="col-xl-6">
                                                         <div class="form-floating">
-                                                            <textarea class="form-control" placeholder="Address Here" id="address-add"></textarea>
+                                                            <textarea class="form-control" placeholder="Address Here" id="address-add" required></textarea>
                                                             <label for="address-add">Address</label>
                                                             <div class="invalid-feedback" id="address-empty" style="display:none;">
                                                                 Address cannot be emtpty.
@@ -259,7 +259,7 @@
                                                         <div class="row gy-2">
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="number" class="form-control" id="pincode-add" placeholder="Name">
+                                                                    <input type="number" class="form-control" id="pincode-add" placeholder="Name" required>
                                                                     <label for="pincode-add">Pin Code</label>
                                                                     <div class="invalid-feedback" id="pincode-empty" style="display:none;">
                                                                         Pin code cannot be emtpty.
@@ -268,7 +268,7 @@
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="city-add" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="city-add" placeholder="Name" required>
                                                                     <label for="city-add">City</label>
                                                                     <div class="invalid-feedback" id="city-empty" style="display:none;">
                                                                         City cannot be emtpty.
@@ -277,7 +277,7 @@
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="state-add" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="state-add" placeholder="Name" required>
                                                                     <label for="state-add">State</label>
                                                                     <div class="invalid-feedback" id="state-empty" style="display:none;">
                                                                         State cannot be emtpty.
@@ -286,7 +286,7 @@
                                                             </div>
                                                             <div class="col-xl-3">
                                                                 <div class="form-floating">
-                                                                    <input type="text" class="form-control" id="country-add" placeholder="Name">
+                                                                    <input type="text" class="form-control" id="country-add" placeholder="Name" required>
                                                                     <label for="country-add">Country</label>
                                                                     <div class="invalid-feedback" id="country-empty" style="display:none;">
                                                                         Country cannot be emtpty.
@@ -407,7 +407,7 @@
                                         <div class="tab-pane fade border-0 p-0" id="delivery-tab-pane" role="tabpanel"
                                             aria-labelledby="delivery-tab-pane" tabindex="0">
                                             <div class="p-5 checkout-payment-success my-3">
-                                                <a onclick="updateProfile()" class="btn btn-success">Submit</a>
+                                                <a  class="btn btn-success" data-bs-toggle="modal" data-bs-target="#profileSubmitModal">Submit</a>
                                             </div>
                                         </div>
                                     </div>
@@ -454,6 +454,30 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="profileSubmitModal" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="staticBackdropLabel">Confirm Submission
+                        </h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to submit the Profile details?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="updateProfile()"
+                            data-bs-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <!-- Gallery JS -->

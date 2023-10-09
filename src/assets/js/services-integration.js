@@ -73,7 +73,6 @@ var signUp = async () => {
 
 };
 
-
 var verifyOtp = () => {
     var otpCode = sessionStorage.getItem('otpCode');
     console.log("## inside verify - otpCode:", otpCode);
@@ -165,12 +164,12 @@ var getUserProfile = () => {
             if (res.status == 200) {
                 console.log(res.data);
                 
-                const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:{};
-                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:{};
-                const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:[];
-                const netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:[];
-                const netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:[];
-                const netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:[];
+                const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:null;
+                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
+                const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
+                const netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:null;
+                const netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:null;
+                const netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:null;
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -200,9 +199,9 @@ var getUserProfile = () => {
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID);                      
                 }
 
-                document.getElementById("as-of-summary").innerHTML = subscribtionStatsSummary.AS_OF_SUMMARY;
-                document.getElementById("total-trades").innerHTML = subscribtionStatsSummary.SUM_USER_SUB_TRADES;
-                document.getElementById("active-bots").innerHTML = subscribtionStatsSummary.ACTIVE_BOTS;
+                document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : '01-01-1900';
+                document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
+                document.getElementById("active-bots").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.ACTIVE_BOTS : 0;
 
                 const theme = new Map([
                     ["PROFILE", 'success'],
@@ -493,10 +492,9 @@ var updateProfile = () => {
                         api_secret: document.getElementById("api-secret-value").value,
                         risk_plan: document.getElementById("risk-level").options[document.getElementById("risk-level").selectedIndex].text,
                         notes: document.getElementById("notes-section").value,
-                        role_code: document.getElementById("profile-rolecode").value
+                        role_code: document.getElementById("profile-rolecode").innerHTML
                     }
 
-                    console.log("test: "+document.getElementById("profile-rolecode").value);
     const authToken = localStorage.getItem('authToken');
     axios
         .post(
@@ -533,34 +531,35 @@ var updatePricingPage = () => {
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
-
-    if(statsSummary.ACTIVE_BOTS == 1){
-        document.getElementById("tier-free-1m").disabled = true;
-        document.getElementById("tier-1core-1m").disabled = true;
-
-        document.getElementById("tier-free-3m").disabled = true;
-        document.getElementById("tier-1core-3m").disabled = true;
-    }
-    else if(statsSummary.ACTIVE_BOTS >= 2 && statsSummary.ACTIVE_BOTS < 5){
-        document.getElementById("tier-free-1m").disabled = true;
-        document.getElementById("tier-1core-1m").disabled = true;
-        document.getElementById("tier-2core-1m").disabled = true;
-
-        document.getElementById("tier-free-3m").disabled = true;
-        document.getElementById("tier-1core-3m").disabled = true;
-        document.getElementById("tier-2core-3m").disabled = true;
-    }
-
-    else if(statsSummary.ACTIVE_BOTS >= 5){
-        document.getElementById("tier-free-1m").disabled = true;
-        document.getElementById("tier-1core-1m").disabled = true;
-        document.getElementById("tier-2core-1m").disabled = true;
-        document.getElementById("tier-5core-1m").disabled = true;
-
-        document.getElementById("tier-free-3m").disabled = true;
-        document.getElementById("tier-1core-3m").disabled = true;
-        document.getElementById("tier-2core-3m").disabled = true;
-        document.getElementById("tier-5core-3m").disabled = true;
+ 
+    if(statsSummary != null){
+        if(statsSummary.ACTIVE_BOTS == 1){
+            document.getElementById("tier-free-1m").disabled = true;
+            document.getElementById("tier-1core-1m").disabled = true;
+    
+            document.getElementById("tier-free-3m").disabled = true;
+            document.getElementById("tier-1core-3m").disabled = true;
+        }
+        else if(statsSummary.ACTIVE_BOTS >= 2 && statsSummary.ACTIVE_BOTS < 5){
+            document.getElementById("tier-free-1m").disabled = true;
+            document.getElementById("tier-1core-1m").disabled = true;
+            document.getElementById("tier-2core-1m").disabled = true;
+    
+            document.getElementById("tier-free-3m").disabled = true;
+            document.getElementById("tier-1core-3m").disabled = true;
+            document.getElementById("tier-2core-3m").disabled = true;
+        }
+        else if(statsSummary.ACTIVE_BOTS >= 5){
+            document.getElementById("tier-free-1m").disabled = true;
+            document.getElementById("tier-1core-1m").disabled = true;
+            document.getElementById("tier-2core-1m").disabled = true;
+            document.getElementById("tier-5core-1m").disabled = true;
+    
+            document.getElementById("tier-free-3m").disabled = true;
+            document.getElementById("tier-1core-3m").disabled = true;
+            document.getElementById("tier-2core-3m").disabled = true;
+            document.getElementById("tier-5core-3m").disabled = true;
+        } 
     }
 }
 
@@ -581,19 +580,10 @@ var signout = () => {
         });
 };
 
-/* var generateSummary = (avgNetProfit) => {
-    var chart3 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
-    chart3.render();
-    chart3.updateOptions({
-        colors: ["rgba(" + myVarVal + ", 0.95)"],
-        series: [avgNetProfit]
-    });
+var mapTierToModal = (tier) => {
+    var divEl = document.getElementById("pp-modal-footer");
+    divEl.innerHTML = `<button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-outline-primary" id="pp-modal-submit"
+                            data-bs-dismiss="modal" onclick="updateTier(${tier})">Submit</button>`
 }
-
-var generateStatistics = (hourlyData) => {
-    var graphData = formatGraphData(hourlyData);
-    inputNetprofit = graphData.netProfitArray;
-    inputXAxisData = graphData.xAxisDataArray;
-
-    updateChartData(inputNetprofit,inputXAxisData);
-} */

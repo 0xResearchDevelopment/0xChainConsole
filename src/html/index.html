@@ -1,6 +1,7 @@
 @SPK@include("partials/mainhead.html")
 <link rel="stylesheet" href="../assets/libs/jsvectormap/css/jsvectormap.min.css">
 <link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- Axios dependency-->
 <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
@@ -43,7 +44,7 @@
                                         <div class="card-title">
                                             Summary
                                         </div>
-                                        <div class="dropdown">
+                                        <!-- <div class="dropdown">
                                             <a href="javascript:void(0);"
                                                 class="btn-outline-light btn btn-sm text-muted"
                                                 data-bs-toggle="dropdown" aria-expanded="false">Overall<i
@@ -56,6 +57,9 @@
                                                 <li><a class="dropdown-item" href="javascript:void(0);">Last Month</a>
                                                 </li>
                                             </ul>
+                                        </div> -->
+                                        <div>
+                                            <i class="fa fa-refresh" aria-hidden="true" onclick="changeLayout(0)" style="font-size: x-large;cursor:pointer"></i>
                                         </div>
                                     </div>
                                     <div class="card-body p-0">

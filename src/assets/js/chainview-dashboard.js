@@ -1,12 +1,10 @@
 /* starts : chainview - netprofit summary pie-chart */
-var avgNetProfit;
+var avgNetProfit = 0;
 
-if(localStorage.getItem("statsSummaryObj") === null){
-    avgNetProfit = 0;
-}
-else{
+if(localStorage.getItem("statsSummaryObj") != null){
     var summaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
-    avgNetProfit = summaryObj.AVG_USER_SUB_NETPROFIT;
+    console.log("summaryObj: "+ summaryObj);
+    avgNetProfit = summaryObj != null ? summaryObj.AVG_USER_SUB_NETPROFIT : 0;
 }
 
 var pieChartData = {
@@ -30,6 +28,23 @@ chart2.render();
 function index1() {
     chart2.updateOptions({
         colors: ["rgba(" + myVarVal + ", 0.95)"],
+    });
+}
+
+var updatePieChartData = () => {
+    if(localStorage.getItem("statsSummaryObj") === null){
+        avgNetProfit = 0;
+    }
+    else{
+        var summaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
+        avgNetProfit = summaryObj != null ? summaryObj.AVG_USER_SUB_NETPROFIT : 0;
+    }
+
+    var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
+    chart2.render();
+    chart2.updateOptions({
+        colors: ["rgba(" + myVarVal + ", 0.95)"],
+        series: [avgNetProfit]
     });
 }
 /* ends : chainview - netprofit summary pie-chart */
@@ -242,6 +257,8 @@ var changeLayout = (layout) => {
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
+        updatePieChartData();
+        document.getElementById("chart-view").innerHTML = "Monthly"
     }
     else if(layout == 1){
         var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitDailyArr')));
@@ -249,6 +266,8 @@ var changeLayout = (layout) => {
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
+        updatePieChartData();
+        document.getElementById("chart-view").innerHTML = "Daily"
     }
     else {
         var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitHourlyArr')));
@@ -256,6 +275,8 @@ var changeLayout = (layout) => {
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
+        updatePieChartData();
+        document.getElementById("chart-view").innerHTML = "Hourly"
     }
 }
 

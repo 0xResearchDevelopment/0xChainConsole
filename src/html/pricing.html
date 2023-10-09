@@ -745,7 +745,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(0);" id="tier-free-1m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-free-1m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(0)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -795,7 +796,8 @@
                                                                     </li>
                                                                 </ul>
                                                                 <div class="d-grid">
-                                                                    <button type="button" onclick="updateTier(1);" id="tier-1core-1m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                    <button type="button" id="tier-1core-1m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(1)" 
+                                                                        data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -851,7 +853,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(2);" id="tier-2core-1m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-2core-1m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(2)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -916,7 +919,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(5);" id="tier-5core-1m" class="btn btn-primary btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-5core-1m" data-bs-toggle="modal" class="btn btn-primary btn-wave" onclick="mapTierToModal(5)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -977,7 +981,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(0);" id="tier-free-3m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-free-3m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(0)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1027,7 +1032,8 @@
                                                                     </li>
                                                                 </ul>
                                                                 <div class="d-grid">
-                                                                    <button type="button" onclick="updateTier(1);" id="tier-1core-3m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                    <button type="button" id="tier-1core-3m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(1)" 
+                                                                        data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -1083,7 +1089,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(2);" id="tier-2core-3m" class="btn btn-primary-light btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-2core-3m" class="btn btn-primary-light btn-wave" onclick="mapTierToModal(2)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1148,7 +1155,8 @@
                                                                 </li>
                                                             </ul>
                                                             <div class="d-grid">
-                                                                <button type="button" onclick="updateTier(5);" id="tier-5core-3m" class="btn btn-primary btn-wave">Get Started</button>
+                                                                <button type="button" id="tier-5core-3m" class="btn btn-primary btn-wave" onclick="mapTierToModal(5)" 
+                                                                    data-bs-toggle="modal" data-bs-target="#pricingPlanModal">Get Started</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1198,6 +1206,26 @@
         </div>
     </div>
 
+    <div class="modal fade" id="pricingPlanModal" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+    aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="staticBackdropLabel">Confirm Subscription
+                    </h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to choose the selected plan?</p>
+                </div>
+                <div class="modal-footer" id="pp-modal-footer">
+                    <!-- Button will be generated dynamically during runtime-->
+                </div>
+            </div>
+        </div>
+    </div>
 
     @SPK@include("partials/commonjs.html")
 
