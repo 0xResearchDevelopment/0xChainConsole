@@ -34,8 +34,9 @@ var signUp = async () => {
     else if (myJson.code == 201) {
         showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
         sessionStorage.setItem('verficationToken', myJson.results.verification.token);
+        sessionStorage.setItem('actionCode', 0);
         setTimeout(()=> {
-            window.location.href = "sign-up-verification.html";
+            window.location.href = "verification.html";
          }
          ,delayInMS);
     }
@@ -61,7 +62,7 @@ var signUp = async () => {
         if(res.status == 201){
             alert(JSON.stringify(myJson.message)); 
             sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-            location.href = "sign-up-verification.html";
+            location.href = "verification.html";
         }
     })
     .catch(err => {
@@ -75,6 +76,7 @@ var signUp = async () => {
 
 var verifyOtp = () => {
     var otpCode = sessionStorage.getItem('otpCode');
+    var actionCode = sessionStorage.getItem('actionCode');
     console.log("## inside verify - otpCode:", otpCode);
 
     var digit1 = document.getElementById("one").value;
@@ -90,7 +92,7 @@ var verifyOtp = () => {
     if(userEnteredCode == otpCode) {
         showToastAlerts('verification-success','alert-success-msg',"OTP validation successful");
         setTimeout(() => {
-            verifyAccount();
+            verifyAccount(actionCode); //actionCode : 0 is for sign-in verification, 1 is for forget-change password
         }, delayInMS);
         //alert("valid otp");
     } else {
@@ -99,23 +101,31 @@ var verifyOtp = () => {
     }    
 };
 
-var verifyAccount = () => {
+var verifyAccount = (actionCode) => {
         var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+        console.log("## verifyAccount-actionCode:", actionCode);
 
         axios.get(verifyAccountUrl)
             .then(res => {
                 console.log(res);
                 if (res.status == 200) {
-                showToastAlerts('verification-success','alert-success-msg',res.data.message);
+                    showToastAlerts('verification-success','alert-success-msg',res.data.message);
                     sessionStorage.removeItem('verficationToken');
-                setTimeout(()=> {
-                        window.location.href = "sign-in-cover.html";
-                 },delayInMS);
-
+                    sessionStorage.removeItem('actionCode');
+                    if( actionCode == 0) {
+                        setTimeout(()=> {
+                                window.location.href = "sign-in-cover.html";
+                        },delayInMS);
+                    } else if (actionCode == 1) {
+                        setTimeout(()=> {
+                            window.location.href = "create-password.html";
+                        },delayInMS);
+                    }
                 }
             }).catch(err => {
                 console.log(err, err.response);
                 alert(err);
+                window.location.href = "create-password.html"; //FIXME: just for testing purpose, need to remove this line one forgetPwd flow implemented
         });
 };
 
@@ -371,7 +381,7 @@ var showProfileStatus = (percentCompletion) => {
     profileStatusDiv.innerHTML = `<p class="fs-15 mb-2 fw-semibold">Profile Status :</p>
                                   <p class="fw-semibold mb-2">Profile ${percentCompletion}% completed</p>
                                   <div class="progress progress-sm progress-animate ">
-                                    <div class="progress-bar bg-success  ronded-1" role="progressbar" aria-valuenow="${percentCompletion}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentCompletion}%"></div>
+                                    <div class="progress-bar bg-info ronded-1" role="progressbar" aria-valuenow="${percentCompletion}" aria-valuemin="0" aria-valuemax="100" style="width: ${percentCompletion}%"></div>
                                   </div>`
 
     const profileStatusContainer = document.getElementById("profile-status");
@@ -411,6 +421,8 @@ var loadProfilePage = () => {
             
                 const profileStatus = (profile.ROLE_CODE > -2) ? 100: (profile.ROLE_CODE == -2) ? 50 : 0;
                 showProfileStatus(profileStatus);
+                const userStatusMsg = (profile.ROLE_CODE > -2) ? "<button type='button' class='btn btn-info btn-lg btn-wave'><i class='align-middle'></i>Active</button>" : "<button type='button' class='btn btn-danger btn-lg btn-wave'><i class='align-middle'></i>Pending Activation</button>";
+                document.getElementById("btn_userStatus").innerHTML = userStatusMsg;
             
                 document.getElementById("profile-firstname").innerHTML = profile.NAME_FIRST;
                 document.getElementById("profile-lastname").innerHTML = profile.NAME_LAST;
@@ -587,3 +599,46 @@ var mapTierToModal = (tier) => {
                         <button type="button" class="btn btn-outline-primary" id="pp-modal-submit"
                             data-bs-dismiss="modal" onclick="updateTier(${tier})">Submit</button>`
 }
+
+
+var forgetPassword = async () => {
+    var forgetPwdOtpCode = Math.floor(1000 + Math.random() * 9000).toString();
+    console.log("### forgetPwdOtpCode:", forgetPwdOtpCode);
+    sessionStorage.setItem('otpCode', forgetPwdOtpCode);
+    sessionStorage.setItem('actionCode', 1); //action is forget password
+
+    const myBody = {
+        "email": document.getElementById("signin-username").value,
+        "accountOtpGenerated" : forgetPwdOtpCode
+    };
+    //console.log("## signUp-request-object:",myBody);
+    /*const response = await fetch('https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(myBody)
+    });
+
+    const myJson = await response.json();
+    if (myJson.code == 422) {
+        showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
+        document.getElementById("signup-fname").value = '';
+        document.getElementById("signup-lname").value = '';
+        document.getElementById("signup-email").value = '';
+        document.getElementById("signup-password").value = '';
+    }
+    else if (myJson.code == 201) {
+        showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
+        sessionStorage.setItem('verficationToken', myJson.results.verification.token);
+        sessionStorage.setItem('actionCode', 0);
+        setTimeout(()=> {
+            window.location.href = "verification.html";
+         }
+         ,delayInMS);
+    }*/
+    setTimeout(()=> {
+        window.location.href = "verification.html";
+     },delayInMS);
+};
