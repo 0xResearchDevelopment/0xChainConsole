@@ -16,6 +16,7 @@ let autoprefixer = require("gulp-autoprefixer");
 let sourcemaps = require("gulp-sourcemaps");
 let cleanCSS = require('gulp-clean-css');
 var replaceUrl = require('gulp-string-replace');
+var cleanDestination = require('gulp-clean');
 
 let sass$ = gulpsass(sass)
 let browsersync$ = browsersync.create();
@@ -191,12 +192,16 @@ function replaceApiUrl() {
 	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/prod')).pipe(gulp.dest(jsFilePath)); //Production
 };
 
+function cleanTarget () {
+    return gulp.src("./dist", {"allowEmpty" : true}).pipe(cleanDestination({force: true})).pipe(gulp.dest('./dist'));
+};
+
 const build = gulp.series(
-	gulp.parallel(cleanDist, copyAll, html, scss, js, replaceApiUrl, plugins),
+	gulp.parallel(cleanDist, cleanTarget, copyAll, html, scss, js, replaceApiUrl, plugins),
 	gulp.parallel(scss, html, js, replaceApiUrl, plugins));
 
 const defaults = gulp.series(
-	gulp.parallel(cleanDist, copyAll, html, scss, js, plugins, replaceApiUrl, copyLibs),
+	gulp.parallel(cleanDist, cleanTarget, copyAll, html, scss, js, plugins, replaceApiUrl, copyLibs),
 	gulp.parallel(browsersyncFn, watch, html, js, replaceApiUrl, scss, plugins));
 
 
@@ -210,6 +215,7 @@ exports.html = html;
 exports.cleanDist = cleanDist;
 exports.copyAll = copyAll;
 exports.replaceApiUrl = replaceApiUrl;
+exports.cleanTarget = cleanTarget;
 
 exports.watch = watch;
 

@@ -253,7 +253,7 @@ var chartData = {
             },
         }
     },
-}
+};
 
 document.getElementById("earnings").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
@@ -267,17 +267,16 @@ function earnings() {
             "rgba(" + myVarVal + ", 0.95)"
         ],
     });
-}
+};
 
 var changeLayout = (layout) => {
-
     if(layout == 2){
         var graphData = formatGraphData(netProfitMonthly);
         inputNetprofit = graphData.netProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        document.getElementById("chart-view").innerHTML = "Monthly"
+        document.getElementById("chart-view").innerHTML = "Monthly";
     }
     else if(layout == 1){
         var graphData = formatGraphData(netProfitDaily);
@@ -285,7 +284,7 @@ var changeLayout = (layout) => {
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        document.getElementById("chart-view").innerHTML = "Daily"
+        document.getElementById("chart-view").innerHTML = "Daily";
     }
     else {
         var graphData = formatGraphData(netProfitHourly);
@@ -293,8 +292,7 @@ var changeLayout = (layout) => {
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        document.getElementById("chart-view").innerHTML = "Hourly"
+        document.getElementById("chart-view").innerHTML = "Hourly";
     }
-}
-
-/* ends : chainview - Netprofit stats line-chart */
+};
+//*********************** */
