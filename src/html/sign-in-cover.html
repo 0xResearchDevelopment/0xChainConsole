@@ -61,12 +61,25 @@
                                                     <div class="col-xl-12 mt-0">
                                                         <label for="signin-username" class="form-label text-default">User Name</label>
                                                         <input type="text" class="form-control form-control-lg" id="signin-username" placeholder="user name">
+                                                        <div class="invalid-feedback" id="signin-username-empty" style="display:none;">
+                                                            User name cannot be emtpty.
+                                                        </div>
+                                                        <div class="invalid-feedback" id="signin-username-format" style="display:none;">
+                                                            Please enter valid User Name.
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-12 mb-3"> <!-- TODO: call forgetPassword API and redirect to verification page -->
-                                                        <label for="signin-password" class="form-label text-default d-block">Password<a href="javascript:forgetPassword();" class="float-end text-primary">Forget password ?</a></label>
+                                                        <label for="signin-password" class="form-label text-default d-block">Password
+                                                            <a href="javascript:forgetPassword();" class="float-end text-primary">Forget password ?</a></label>
                                                         <div class="input-group">
                                                             <input type="password" class="form-control form-control-lg" id="signin-password" placeholder="password">
                                                             <button class="btn btn-light bg-transparent" type="button" onclick="createpassword('signin-password',this)" id="button-addon2"><i class="ri-eye-off-line align-middle"></i></button>
+                                                        </div>
+                                                        <div class="invalid-feedback" id="signin-password-empty" style="display:none;">
+                                                            Password cannot be emtpty.
+                                                        </div>
+                                                        <div class="invalid-feedback" id="signin-password-length" style="display:none;">
+                                                            Password must be between 6 to 12 characters length.
                                                         </div>
                                                         <div class="mt-2">
                                                             <div class="form-check">

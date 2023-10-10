@@ -1,12 +1,18 @@
 @SPK@include("partials/mainhead.html")
 
- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
- <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+
+<!-- Axios dependency-->
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+<!-- API Integration & functionalities-->
+<script src="../assets/js/history.js"></script>
 
 </head>
 
-<body>
+<body onload="loadHistoryData()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -42,34 +48,8 @@
                                             <th scope="col">Netprofit</th> <!-- TOKEN_NETPROFIT -->
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1184</td>
-                                            <td>09-Oct-23 3:47:26 PM</td>
-                                            <td>823 MATIC</td>
-                                            <td>Sold</td>
-                                            <td>MATICBTC_30M</td>
-                                            <td>2735</td>
-                                            <td>-91.23%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1183</td>
-                                            <td>09-Oct-23 1:11:26 PM</td>
-                                            <td>112 DOT</td>
-                                            <td>Bought</td>
-                                            <td>DOTBTC_15m</td>
-                                            <td>1120</td>
-                                            <td>-70.23%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>1182</td>
-                                            <td>09-Oct-23 11:47:26 AM</td>
-                                            <td>823 MATIC</td>
-                                            <td>Bought</td>
-                                            <td>MATICBTC_30M</td>
-                                            <td>2734</td>
-                                            <td>-91.13%</td>
-                                        </tr>
+                                    <tbody id="history-tbody">
+                                        <!-- Rows will be created at Runtime dynamically-->
                                     </tbody>
                                 </table>
                             </div>

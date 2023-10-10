@@ -1,44 +1,51 @@
 var delayInMS = 3000;
 
 var signUp = async () => {
+    var firstName = document.getElementById('signup-fname').value;
+    var lastName = document.getElementById('signup-lname').value;
+    var email = document.getElementById('signup-email').value;
+    var password = document.getElementById('signup-password').value;
+    validateSignUpInputs(firstName,lastName,email,password);
 
-    var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
-    //console.log("### accountOtpGenerated:", accountOtpGenerated);
-    sessionStorage.setItem('otpCode', accountOtpGenerated);
-
-    const myBody = {
-        "name_first": document.getElementById("signup-fname").value,
-        "name_last": document.getElementById("signup-lname").value,
-        "email": document.getElementById("signup-email").value,
-        "password": document.getElementById("signup-password").value,
-        "accountOtpGenerated" : accountOtpGenerated
-    };
-    //console.log("## signUp-request-object:",myBody);
-    const response = await fetch('https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(myBody)
-    });
-
-    const myJson = await response.json();
-    if (myJson.code == 422) {
-        showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
-        document.getElementById("signup-fname").value = '';
-        document.getElementById("signup-lname").value = '';
-        document.getElementById("signup-email").value = '';
-        document.getElementById("signup-password").value = '';
-    }
-    else if (myJson.code == 201) {
-        showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
-        sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-        sessionStorage.setItem('actionCode', 0);
-        setTimeout(()=> {
-            window.location.href = "verification.html";
-         }
-         ,delayInMS);
+    if(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(email,"signUp")) {
+        var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
+        //console.log("### accountOtpGenerated:", accountOtpGenerated);
+        sessionStorage.setItem('otpCode', accountOtpGenerated);
+    
+        const myBody = {
+            "name_first": firstName,
+            "name_last": lastName,
+            "email": email,
+            "password": password,
+            "accountOtpGenerated" : accountOtpGenerated
+        };
+        //console.log("## signUp-request-object:",myBody);
+        const response = await fetch('https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(myBody)
+        });
+    
+        const myJson = await response.json();
+        if (myJson.code == 422) {
+            showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
+            document.getElementById("signup-fname").value = '';
+            document.getElementById("signup-lname").value = '';
+            document.getElementById("signup-email").value = '';
+            document.getElementById("signup-password").value = '';
+        }
+        else if (myJson.code == 201) {
+            showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
+            sessionStorage.setItem('verficationToken', myJson.results.verification.token);
+            sessionStorage.setItem('actionCode', 0);
+            setTimeout(()=> {
+                window.location.href = "verification.html";
+             }
+             ,delayInMS);
+        }
     }
 
     /*await axios
@@ -91,10 +98,17 @@ var verifyOtp = () => {
     console.log("## inside verify - userEnteredCode:", userEnteredCode);
     if(userEnteredCode == otpCode) {
         showToastAlerts('verification-success','alert-success-msg',"OTP validation successful");
-        setTimeout(() => {
-            verifyAccount(actionCode); //actionCode : 0 is for sign-in verification, 1 is for forget-change password
-        }, delayInMS);
-        //alert("valid otp");
+        if(actionCode == 0) {
+            setTimeout(() => {
+                verifyAccount(actionCode); //actionCode : 0 is for sign-in verification, 1 is for forget-change password
+            }, delayInMS);
+        } else if (actionCode == 1) {
+            sessionStorage.removeItem('verficationToken');
+            sessionStorage.removeItem('actionCode');
+            setTimeout(()=> {
+                window.location.href = "create-password.html";
+            },delayInMS);
+        }
     } else {
         //alert("invalid otp");
         showToastAlerts('verification-error','alert-error-msg',"Invalid OTP");
@@ -102,35 +116,34 @@ var verifyOtp = () => {
 };
 
 var verifyAccount = (actionCode) => {
-        var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
-        console.log("## verifyAccount-actionCode:", actionCode);
+    console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
+    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    console.log("## verifyAccount-actionCode:", actionCode);
 
-        axios.get(verifyAccountUrl)
-            .then(res => {
-                console.log(res);
-                if (res.status == 200) {
-                    showToastAlerts('verification-success','alert-success-msg',res.data.message);
-                    sessionStorage.removeItem('verficationToken');
-                    sessionStorage.removeItem('actionCode');
-                    if( actionCode == 0) {
-                        setTimeout(()=> {
-                                window.location.href = "sign-in-cover.html";
-                        },delayInMS);
-                    } else if (actionCode == 1) {
-                        setTimeout(()=> {
-                            window.location.href = "create-password.html";
-                        },delayInMS);
-                    }
-                }
-            }).catch(err => {
-                console.log(err, err.response);
-                alert(err);
-                window.location.href = "create-password.html"; //FIXME: just for testing purpose, need to remove this line one forgetPwd flow implemented
-        });
+    axios.get(verifyAccountUrl)
+        .then(res => {
+            console.log(res);
+            if (res.status == 200) {
+                showToastAlerts('verification-success','alert-success-msg',res.data.message);
+                sessionStorage.removeItem('verficationToken');
+                sessionStorage.removeItem('actionCode');
+                setTimeout(()=> {
+                    window.location.href = "sign-in-cover.html";
+                },delayInMS);
+            }
+        }).catch(err => {
+            console.log(err, err.response);
+            alert(err);
+    });
 };
 
 var signIn = () => {
-    axios
+    var userName = document.getElementById('signin-username').value;
+    var password = document.getElementById('signin-password').value;
+    validateSignInInputs(userName, password);
+
+    if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
+        axios
         .post(
             'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
             {
@@ -156,7 +169,89 @@ var signIn = () => {
                 showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
             }
         });
+    }
 };
+
+var validateEmail = (email, page) => {
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+    if (reg.test(email) == false) 
+        {
+            if(page == "signIn"){
+                document.getElementById('signin-username').classList.add("is-invalid");
+                document.getElementById('signin-username-format').style.display = 'block';
+            }
+            else if(page == "signUp"){
+                document.getElementById('signup-email').classList.add("is-invalid");
+                document.getElementById('signup-email-format').style.display = 'block';
+            }
+            return false;
+        }
+
+    return true;
+}
+
+var validateSignInInputs = (userName, password) => {
+    document.getElementById('signin-username').classList.remove("is-invalid");
+    document.getElementById('signin-username-empty').style.display = 'none';
+    document.getElementById('signin-username-format').style.display = 'none';
+    document.getElementById('signin-password').classList.remove("is-invalid");
+    document.getElementById('signin-password-empty').style.display = 'none';
+    document.getElementById('signin-password-length').style.display = 'none';
+
+    if(userName.length == 0){
+        document.getElementById('signin-username').classList.add("is-invalid");
+        document.getElementById('signin-username-empty').style.display = 'block';
+    }
+    if(userName.length > 0){
+        validateEmail(userName, "signIn");
+    }
+    if(password.length == 0){
+        document.getElementById('signin-password').classList.add("is-invalid");
+        document.getElementById('signin-password-empty').style.display = 'block';
+    }
+    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+        document.getElementById('signin-password').classList.add("is-invalid");
+        document.getElementById('signin-password-length').style.display = 'block';
+    }
+}
+
+var validateSignUpInputs = (fname, lname, email, password) => {
+    document.getElementById('signup-fname').classList.remove("is-invalid");
+    document.getElementById('signup-fname-empty').style.display = 'none';
+    document.getElementById('signup-lname').classList.remove("is-invalid");
+    document.getElementById('signup-lname-empty').style.display = 'none';
+    document.getElementById('signup-email').classList.remove("is-invalid");
+    document.getElementById('signup-email-empty').style.display = 'none';
+    document.getElementById('signup-email-format').style.display = 'none';
+    document.getElementById('signup-password').classList.remove("is-invalid");
+    document.getElementById('signup-password-empty').style.display = 'none';
+    document.getElementById('signup-password-length').style.display = 'none';
+
+    if(fname.length == 0){
+        document.getElementById('signup-fname').classList.add("is-invalid");
+        document.getElementById('signup-fname-empty').style.display = 'block';
+    }
+    if(lname.length == 0){
+        document.getElementById('signup-lname').classList.add("is-invalid");
+        document.getElementById('signup-lname-empty').style.display = 'block';
+    }
+    if(email.length == 0){
+        document.getElementById('signup-email').classList.add("is-invalid");
+        document.getElementById('signup-email-empty').style.display = 'block';
+    }
+    if(email.length > 0){
+        validateEmail(email, "signUp");
+    }
+    if(password.length == 0){
+        document.getElementById('signup-password').classList.add("is-invalid");
+        document.getElementById('signup-password-empty').style.display = 'block';
+    }
+    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+        document.getElementById('signup-password').classList.add("is-invalid");
+        document.getElementById('signup-password-length').style.display = 'block';
+    }
+}
 
 var getUserProfile = () => {
     const authToken = localStorage.getItem('authToken');
@@ -175,11 +270,8 @@ var getUserProfile = () => {
                 console.log(res.data);
                 
                 const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:null;
-                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
-                const netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:null;
-                const netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:null;
-                const netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:null;
+                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -188,10 +280,6 @@ var getUserProfile = () => {
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
                 localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
-                localStorage.setItem('subscribedBotsArr', JSON.stringify(subscribedBots));
-                localStorage.setItem('netProfitHourlyArr', JSON.stringify(netProfitHourly)); 
-                localStorage.setItem('netProfitDailyArr', JSON.stringify(netProfitDaily));
-                localStorage.setItem('netProfitMonthlyArr', JSON.stringify(netProfitMonthly));
 
                 if(profile.ROLE_CODE == -2){
                     location.href = "profile.html";
@@ -226,9 +314,6 @@ var getUserProfile = () => {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
-
-                //generateSummary(subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT);
-                //generateStatistics(netProfitHourly);
             }
         }).catch(err => {
             console.log("inside err");
@@ -361,9 +446,7 @@ var populateRecentActivities = (description,module,timestamp,theme) => {
                             <div
                                 class="flex-grow-1 d-flex align-items-center justify-content-between">
                                 <div>
-                                    <span class="fs-12 text-muted">${module}
-                                        <a href="javascript:void(0)"
-                                            class="fw-semibold text-${description}"></a></span>
+                                    <span class="fs-12 text-muted">${module}</span>
                                 </div>
                                 <div class="min-w-fit-content ms-2 text-end">
 
@@ -600,45 +683,59 @@ var mapTierToModal = (tier) => {
                             data-bs-dismiss="modal" onclick="updateTier(${tier})">Submit</button>`
 }
 
+var forgetPassword = () => {
 
-var forgetPassword = async () => {
-    var forgetPwdOtpCode = Math.floor(1000 + Math.random() * 9000).toString();
-    console.log("### forgetPwdOtpCode:", forgetPwdOtpCode);
-    sessionStorage.setItem('otpCode', forgetPwdOtpCode);
-    sessionStorage.setItem('actionCode', 1); //action is forget password
+    document.getElementById('signin-username').classList.remove("is-invalid");
+    document.getElementById('signin-username-empty').style.display = 'none';
+    document.getElementById('signin-username-format').style.display = 'none';
+    var userName = document.getElementById('signin-username').value;
 
-    const myBody = {
-        "email": document.getElementById("signin-username").value,
-        "accountOtpGenerated" : forgetPwdOtpCode
-    };
-    //console.log("## signUp-request-object:",myBody);
-    /*const response = await fetch('https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(myBody)
-    });
-
-    const myJson = await response.json();
-    if (myJson.code == 422) {
-        showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
-        document.getElementById("signup-fname").value = '';
-        document.getElementById("signup-lname").value = '';
-        document.getElementById("signup-email").value = '';
-        document.getElementById("signup-password").value = '';
+    if(userName.length == 0){
+        document.getElementById('signin-username').classList.add("is-invalid");
+        document.getElementById('signin-username-empty').style.display = 'block';
     }
-    else if (myJson.code == 201) {
-        showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
-        sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-        sessionStorage.setItem('actionCode', 0);
-        setTimeout(()=> {
-            window.location.href = "verification.html";
-         }
-         ,delayInMS);
-    }*/
-    setTimeout(()=> {
-        window.location.href = "verification.html";
-     },delayInMS);
+    if(userName.length > 0){
+        validateEmail(userName, "signIn");
+    }
+
+    if(userName.length > 0 && validateEmail(userName,"signIn")){
+        var forgetPwdOtpCode = Math.floor(1000 + Math.random() * 9000).toString();
+        console.log("### forgetPwdOtpCode:", forgetPwdOtpCode);
+        sessionStorage.setItem('otpCode', forgetPwdOtpCode);
+    
+        const myBody = {
+            "email": userName,
+            "accountOtpGenerated" : forgetPwdOtpCode
+        };
+
+        axios
+        .post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/forgot',
+            myBody,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+        )
+        .then(res => {
+            console.log("res: " + JSON.stringify(res.data));
+            if (res.status == 201) {
+                showToastAlerts('signin-success','alert-success-msg',res.data.message);
+                sessionStorage.setItem('verficationToken', res.data.results.verification.token);
+                sessionStorage.setItem('actionCode', 1);
+                setTimeout(()=> {
+                    window.location.href = "verification.html";
+                 }
+                 ,delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            if (err.response.status == 422) {
+                showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
+            } 
+        });
+    }
 };

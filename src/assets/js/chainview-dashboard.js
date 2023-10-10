@@ -1,12 +1,45 @@
-/* starts : chainview - netprofit summary pie-chart */
-var avgNetProfit = 0;
+//API call : Get User Profile
+var loadChartData = () => {
+    const authToken = localStorage.getItem('authToken');
+    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+    axios
+        .get(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        )
+        .then(res => {
+            if (res.status == 200) {
+                console.log(res.data);
 
-if(localStorage.getItem("statsSummaryObj") != null){
-    var summaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
-    console.log("summaryObj: "+ summaryObj);
-    avgNetProfit = summaryObj != null ? summaryObj.AVG_USER_SUB_NETPROFIT : 0;
+                const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
+                netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:null;
+                netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:null;
+                netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:null;
+
+                avgNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT : 0;
+                updatePieChartData();
+
+                var graphData = formatGraphData(netProfitHourly);
+                inputNetprofit = graphData.netProfitArray;
+                inputXAxisData = graphData.xAxisDataArray;
+                updateChartData(inputNetprofit, inputXAxisData);
+            }
+        }).catch(err => {
+            console.log("inside err");
+            console.log(err, err.response);
+            location.href = "sign-in-cover.html";
+        })
 }
 
+//API call to fetch Chart data
+loadChartData();
+
+/* starts : chainview - netprofit summary pie-chart */
+var avgNetProfit = 0;
 var pieChartData = {
     series: [avgNetProfit],  /* get this value from loacl storage*/
     chart: {
@@ -23,6 +56,7 @@ var pieChartData = {
     },
     labels: ["Net Profit"],
 };
+
 var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
 chart2.render();
 function index1() {
@@ -32,14 +66,6 @@ function index1() {
 }
 
 var updatePieChartData = () => {
-    if(localStorage.getItem("statsSummaryObj") === null){
-        avgNetProfit = 0;
-    }
-    else{
-        var summaryObj = JSON.parse(localStorage.getItem('statsSummaryObj'));
-        avgNetProfit = summaryObj != null ? summaryObj.AVG_USER_SUB_NETPROFIT : 0;
-    }
-
     var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
     chart2.render();
     chart2.updateOptions({
@@ -105,18 +131,12 @@ var updateChartData = (dataInput, XAxisInput) => {
 }
 
 /* starts : chainview - Netprofit stats line-chart */
+var netProfitHourly = [];
+var netProfitDaily = [];
+var netProfitMonthly = [];
+
 var inputNetprofit = [];
 var inputXAxisData = [];
-
-if(localStorage.getItem("netProfitHourlyArr") === null){
-    inputNetprofit = [];
-    inputXAxisData = [];
-}
-else{
-    var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitHourlyArr')));
-    inputNetprofit = graphData.netProfitArray;
-    inputXAxisData = graphData.xAxisDataArray;
-}
 
 console.log("1: ",inputNetprofit);
 console.log("2: ",inputXAxisData);
@@ -252,30 +272,27 @@ function earnings() {
 var changeLayout = (layout) => {
 
     if(layout == 2){
-        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitMonthlyArr')));
+        var graphData = formatGraphData(netProfitMonthly);
         inputNetprofit = graphData.netProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        updatePieChartData();
         document.getElementById("chart-view").innerHTML = "Monthly"
     }
     else if(layout == 1){
-        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitDailyArr')));
+        var graphData = formatGraphData(netProfitDaily);
         inputNetprofit = graphData.netProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        updatePieChartData();
         document.getElementById("chart-view").innerHTML = "Daily"
     }
     else {
-        var graphData = formatGraphData(JSON.parse(localStorage.getItem('netProfitHourlyArr')));
+        var graphData = formatGraphData(netProfitHourly);
         inputNetprofit = graphData.netProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
         updateChartData(inputNetprofit,inputXAxisData);
-        updatePieChartData();
         document.getElementById("chart-view").innerHTML = "Hourly"
     }
 }

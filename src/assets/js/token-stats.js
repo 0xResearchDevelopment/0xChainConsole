@@ -123,9 +123,6 @@ var getTokenStats = () => {
     });
 };
 
-
-
-
 var showToastAlerts = (divId, spanId, msg) => {
   document.getElementById(spanId).innerHTML = msg;
   const middlecentertoastExample = document.getElementById(divId);
@@ -138,15 +135,17 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
   const list = document.createElement('li');
   list.id = 'transaction-li';
-  list.classList.add("list-item", "mb-4", "up-event");
-  list.innerHTML = `<div class="d-flex align-items-start">
-                        <div class="me-5 text-center fw-semibold">
-                            <p class="text-primary fs-12 mb-0">${lastTradedDate}</p>
-                        </div>
-                        <div class="flex-1 fw-semibold row" style="margin-left: 15%;">
-                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fw-semibold ms-2 col-xl-2">${tradeActionFull}</span>
-                            <span class="col-xl-6">${lastTradeQty} ${tokenCurrencyCode}</span>
-                        </div>
+  list.innerHTML = `<div class="">
+                          <i class="task-icon bg-${badgeTheme}"></i>
+                          <div class="flex-1 fw-semibold">
+                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fw-semibold">${tradeActionFull}</span>
+                            <span>${lastTradeQty} ${tokenCurrencyCode}</span>
+                          </div>
+                          <div class="flex-grow-1 d-flex align-items-center justify-content-between">
+                              <div>
+                                  <span class="fs-12 text-muted">${lastTradedDate}</span>
+                              </div>
+                          </div>
                       </div>`
 
   const ulist = document.getElementById("transactions-ul");

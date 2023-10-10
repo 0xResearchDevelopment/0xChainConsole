@@ -58,18 +58,36 @@
                                                     <div class="col-xl-12">
                                                         <label for="signup-fname" class="form-label text-default">First Name</label>
                                                         <input type="text" class="form-control form-control-lg" id="signup-fname" placeholder="first name">
+                                                        <div class="invalid-feedback" id="signup-fname-empty" style="display:none;">
+                                                            First name cannot be emtpty.
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <label for="signup-lname" class="form-label text-default">Last Name</label>
                                                         <input type="text" class="form-control form-control-lg" id="signup-lname" placeholder="last name">
+                                                        <div class="invalid-feedback" id="signup-lname-empty" style="display:none;">
+                                                            Last name cannot be emtpty.
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <label for="signup-email" class="form-label text-default">Email</label>
                                                         <input type="email" class="form-control form-control-lg" id="signup-email" placeholder="email">
+                                                        <div class="invalid-feedback" id="signup-email-empty" style="display:none;">
+                                                            Email cannot be emtpty.
+                                                        </div>
+                                                        <div class="invalid-feedback" id="signup-email-format" style="display:none;">
+                                                            Please enter valid Email.
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-12">
                                                         <label for="signup-password" class="form-label text-default">Password</label>
                                                         <input type="password" class="form-control form-control-lg" id="signup-password" placeholder="password">
+                                                        <div class="invalid-feedback" id="signup-password-empty" style="display:none;">
+                                                            Password cannot be emtpty.
+                                                        </div>
+                                                        <div class="invalid-feedback" id="signup-password-length" style="display:none;">
+                                                            Password must be between 6 to 12 characters length.
+                                                        </div>
                                                     </div>
                                                     <div class="col-xl-12 d-grid mt-2">
                                                         <a onclick="signUp()" class="btn btn-lg btn-primary">Create Account</a>
