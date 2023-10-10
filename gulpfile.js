@@ -15,6 +15,7 @@ let sass = require('sass');
 let autoprefixer = require("gulp-autoprefixer");
 let sourcemaps = require("gulp-sourcemaps");
 let cleanCSS = require('gulp-clean-css');
+var replaceUrl = require('gulp-string-replace');
 
 let sass$ = gulpsass(sass)
 let browsersync$ = browsersync.create();
@@ -183,13 +184,20 @@ function copyAll() {
 		.pipe(gulp.dest(assetsPath));				// dest() - A stream that can be used in the middle or at the end of a pipeline to create files on the file system.
 };
 
+function replaceApiUrl() {
+	var jsFilePath = './dist/assets/js';
+  	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'http://localhost:3000')).pipe(gulp.dest(jsFilePath)); //Local-Env
+	return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev')).pipe(gulp.dest(jsFilePath)); //Developement
+	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/prod')).pipe(gulp.dest(jsFilePath)); //Production
+};
+
 const build = gulp.series(
-	gulp.parallel(cleanDist, copyAll, html, scss, js, plugins),
-	gulp.parallel(scss, html, js, plugins));
+	gulp.parallel(cleanDist, copyAll, html, scss, js, replaceApiUrl, plugins),
+	gulp.parallel(scss, html, js, replaceApiUrl, plugins));
 
 const defaults = gulp.series(
-	gulp.parallel(cleanDist, copyAll, html, scss, js, plugins, copyLibs),
-	gulp.parallel(browsersyncFn, watch, html, js, scss, plugins));
+	gulp.parallel(cleanDist, copyAll, html, scss, js, plugins, replaceApiUrl, copyLibs),
+	gulp.parallel(browsersyncFn, watch, html, js, replaceApiUrl, scss, plugins));
 
 
 // Export tasks
@@ -201,6 +209,7 @@ exports.scss = scss;
 exports.html = html;
 exports.cleanDist = cleanDist;
 exports.copyAll = copyAll;
+exports.replaceApiUrl = replaceApiUrl;
 
 exports.watch = watch;
 
