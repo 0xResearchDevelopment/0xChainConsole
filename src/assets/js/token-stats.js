@@ -142,7 +142,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
                           </div>
                           <div class="flex-grow-1 d-flex align-items-center justify-content-between">
                               <div>
-                                  <span class="fs-12 text-muted">${lastTradedDate}</span>
+                                  <span class="fs-11 text-muted">${lastTradedDate}</span>
                               </div>
                           </div>
                       </div>`
