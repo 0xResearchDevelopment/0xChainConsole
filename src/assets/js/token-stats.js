@@ -46,15 +46,9 @@ var getTokenStats = () => {
         document.getElementById("token-icon").src = botDetails.BOT_TOKEN_ICON;
         document.getElementById("time-frame").innerHTML = botDetails.BOT_NAME;
         document.getElementById("total-no-of-trades").innerHTML = botDetails.TOTAL_NUMOF_TRADES;
-        var netProfitValue = botDetails.TOKEN_NETPROFIT; //  
+        
 
-        if(netProfitValue>0){
-          document.getElementById("net-profit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-up ms-1'></i></span>";
-        } else {
-          document.getElementById("net-profit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-down ms-1'></i></span>";
-        }
-
-        document.getElementById("traded-date1").innerHTML = new Date(botDetails.LAST_TRADED_DATE).toLocaleString();
+        document.getElementById("traded-date1").innerHTML = new Date(botDetails.APP_TS).toLocaleString();
         document.getElementById("investment").innerHTML = botDetails.TOKEN_ENTRY_AMOUNT;
         document.getElementById("subscribed-on").innerHTML = botDetails.SUBSCRIBED_ON;
         document.getElementById("traded-qty").innerHTML = botDetails.LAST_TRADE_QTY;
@@ -75,17 +69,48 @@ var getTokenStats = () => {
         document.getElementById("current-balance").innerHTML = currentBalance;
         document.getElementById("initial-balance").innerHTML = initialBalance;
 
-        var baseProfit = botDetails.BASE_PROFIT + " " + botDetails.BASE_CURRENCY_CODE;
-        document.getElementById("base-net-profit").innerHTML = "Netprofit: " + botDetails.BASE_NETPROFIT + "%";
-        document.getElementById("base-profit").innerHTML = "Amount gained: " + baseProfit;
 
+        //Profit Summary - Chart setup - starts
+        var netProfitValue = botDetails.TOKEN_NETPROFIT;
+        var baseNetProfitValue = botDetails.BASE_NETPROFIT;
+        var tradeSuccessRate = botDetails.OVERALL_PROFITABLE;
+        
+        document.getElementById("tokenAsOfNowtNetProfitLbl").innerHTML = "<i class='bx bxs-circle text-primary fs-12  me-1'></i>" + botDetails.TOKEN_CURRENCY_CODE + " Netprofit";
+        document.getElementById("baseAsOfNowtNetProfitLbl").innerHTML = "<i class='bx bxs-circle text-secondary fs-12  me-1'></i>" + botDetails.BASE_CURRENCY_CODE + " Netprofit";
+        document.getElementById("overallAsOfNowtNetProfitLbl").innerHTML = "<i class='bx bxs-circle text-info fs-12 me-1'></i>" + "Trade Success Rate";
+
+        if(netProfitValue>0){
+          document.getElementById("net-profit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-up ms-1'></i></span>";
+          document.getElementById("tokenAsOfNowtNetProfit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_NETPROFIT + "%" + "<i class='ti ti-trending-up ms-1'></i></span>";
+        } else {
+          document.getElementById("net-profit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-down ms-1'></i></span>";
+          document.getElementById("tokenAsOfNowtNetProfit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_NETPROFIT + "%" + "<i class='ti ti-trending-down ms-1'></i></span>";
+        }
+
+        if(baseNetProfitValue>0){
+          document.getElementById("base-net-profit").innerHTML = "Netprofit: " + "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + baseNetProfitValue + "%"+ "<i class='ti ti-trending-up ms-1'></i></span>";
+          document.getElementById("baseAsOfNowtNetProfit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.BASE_NETPROFIT + "%" + "<i class='ti ti-trending-up ms-1'></i></span>";
+        } else {
+          document.getElementById("base-net-profit").innerHTML = "Netprofit: " + "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + baseNetProfitValue + "%" + "<i class='ti ti-trending-down ms-1'></i></span>";
+          document.getElementById("baseAsOfNowtNetProfit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.BASE_NETPROFIT + "%" + "<i class='ti ti-trending-down ms-1'></i></span>";
+        }
+        document.getElementById("base-profit").innerHTML = "Gain in BASE: " + botDetails.BASE_PROFIT + " " + botDetails.BASE_CURRENCY_CODE;
+
+        if(tradeSuccessRate>0)
+          document.getElementById("overallAsOfNowtNetProfit").innerHTML =  "<span class='badge bg-success-transparent fs-14 rounded-pill'>" +tradeSuccessRate + "%" + "<i class='ti ti-trending-up ms-1'></i></span>"; //Trade success rate
+        else
+          document.getElementById("overallAsOfNowtNetProfit").innerHTML =  "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" +tradeSuccessRate + "%" + "<i class='ti ti-trending-up ms-1'></i></span>"; //Trade success rate
+        
+        //Profit Summary - Chart setup - ends
+
+        
         var tokenTradeFee = botDetails.TOKEN_TRADE_FEE + " " + botDetails.TOKEN_CURRENCY_CODE;
         var baseTradeFee = botDetails.BASE_TRADE_FEE + " " + botDetails.BASE_CURRENCY_CODE;
-        document.getElementById("token-trade-fee").innerHTML = "Fee: " + tokenTradeFee;
-        document.getElementById("base-trade-fee").innerHTML = "Fee: " + baseTradeFee;
+        document.getElementById("token-trade-fee").innerHTML = "Fee in Token: " + tokenTradeFee;
+        document.getElementById("base-trade-fee").innerHTML = "Fee in BASE: " + baseTradeFee;
 
         for (let i = tradeTransHistory.length - 1; i >=0; i--) {
-          var txDateTime = new Date(tradeTransHistory[i].LAST_TRADED_DATE).toLocaleString();
+          var txDateTime = new Date(tradeTransHistory[i].APP_TS).toLocaleString();
           createTransHistoryElements(txDateTime, tradeTransHistory[i].TRADE_ACTION,
             tradeTransHistory[i].LAST_TRADE_QTY, tradeTransHistory[i].TOKEN_CURRENCY_CODE);
         }
@@ -100,15 +125,6 @@ var getTokenStats = () => {
         document.getElementById("max-losses").innerHTML = botDetails.MAX_LOSS + " trades";
         document.getElementById("max-tokens-held").innerHTML = botDetails.MAX_TOKENS_HELD + " " + botDetails.TOKEN_CURRENCY_CODE;
         document.getElementById("avg-time-per-trade").innerHTML = botDetails.AVG_TIME_PER_TRADE + "  days";
-
-        document.getElementById("tokenAsOfNowtNetProfitLbl").innerHTML = botDetails.TOKEN_CURRENCY_CODE + " Netprofit";
-        document.getElementById("tokenAsOfNowtNetProfit").innerHTML = botDetails.TOKEN_NETPROFIT + "%";
-
-        document.getElementById("baseAsOfNowtNetProfitLbl").innerHTML = botDetails.BASE_CURRENCY_CODE + " Netprofit";
-        document.getElementById("baseAsOfNowtNetProfit").innerHTML = botDetails.BASE_NETPROFIT + "%";
-
-        document.getElementById("overallAsOfNowtNetProfitLbl").innerHTML = "Trade Success Rate";
-        document.getElementById("overallAsOfNowtNetProfit").innerHTML = botDetails.OVERALL_PROFITABLE + "%";
       }
     })
     .catch(err => {
@@ -138,13 +154,11 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   list.innerHTML = `<div class="">
                           <i class="task-icon bg-${badgeTheme}"></i>
                           <div class="flex-1 fw-semibold">
-                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fw-semibold">${tradeActionFull}</span>
+                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fs-12 fw-semibold">${tradeActionFull}</span>
                             <span>${lastTradeQty} ${tokenCurrencyCode}</span>
                           </div>
-                          <div class="flex-grow-1 d-flex align-items-center justify-content-between">
-                              <div>
-                                  <span class="fs-11 text-muted">${lastTradedDate}</span>
-                              </div>
+                          <div class="min-w-fit-content ms-2 text-end">
+                                <p class="mb-0 text-muted fs-11">${lastTradedDate}</p>
                           </div>
                       </div>`
 
@@ -341,7 +355,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
 
 var options = {
   chart: {
-    height: 310,
+    height: 400,
     toolbar: {
       show: true
     },
@@ -384,9 +398,9 @@ var options = {
     position: 'top',
     horizontalAlign: 'center',
     fontWeight: 600,
-    fontSize: '11px',
+    fontSize: '16px',
     tooltipHoverFormatter: function (val, opts) {
-      return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '%'
+      return val + ': ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + '%'
     },
     labels: {
       colors: '#74767c',
@@ -486,7 +500,7 @@ var formatGraphData = (rawInputArr) => {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
     input2.push(rawInputArr[i].BASE_NETPROFIT);
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
-    var tradeDate = new Date(rawInputArr[i].LAST_TRADED_DATE).toLocaleTimeString();  //TODO: this nees be to change as per the date format required for the chart
+    var tradeDate = new Date(rawInputArr[i].APP_TS).toLocaleTimeString();  //TODO: this nees be to change as per the date format required for the chart
     xAxisData.push(tradeDate);
   }
 
@@ -535,7 +549,7 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
     //   },
     // ],
     series: [{
-      name: "Trade Success rate",
+      name: "Trade Success Rate",
       data: tokenNetProfitInput,
       type: 'bar',
     }, {
