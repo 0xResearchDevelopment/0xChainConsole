@@ -9,7 +9,7 @@ var signUp = async () => {
 
     if(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(email,"signUp")) {
         var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
-        //console.log("### accountOtpGenerated:", accountOtpGenerated);
+        console.log("### accountOtpGenerated:", accountOtpGenerated);
         sessionStorage.setItem('otpCode', accountOtpGenerated);
     
         const myBody = {
@@ -19,66 +19,41 @@ var signUp = async () => {
             "password": password,
             "accountOtpGenerated" : accountOtpGenerated
         };
-        //console.log("## signUp-request-object:",myBody);
-        const response = await fetch('@API_URL@/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(myBody)
-        });
-    
-        const myJson = await response.json();
-        if (myJson.code == 422) {
-            showToastAlerts('signup-error','alert-error-msg',JSON.parse(JSON.stringify(myJson.errors.msg)));
-            document.getElementById("signup-fname").value = '';
-            document.getElementById("signup-lname").value = '';
-            document.getElementById("signup-email").value = '';
-            document.getElementById("signup-password").value = '';
-        }
-        else if (myJson.code == 201) {
-            showToastAlerts('signup-success','alert-success-msg',JSON.parse(JSON.stringify(myJson.message)));
-            sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-            sessionStorage.setItem('actionCode', 0);
-            setTimeout(()=> {
-                window.location.href = "verification.html";
-             }
-             ,delayInMS);
-        }
-    }
 
-    /*await axios
-    .post(
-        '@API_URL@/api/auth/register',
-        {
-            name_first:document.getElementById("signup-fname").value,
-            name_last:document.getElementById("signup-lname").value,
-            email:document.getElementById("signup-email").value,
-            password:document.getElementById("signup-password").value
-        },
-        {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+        await axios
+        .post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register',
+            myBody,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
             }
-        }
-    )
-    .then(res => {
-        console.log(res);
-        if(res.status == 201){
-            alert(JSON.stringify(myJson.message)); 
-            sessionStorage.setItem('verficationToken', myJson.results.verification.token);
-            location.href = "verification.html";
-        }
-    })
-    .catch(err => {
-        console.log(err.response);
-        if(err.response.status == 422) {
-            alert(err.response.data.errors);
-        }
-    });*/
-
+        )
+        .then(res => {
+            console.log(res);
+            if(res.status == 201){
+                showToastAlerts('signup-success','alert-success-msg',res.data.message);
+                sessionStorage.setItem('verficationToken', res.data.results.verification.token);
+                sessionStorage.setItem('actionCode', 0);
+                setTimeout(()=> {
+                    window.location.href = "verification.html";
+                }
+                ,delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            if(err.response.status == 422) {
+                showToastAlerts('signup-error','alert-error-msg',err.response.data.errors.msg);
+                document.getElementById("signup-fname").value = '';
+                document.getElementById("signup-lname").value = '';
+                document.getElementById("signup-email").value = '';
+                document.getElementById("signup-password").value = '';
+            }
+        });
+    }
 };
 
 var verifyOtp = () => {
@@ -103,8 +78,6 @@ var verifyOtp = () => {
                 verifyAccount(actionCode); //actionCode : 0 is for sign-in verification, 1 is for forget-change password
             }, delayInMS);
         } else if (actionCode == 1) {
-            sessionStorage.removeItem('verficationToken');
-            sessionStorage.removeItem('actionCode');
             setTimeout(()=> {
                 window.location.href = "create-password.html";
             },delayInMS);
@@ -117,7 +90,7 @@ var verifyOtp = () => {
 
 var verifyAccount = (actionCode) => {
     console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
-    var verifyAccountUrl = '@API_URL@/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
     console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
@@ -145,7 +118,7 @@ var signIn = () => {
     if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
         axios
         .post(
-            '@API_URL@/api/auth/login',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
             {
                 email: document.getElementById("signin-username").value,
                 password: document.getElementById("signin-password").value,
@@ -189,6 +162,18 @@ var validateEmail = (email, page) => {
         }
 
     return true;
+}
+
+var isPwdConfirmPwdMatches = (password, confirmPassword) => {
+    if (password == confirmPassword) {
+        return true;
+    }
+    else {
+        document.getElementById('create-password').classList.add("is-invalid");
+        document.getElementById('create-confirmpassword').classList.add("is-invalid");
+        document.getElementById('create-password-match').style.display = 'block';
+        return false;
+    }
 }
 
 var validateSignInInputs = (userName, password) => {
@@ -253,12 +238,39 @@ var validateSignUpInputs = (fname, lname, email, password) => {
     }
 }
 
+var validateCreatePwdInputs = (password, confirmPassword) => {
+    document.getElementById('create-password').classList.remove("is-invalid");
+    document.getElementById('create-password-empty').style.display = 'none';
+    document.getElementById('create-password-length').style.display = 'none';
+    document.getElementById('create-confirmpassword').classList.remove("is-invalid");
+    document.getElementById('create-confirmpassword-empty').style.display = 'none';
+    document.getElementById('create-confirmpassword-length').style.display = 'none';
+    document.getElementById('create-password-match').style.display = 'none';
+
+    if(password.length == 0){
+        document.getElementById('create-password').classList.add("is-invalid");
+        document.getElementById('create-password-empty').style.display = 'block';
+    }
+    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+        document.getElementById('create-password').classList.add("is-invalid");
+        document.getElementById('create-password-length').style.display = 'block';
+    }
+    if(confirmPassword.length == 0){
+        document.getElementById('create-confirmpassword').classList.add("is-invalid");
+        document.getElementById('create-confirmpassword-empty').style.display = 'block';
+    }
+    if(confirmPassword.length > 12 || (confirmPassword.length < 6 && confirmPassword.length > 0)){
+        document.getElementById('create-confirmpassword').classList.add("is-invalid");
+        document.getElementById('create-confirmpassword-length').style.display = 'block';
+    }
+}
+
 var getUserProfile = () => {
     const authToken = localStorage.getItem('authToken');
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            '@API_URL@/api/auth/user-profile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -404,7 +416,7 @@ var updateTier = (code) => {
     console.log("### Inside updateTier:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            '@API_URL@/api/auth/upgradeTier',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/upgradeTier',
             {
                 newPlan: code
             },
@@ -416,7 +428,7 @@ var updateTier = (code) => {
         .then(res => {
             console.log("### Inside updateTier:res: " + res);
             if (res.status == 200) {
-                showToastAlerts('signin-success','alert-success-msg',res.data.message);
+                showToastAlerts('pricing-success','alert-success-msg',res.data.message);
                 console.log("### Inside updateTier:res.message:", res.data.message);
                 setTimeout(()=> {
                     window.location.href='index.html';
@@ -426,7 +438,7 @@ var updateTier = (code) => {
         })
         .catch(err => {
             console.log("### Inside updateTier:err.response", err.response.data.message);
-            showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
+            showToastAlerts('pricing-error','alert-error-msg',err.response.data.message);
             if(err.response.status == 401) {
                 setTimeout(()=> {
                     window.location.href='sign-in-cover.html';
@@ -477,7 +489,7 @@ var loadProfilePage = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            '@API_URL@/api/auth/user-profile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -591,9 +603,10 @@ var updateProfile = () => {
                     }
 
     const authToken = localStorage.getItem('authToken');
+    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            '@API_URL@/api/auth/updateProfile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/updateProfile',
             userDetails,
             {
                 headers: {
@@ -613,9 +626,13 @@ var updateProfile = () => {
         })
         .catch(err => {
             console.log(err);
-            /* if (err.response.status == 422) {
-                showToastAlerts('update-profile-error','alert-error-msg',err.response.data.errors);
-            } */
+             if (err.response.status == 401) {
+                showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
+            } 
+            setTimeout(()=> {
+                location.href = "sign-in-cover.html";
+             }
+             ,delayInMS);
         });
 };
 
@@ -662,7 +679,7 @@ var signout = () => {
     console.log("### Inside signout:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            '@API_URL@/api/auth/logout',{},
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/logout',{},
             {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -672,6 +689,8 @@ var signout = () => {
             console.log("### Inside signout:res: " + res);
             localStorage.clear();
             window.location.href='sign-in-cover.html';
+        }).catch(err => {
+            console.log(err);
         });
 };
 
@@ -688,6 +707,9 @@ var forgetPassword = () => {
     document.getElementById('signin-username').classList.remove("is-invalid");
     document.getElementById('signin-username-empty').style.display = 'none';
     document.getElementById('signin-username-format').style.display = 'none';
+    document.getElementById('signin-password').classList.remove("is-invalid");
+    document.getElementById('signin-password-empty').style.display = 'none';
+    document.getElementById('signin-password-length').style.display = 'none';
     var userName = document.getElementById('signin-username').value;
 
     if(userName.length == 0){
@@ -710,7 +732,7 @@ var forgetPassword = () => {
 
         axios
         .post(
-            '@API_URL@/api/password/forgot',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/forgot',
             myBody,
             {
                 headers: {
@@ -739,3 +761,40 @@ var forgetPassword = () => {
         });
     }
 };
+
+var updatePassword = () => {
+    var password = document.getElementById('create-password').value;
+    var confirmPassword = document.getElementById('create-confirmpassword').value;
+    validateCreatePwdInputs(password,confirmPassword);
+
+    if(password.length > 0 && password.length >= 6 && password.length <= 12 && confirmPassword.length > 0 
+    && confirmPassword.length >= 6 && confirmPassword.length <= 12 && isPwdConfirmPwdMatches(password,confirmPassword)){
+        console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
+        const requestBody = {
+            "token": sessionStorage.getItem('verficationToken'),
+            "password" : password
+        };
+        axios
+        .post(
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/reset',
+            requestBody
+        )
+        .then(res => {
+            console.log(res);
+            if (res.status == 200) {
+                showToastAlerts('create-password-success','alert-success-msg',res.data.message);
+                sessionStorage.removeItem('verficationToken');
+                sessionStorage.removeItem('actionCode');
+                setTimeout(()=> {
+                    window.location.href = "sign-in-cover.html";
+                },delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log(err, err.response);
+            alert(err);
+        });
+    }   
+};
+
+//****************************************************************** */
