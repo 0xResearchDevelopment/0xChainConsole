@@ -17,7 +17,7 @@ var getTokenStats = () => {
 
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
-    'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/tradingdata/getTokenStats',
+    'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/tradingdata/getTokenStats',
     {
       botId: botId
     },
@@ -40,8 +40,8 @@ var getTokenStats = () => {
 
         updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
 
-        document.getElementById("header-trade-symbol").innerHTML = botDetails.TRADE_SYMBOL;
-        document.getElementById("bot-name").innerHTML = botDetails.TRADE_SYMBOL;
+        document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+  botDetails.BOT_ID +"</span>   " + botDetails.TRADE_SYMBOL;
+        document.getElementById("bot-name").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-14 '>"+  botDetails.BOT_ID +"</span>   " +  botDetails.TRADE_SYMBOL;
         document.getElementById("base-icon").src = botDetails.BOT_BASE_ICON;
         document.getElementById("token-icon").src = botDetails.BOT_TOKEN_ICON;
         document.getElementById("time-frame").innerHTML = botDetails.BOT_NAME;

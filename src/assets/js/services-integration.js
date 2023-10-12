@@ -22,7 +22,7 @@ var signUp = async () => {
 
         await axios
         .post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/register',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register',
             myBody,
             {
                 headers: {
@@ -90,7 +90,7 @@ var verifyOtp = () => {
 
 var verifyAccount = (actionCode) => {
     console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
-    var verifyAccountUrl = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
     console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
@@ -118,7 +118,7 @@ var signIn = () => {
     if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
         axios
         .post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/login',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
             {
                 email: document.getElementById("signin-username").value,
                 password: document.getElementById("signin-password").value,
@@ -270,7 +270,7 @@ var getUserProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/user-profile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -416,7 +416,7 @@ var updateTier = (code) => {
     console.log("### Inside updateTier:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/upgradeTier',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/devpi/auth/upgradeTier',
             {
                 newPlan: code
             },
@@ -489,7 +489,7 @@ var loadProfilePage = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/user-profile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -606,7 +606,7 @@ var updateProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/updateProfile',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/updateProfile',
             userDetails,
             {
                 headers: {
@@ -679,7 +679,7 @@ var signout = () => {
     console.log("### Inside signout:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/logout',{},
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/logout',{},
             {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -732,7 +732,7 @@ var forgetPassword = () => {
 
         axios
         .post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/password/forgot',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/forgot',
             myBody,
             {
                 headers: {
@@ -776,7 +776,7 @@ var updatePassword = () => {
         };
         axios
         .post(
-            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/password/reset',
+            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/reset',
             requestBody
         )
         .then(res => {
