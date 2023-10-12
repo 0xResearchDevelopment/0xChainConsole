@@ -17,7 +17,7 @@ var getTokenStats = () => {
 
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
-    'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/tradingdata/getTokenStats',
+    'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/tradingdata/getTokenStats',
     {
       botId: botId
     },

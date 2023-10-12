@@ -188,8 +188,8 @@ function copyAll() {
 function replaceApiUrl() {
 	var jsFilePath = './dist/assets/js';
   	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'http://localhost:3000')).pipe(gulp.dest(jsFilePath)); //Local-Env
-	return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev')).pipe(gulp.dest(jsFilePath)); //Developement
-	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live')).pipe(gulp.dest(jsFilePath)); //Production
+	//return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev')).pipe(gulp.dest(jsFilePath)); //Developement
+	return gulp.src(["./src/assets/js/*.js"]).pipe(replaceUrl(new RegExp('@API_URL@', 'g'), 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live')).pipe(gulp.dest(jsFilePath)); //Production
 };
 
 function cleanTarget () {

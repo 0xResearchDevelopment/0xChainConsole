@@ -36,16 +36,16 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table id="responsiveDataTable" class="table table-bordered text-wrap" style="width:100%">
+                                <table id="txHistoryresponsiveDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th scope="col">ID</th> <!-- TODO: EVENT_ID : latest first - Decendeing order by Event_ID-->
-                                            <th scope="col">Timestamp</th> <!-- APP_TS -->
-                                            <th scope="col">Quantity</th> <!-- LAST_TRADE_QTY and TOKEN_CURRENCY_CODE :  like 2562 MATIC-->
+                                            <th scope="col">Tx.ID</th> <!-- EVENT_ID : latest first - Decendeing order by Event_ID-->
+                                            <th scope="col">Bot Name</th> <!-- TRADE_SYMBOL and TRADE_TIMEFRAME :  like MATICBTC_30M -->
+                                            <th scope="col">% Netprofit</th> <!-- TOKEN_NETPROFIT -->
                                             <th scope="col">Action</th> <!-- TRADE_ACTION: S : Sold, B- Bought -->
-                                            <th scope="col">Bot</th> <!-- TRADE_SYMBOL and TRADE_TIMEFRAME :  like MATICBTC_30M -->
-                                            <th scope="col">Trade#</th> <!-- TOTAL_NUMOF_TRADES -->
-                                            <th scope="col">Netprofit</th> <!-- TOKEN_NETPROFIT -->
+                                            <th scope="col">Quantity</th> <!-- LAST_TRADE_QTY and TOKEN_CURRENCY_CODE :  like 2562 MATIC-->
+                                            <th scope="col">Trade #</th> <!-- TOTAL_NUMOF_TRADES -->
+                                            <th scope="col">Trade Timestamp</th> <!-- APP_TS -->
                                         </tr>
                                     </thead>
                                    <tbody id="history-tbody">

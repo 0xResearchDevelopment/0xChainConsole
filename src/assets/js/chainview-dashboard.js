@@ -5,7 +5,7 @@ var loadChartData = () => {
     axios
         .get(
             //'@API_URL@/api/auth/user-profile',
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -144,7 +144,7 @@ console.log("2: ",inputXAxisData);
 
 var chartData = {
     chart: {
-        height: 300,
+        height: 350,
         toolbar: {
             show: false
         },
@@ -177,7 +177,7 @@ var chartData = {
         fontWeight: 600,
         fontSize: '11px',
         tooltipHoverFormatter: function (val, opts) {
-            return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+            return val + ': ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
         },
         labels: {
             colors: '#74767c',
@@ -197,7 +197,7 @@ var chartData = {
             data: inputNetprofit,
             type: 'line',
         }],
-    colors: ["rgba(0, 144, 172, 0.95)",],
+    colors: ["rgba(15, 75, 160, 0.95)",], //setting line color here
     fill: {
         type: ['gradient'],
         gradient: {

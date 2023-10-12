@@ -22,7 +22,7 @@ var signUp = async () => {
 
         await axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/register',
             myBody,
             {
                 headers: {
@@ -90,7 +90,7 @@ var verifyOtp = () => {
 
 var verifyAccount = (actionCode) => {
     console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
-    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    var verifyAccountUrl = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/verify/' + sessionStorage.getItem('verficationToken');
     console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
@@ -118,7 +118,7 @@ var signIn = () => {
     if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/login',
             {
                 email: document.getElementById("signin-username").value,
                 password: document.getElementById("signin-password").value,
@@ -270,7 +270,7 @@ var getUserProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -353,7 +353,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     
     const flex1Child1Div = document.createElement('div');
     flex1Child1Div.id = 'flex1-child1-div';
-    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted">${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
+    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted"><span class="badge bg-info ms-0 d-offline-block">${botId}</span> ${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
 
     const flex1Child2Div = document.createElement('div');
     flex1Child2Div.id = 'flex1-child2-div';
@@ -363,28 +363,28 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     const flex2Div = document.createElement('div');
     flex2Div.id = 'flex2-div';
     flex2Div.setAttribute("class", "d-flex mt-2");
-    flex2Div.innerHTML = `<p class="fw-medium mb-1 text-muted">Trades : ${totalNoOfTrades}</p>`
+    flex2Div.innerHTML = `<p class="fw-medium mb-1 fs-14 text-muted">Trades : ${totalNoOfTrades}</p>`
 
     const flex5Div = document.createElement('div');
     flex5Div.id = 'flex5-div';
     flex5Div.setAttribute("class", "d-flex mt-2");
-    flex5Div.innerHTML = `<p class="mb-0 fs-10 text-mute"><span>As of : ${lastTradedDate}</span></p>`
+    flex5Div.innerHTML = `<p class="fw-medium mb-0 fs-12 text-muted"><span>As of : ${lastTradedDate}</span></p>`
 
     const flex3Div = document.createElement('div');
     flex3Div.id = 'flex3-div';
     flex3Div.setAttribute("class", "d-flex");
-    flex3Div.innerHTML = `<p class="fw-medium mb-1 text-muted">Invested : ${tokenEntryAmount}</p>`
+    flex3Div.innerHTML = `<p class="fw-medium mb-1 fs-14 text-muted">Invested : ${tokenEntryAmount}</p>`
 
     const flex4Div = document.createElement('div');
     flex4Div.id = 'flex4-div';
     flex4Div.setAttribute("class", "d-flex mt-2");
     if(netProfit>0){
         flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
     }
     else{
         flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-11 ms-auto text-decoration-underline mt-auto">more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
     }
 
     const containerDiv = document.getElementById("dashboard-box-container");
@@ -416,7 +416,7 @@ var updateTier = (code) => {
     console.log("### Inside updateTier:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/upgradeTier',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/upgradeTier',
             {
                 newPlan: code
             },
@@ -489,7 +489,7 @@ var loadProfilePage = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -606,7 +606,7 @@ var updateProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/updateProfile',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/updateProfile',
             userDetails,
             {
                 headers: {
@@ -679,7 +679,7 @@ var signout = () => {
     console.log("### Inside signout:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/logout',{},
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/auth/logout',{},
             {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -732,7 +732,7 @@ var forgetPassword = () => {
 
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/forgot',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/password/forgot',
             myBody,
             {
                 headers: {
@@ -776,7 +776,7 @@ var updatePassword = () => {
         };
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/reset',
+            'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live/api/password/reset',
             requestBody
         )
         .then(res => {
