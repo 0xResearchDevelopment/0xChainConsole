@@ -76,12 +76,19 @@ var updatePieChartData = () => {
 }
 /* ends : chainview - netprofit summary pie-chart */
 
+function truncate (num, places) {
+    return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
+  }
+
 var formatGraphData = (rawNetProfitArr) => {
     var netProfit = [];
     var xAxisData = [];
+    var profitDifference = 0; 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
+        profitDifference = i+1 < rawNetProfitArr.length ? (rawNetProfitArr[i+1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
+        console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change 
     }
 
     return {

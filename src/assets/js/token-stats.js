@@ -5,6 +5,10 @@ var baseNetProfitArr = [];
 var overallProfitableArr = [];
 var lastTradedDateArr = [];
 
+function truncate (num, places) {
+  return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
+}
+
 var getTokenStats = () => {
   const profileObj = JSON.parse(localStorage.getItem('profileObj'));
   var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
@@ -124,7 +128,8 @@ var getTokenStats = () => {
         document.getElementById("max-wins").innerHTML = botDetails.MAX_WINS + " trades";
         document.getElementById("max-losses").innerHTML = botDetails.MAX_LOSS + " trades";
         document.getElementById("max-tokens-held").innerHTML = botDetails.MAX_TOKENS_HELD + " " + botDetails.TOKEN_CURRENCY_CODE;
-        document.getElementById("avg-time-per-trade").innerHTML = botDetails.AVG_TIME_PER_TRADE + "  days";
+        var avgTimePerTrade = botDetails.AVG_TIME_PER_TRADE < 1 ? truncate(botDetails.AVG_TIME_PER_TRADE*24,2) + " hours" : truncate(botDetails.AVG_TIME_PER_TRADE,2) +  " days";        
+        document.getElementById("avg-time-per-trade").innerHTML = avgTimePerTrade
       }
     })
     .catch(err => {
@@ -495,12 +500,15 @@ var formatGraphData = (rawInputArr) => {
   var input2 = [];
   var input3 = [];
   var xAxisData = [];
+  var profitDifference = 0; 
 
   for (let i = 0; i < rawInputArr.length; i++) {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
     input2.push(rawInputArr[i].BASE_NETPROFIT);
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
     var tradeDate = new Date(rawInputArr[i].APP_TS).toLocaleTimeString();  //TODO: this nees be to change as per the date format required for the chart
+    profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
+    console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
     xAxisData.push(tradeDate);
   }
 
