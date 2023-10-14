@@ -298,6 +298,7 @@ var getUserProfile = () => {
                 const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:null;
                 const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
+                const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -305,7 +306,8 @@ var getUserProfile = () => {
                 document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
-                localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
+                //localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
+                localStorage.setItem('active_bots_latest', (userActiveBotsLatest != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0);
 
                 if(profile.ROLE_CODE == -2){
                     location.href = "profile.html";
@@ -320,12 +322,12 @@ var getUserProfile = () => {
                 for (let i = 0; i < subscribedBots.length; i++) {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID);                      
+                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
                 }
 
                 document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
-                document.getElementById("active-bots").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.ACTIVE_BOTS : 0;
+                document.getElementById("active-bots").innerHTML = (userActiveBotsLatest != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
 
                 const theme = new Map([
                     ["PROFILE", 'success'],
@@ -348,7 +350,7 @@ var getUserProfile = () => {
         })
 }
 
-var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount,tradeTimeframe,botId) => {
+var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount,tradeTimeframe,botId, subscribeStatus, platformName) => {
     const colDiv = document.createElement('div');
     colDiv.id = 'col-div';
     colDiv.setAttribute("class", "col card-background");
@@ -367,7 +369,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     
     const flex1Child1Div = document.createElement('div');
     flex1Child1Div.id = 'flex1-child1-div';
-    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted"><span class="badge bg-info ms-0 d-offline-block">${botId}</span> ${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
+    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted"> ${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
 
     const flex1Child2Div = document.createElement('div');
     flex1Child2Div.id = 'flex1-child2-div';
@@ -392,13 +394,18 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     const flex4Div = document.createElement('div');
     flex4Div.id = 'flex4-div';
     flex4Div.setAttribute("class", "d-flex mt-2");
+
+    let botIdLabelDesign  = "<span class='badge bg-info ms-2 d-offline-block'>"+ subscribeStatus + " - " + botId + "</span>";
+    if(subscribeStatus == 0)
+        botIdLabelDesign  = "<span class='badge bg-danger ms-2 d-offline-block'>"+ subscribeStatus + " - " + botId + "</span>";
+
     if(netProfit>0){
         flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, 1)" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a><div>${botIdLabelDesign}</div>`
     }
     else{
         flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, 1)" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a><div>${botIdLabelDesign}</div>`
     }
 
     const containerDiv = document.getElementById("dashboard-box-container");
@@ -653,41 +660,44 @@ var updateProfile = () => {
 
 var updatePricingPage = () => {
     const profile = JSON.parse(localStorage.getItem('profileObj'));
-    const statsSummary = JSON.parse(localStorage.getItem('statsSummaryObj'));
+    //const statsSummary = JSON.parse(localStorage.getItem('statsSummaryObj'));
+    let active_bots_latest = localStorage.getItem('active_bots_latest');
+    console.log('## active_bots_latest:', active_bots_latest);
+    //localStorage.removeItem('active_bots_latest');
 
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
  
-    if(statsSummary != null){
-        if(statsSummary.ACTIVE_BOTS == 1){
-            document.getElementById("tier-free-1m").disabled = true;
-            document.getElementById("tier-1core-1m").disabled = true;
-    
-            document.getElementById("tier-free-3m").disabled = true;
-            document.getElementById("tier-1core-3m").disabled = true;
-        }
-        else if(statsSummary.ACTIVE_BOTS >= 2 && statsSummary.ACTIVE_BOTS < 5){
-            document.getElementById("tier-free-1m").disabled = true;
-            document.getElementById("tier-1core-1m").disabled = true;
-            document.getElementById("tier-2core-1m").disabled = true;
-    
-            document.getElementById("tier-free-3m").disabled = true;
-            document.getElementById("tier-1core-3m").disabled = true;
-            document.getElementById("tier-2core-3m").disabled = true;
-        }
-        else if(statsSummary.ACTIVE_BOTS >= 5){
-            document.getElementById("tier-free-1m").disabled = true;
-            document.getElementById("tier-1core-1m").disabled = true;
-            document.getElementById("tier-2core-1m").disabled = true;
-            document.getElementById("tier-5core-1m").disabled = true;
-    
-            document.getElementById("tier-free-3m").disabled = true;
-            document.getElementById("tier-1core-3m").disabled = true;
-            document.getElementById("tier-2core-3m").disabled = true;
-            document.getElementById("tier-5core-3m").disabled = true;
-        } 
+
+    if(active_bots_latest == 1){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
     }
+    else if(active_bots_latest >= 2 && active_bots_latest < 5){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+        document.getElementById("tier-2core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
+        document.getElementById("tier-2core-3m").disabled = true;
+    }
+    else if(active_bots_latest >= 5){
+        document.getElementById("tier-free-1m").disabled = true;
+        document.getElementById("tier-1core-1m").disabled = true;
+        document.getElementById("tier-2core-1m").disabled = true;
+        document.getElementById("tier-5core-1m").disabled = true;
+
+        document.getElementById("tier-free-3m").disabled = true;
+        document.getElementById("tier-1core-3m").disabled = true;
+        document.getElementById("tier-2core-3m").disabled = true;
+        document.getElementById("tier-5core-3m").disabled = true;
+    } 
+
 }
 
 var signout = () => {

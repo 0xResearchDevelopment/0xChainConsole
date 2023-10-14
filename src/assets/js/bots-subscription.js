@@ -85,11 +85,11 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     const successRateTrend = successRate > 40 ? 'caret-up-fill' : 'caret-down-fill';
 
     const recommendateRating  = profitPerMonth > 10 ? 'bi-patch-check-fill' : '';
-    const profitPerMonthColor  = profitPerMonth > 10 ? 'success' : 'danger';
-    const profitPerMonthTrend  = profitPerMonth > 10 ? 'trending-up' : 'trending-down';
+    const profitPerMonthColor  = profitPerMonth > 0 ? 'success' : 'danger';
+    const profitPerMonthTrend  = profitPerMonth > 0 ? 'trending-up' : 'trending-down';
 
-    const userSubscriptionStatusDesign = userSubscriptionStatus == 1 ? "Active" : '';
-    const userSubscriptionStatusColor = userSubscriptionStatus == 1 ? 'success' : 'danger';
+    const userSubscriptionStatusDesign = userSubscriptionStatus == 1 ? "Active" : 'Subscribe';
+    const userSubscriptionStatusColor = userSubscriptionStatus == 1 ? 'success' : 'primary';
 
     //const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
     const row = document.createElement('tr');
@@ -105,9 +105,9 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     <td style = 'font-size: 12px;'>${totalNoOfDays} days</td>
     <td style = 'font-size: 12px;'><span class="text-${tokenNetProfitColorCode}"><i class="ti ti-${tokanNetprofitTrend} me-1 align-middle"></i>${tokenNetProfit}%</span></td>    
     <td style = 'font-size: 12px;'><span class="text-${baseNetProfitColorCode}"><i class="ti ti-${baseNetprofitTrend} me-1 align-middle"></i>${baseNetprofit}%</span></td>
+    <td style = 'font-size: 14px;'> <span class="text-${profitPerMonthColor}"><i class="ti ti-${profitPerMonthTrend} me-1 align-middle"></i>${profitPerMonth}%</span><i class="bi ${recommendateRating} text-success ms-1 fs-21"></i></td>
     <td style = 'font-size: 12px;'><div class="progress progress-xs progress-custom progress-animate" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar bg-primary" style="width: ${successRate}%"></div></div><span class='fs-11'>${successRate}%<i class='bi bi-${successRateTrend} ms-1 ${successRateColorCode}'></i></span></td>
     <td style = 'font-size: 12px;'>${noOfTrades}</td>
-    <td style = 'font-size: 14px;'> <span class="text-${profitPerMonthColor}"><i class="ti ti-${profitPerMonthTrend} me-1 align-middle"></i>${profitPerMonth}%</span><i class="bi ${recommendateRating} text-success ms-1 fs-21"></i></td>
     <td style = 'font-size: 12px;'>${avgTimePerTrade}</td>
     <td style = 'font-size: 12px;'>${appTS}</td>`;
 

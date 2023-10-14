@@ -61,15 +61,15 @@
                                                     </div>
                                                     <div class="flex-1">
                                                         <div class="">
-                                                            <p class="mb-0 text-muted">Trades & Netprofit</p>
+                                                            <p class="mb-0 text-muted">Subscription Status</p>
                                                         </div>
                                                         <div class="flex-between">
-                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="total-no-of-trades"></h3> 
-                                                            <div class="avatar avatar-md br-4 ms-auto">
-                                                                <span class="text-danger fs-18"><span id="net-profit"></span></span> 
+                                                            <h3 class="fs-20 mb-0 font-weight-normal" id="subscription-status-box-text-main">TBD</h3> 
+                                                            <div class="ms-auto" id="id-subscription-box-button">
+                                                                <!-- <button type="button" onclick="javascript:alert('call service');" class="btn btn-primary" id="id-subscription-box-button">Subscribe</button> -->
                                                             </div>
                                                         </div>
-                                                        <span class="badge bg-blue-transparent">As of: <span id="traded-date2"></span></span> 
+                                                        <span class="badge bg-blue-transparent fs-11" id="subscription-status-box-text-below"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -90,7 +90,7 @@
                                                         </div>
                                                         <div class="flex-between">
                                                             <h3 class="fs-20 mb-0 font-weight-normal" id="investment"></h3>
-                                                            <span class="text-blue"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>  
+                                                            <span class="text-primary fs-16" id="total-no-of-days-box">TBD</span>  
                                                         </div>
                                                         <span class="badge bg-blue-transparent" id="subscribed-on"></span>
                                                     </div>
@@ -113,7 +113,7 @@
                                                         </div>
                                                         <div class="flex-between">
                                                             <h3 class="fs-20 mb-0 font-weight-normal" id="traded-qty"></h3>
-                                                            <span class="text-purple"><i class="ti ti-arrow-up-right me-1 fs-14"></i>TBD</span>
+                                                            <span class="text-purple fs-16" id="net-profit">TBD</span> <!-- <i class="ti ti-arrow-up-right me-1 fs-14"></i> -->
                                                         </div>
                                                         <span class="badge bg-purple-transparent" id="traded-date1"></span>
                                                     </div>
@@ -160,6 +160,7 @@
                                                                 <div class="flex-between">
                                                                     <h3 class="fs-20 mb-0 font-weight-normal" id="total-trades"></h3>
                                                                 </div>
+                                                                <span class="badge bg-blue-transparent">As of: <span id="traded-date2"></span></span> 
                                                             </div>
                                                         </div>
                                                     <div class="progress progress-xl my-4">
@@ -225,7 +226,7 @@
                                                         </a>
                                                         <div class="ms-auto">
                                                             <!-- <button type="button" class="btn btn-primary-light btn-sm  btn-wave waves-effect waves-light">TBD</button> -->
-                                                            <span class="avatar radius-5 bg-primary"><i class="fe fe-activity"></i></span>
+                                                            <span class="avatar radius-5 bg-secondary"><i class="fe fe-activity"></i></span>
                                                         </div>
                                                     </li>
                                                     <li class="list-group-item d-flex">
@@ -448,7 +449,7 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <div id="profit-statistics"></div>
+                                            <div id="profit-statistics"></div> <!-- this refers to graph -->
                                             <div class="row mt-4 justify-content-center">
                                                 <div class="col-xl-4 col-md-4  m-1 m-md-0 d-block text-center">
                                                     <div class="px-4 py-2 border rounded-1">

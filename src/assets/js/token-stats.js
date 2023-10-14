@@ -44,32 +44,41 @@ var getTokenStats = (parentPage) => {
       localStorage.removeItem('userSubscriptionStatus');
       if (res.status == 200) {
         console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
-        const botDetails = res.data.tradeTransHistoryOneRow;
-        const tradeTransHistory = res.data.tradeTransHistory;
+        const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
+        const tradeTransHistory = res.data.tradeTransHistory; //history
+        const netprofitHourlyData = res.data.netprofitHourlyData; //hourly data
+        const netprofitDailyData = res.data.netprofitDailyData; //daily data
+        const netprofitMonthlyData = res.data.netprofitMonthlyData; //monthly data
 
-        tokenNetProfitArr = formatGraphData(tradeTransHistory).tokenNetProfit;
-        baseNetProfitArr = formatGraphData(tradeTransHistory).baseNetProfit;
-        overallProfitableArr = formatGraphData(tradeTransHistory).overallProfitable;
-        lastTradedDateArr = formatGraphData(tradeTransHistory).lastTradedDate;
+        tokenNetProfitArr = formatGraphData(netprofitDailyData).tokenNetProfit;
+        baseNetProfitArr = formatGraphData(netprofitDailyData).baseNetProfit;
+        overallProfitableArr = formatGraphData(netprofitDailyData).overallProfitable;
+        lastTradedDateArr = formatGraphData(netprofitDailyData).lastTradedDate;
 
         updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
 
         //userSubscriptionStatusValue - determine status
         let usrBotSubscriptionStatus = userSubscriptionStatusValue == 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
+        let idSubscriptionBoxButtonText = userSubscriptionStatusValue == 1 ? "Unsubscribe" : "Proceed";
+        let subscriptionStatusBoxTextBelow = userSubscriptionStatusValue == 1 ? "Already subscribed" : "Review stats below & subscribe";
         
-        document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+ botDetails.BOT_ID +"</span>  " + botDetails.TRADE_SYMBOL + " " +usrBotSubscriptionStatus;
+        //document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+ botDetails.BOT_ID +"</span>  " + botDetails.TRADE_SYMBOL + " " +usrBotSubscriptionStatus;
+        document.getElementById("header-trade-symbol").innerHTML = usrBotSubscriptionStatus + " " + botDetails.TRADE_SYMBOL;
         document.getElementById("bot-name").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-14 '>" + botDetails.BOT_ID +"</span>   " +  botDetails.TRADE_SYMBOL;
         document.getElementById("base-icon").src = botDetails.BOT_BASE_ICON;
         document.getElementById("token-icon").src = botDetails.BOT_TOKEN_ICON;
         document.getElementById("time-frame").innerHTML = botDetails.BOT_NAME;
-        document.getElementById("total-no-of-trades").innerHTML = botDetails.TOTAL_NUMOF_TRADES;
+        //document.getElementById("total-no-of-trades").innerHTML = botDetails.TOTAL_NUMOF_TRADES;
+        document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
+        document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate(" + botId + "," + userSubscriptionStatusValue + ");' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+        document.getElementById("subscription-status-box-text-below").innerHTML = subscriptionStatusBoxTextBelow; 
         
 
-        document.getElementById("traded-date1").innerHTML = new Date(botDetails.APP_TS).toLocaleString();
+        document.getElementById("traded-date1").innerHTML = botDetails.APP_TS;
         document.getElementById("investment").innerHTML = botDetails.TOKEN_ENTRY_AMOUNT;
-        document.getElementById("subscribed-on").innerHTML = botDetails.SUBSCRIBED_ON;
+        document.getElementById("subscribed-on").innerHTML = "Started on: " + botDetails.SUBSCRIBED_ON;
         document.getElementById("traded-qty").innerHTML = botDetails.LAST_TRADE_QTY;
-        document.getElementById("traded-date2").innerHTML = new Date(botDetails.LAST_TRADED_DATE).toLocaleString();
+        document.getElementById("traded-date2").innerHTML = botDetails.LAST_TRADED_DATE;
 
         document.getElementById("total-trades").innerHTML = botDetails.TOTAL_NUMOF_TRADES;
         document.getElementById("win-trades").innerHTML = botDetails.WIN_TRADES;
@@ -97,10 +106,10 @@ var getTokenStats = (parentPage) => {
         document.getElementById("overallAsOfNowtNetProfitLbl").innerHTML = "<i class='bx bxs-circle text-info fs-12 me-1'></i>" + "Trade Success Rate";
 
         if(netProfitValue>0){
-          document.getElementById("net-profit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-up ms-1'></i></span>";
+          document.getElementById("net-profit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + netProfitValue + "%<i class='ti ti-trending-up ms-1'></i></span>";
           document.getElementById("tokenAsOfNowtNetProfit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_NETPROFIT + "%" + "<i class='ti ti-trending-up ms-1'></i></span>";
         } else {
-          document.getElementById("net-profit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + netProfitValue + "<i class='ti ti-trending-down ms-1'></i></span>";
+          document.getElementById("net-profit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + netProfitValue + "%<i class='ti ti-trending-down ms-1'></i></span>";
           document.getElementById("tokenAsOfNowtNetProfit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_NETPROFIT + "%" + "<i class='ti ti-trending-down ms-1'></i></span>";
         }
 
@@ -131,19 +140,21 @@ var getTokenStats = (parentPage) => {
         document.getElementById("base-trade-fee").innerHTML = "Fee in BASE: " + baseTradeFee;
 
         for (let i = tradeTransHistory.length - 1; i >=0; i--) {
-          var txDateTime = new Date(tradeTransHistory[i].APP_TS).toLocaleString();
+          //var txDateTime = new Date(tradeTransHistory[i].APP_TS).toLocaleString();
+          var txDateTime = (tradeTransHistory[i].APP_TS);
           createTransHistoryElements(txDateTime, tradeTransHistory[i].TRADE_ACTION,
             tradeTransHistory[i].LAST_TRADE_QTY, tradeTransHistory[i].TOKEN_CURRENCY_CODE);
         }
 
         document.getElementById("symbol-statistics").innerHTML = botDetails.TRADE_SYMBOL;
         document.getElementById("total-no-of-days").innerHTML = botDetails.TOTAL_NUMOF_DAYS + " Days";
+        document.getElementById("total-no-of-days-box").innerHTML = botDetails.TOTAL_NUMOF_DAYS + " Days";
 
         //Profit per Month
         let profitPerMonth = botDetails.PROFIT_PER_MONTH;
         const recommendateRating  = profitPerMonth > 10 ? 'bi-patch-check-fill' : '';
-        const profitPerMonthColor  = profitPerMonth > 10 ? 'success' : 'danger';
-        const profitPerMonthTrend  = profitPerMonth > 10 ? 'trending-up' : 'trending-down';
+        const profitPerMonthColor  = profitPerMonth > 0 ? 'success' : 'danger';
+        const profitPerMonthTrend  = profitPerMonth > 0 ? 'trending-up' : 'trending-down';
         let profitPerMonthDesign = "<span class='text-" + profitPerMonthColor +"'><i class='ti ti-" + profitPerMonthTrend +" me-1 align-middle'></i>" + profitPerMonth +"%</span><i class='bi " + recommendateRating +" text-success ms-1 fs-21'></i>";
         
         //Profit per trade
@@ -194,16 +205,19 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   list.innerHTML = `<div class="">
                           <i class="task-icon bg-${badgeTheme}"></i>
                           <div class="flex-1 fw-semibold">
-                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fs-12 fw-semibold">${tradeActionFull}</span>
-                            <span>${lastTradeQty} ${tokenCurrencyCode}</span>
-                          </div>
-                          <div class="min-w-fit-content ms-2 text-end">
-                                <p class="mb-0 text-muted fs-11">${lastTradedDate}</p>
+                            <span>${lastTradeQty} ${tokenCurrencyCode} </span>
+                            <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fs-12 fw-semibold ms-2">${tradeActionFull}</span>
+                            <span class="text-muted fs-10 ms-2">${lastTradedDate}</span>
                           </div>
                       </div>`
 
   const ulist = document.getElementById("transactions-ul");
   ulist.appendChild(list);
+}
+
+
+var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
+  alert("botId:" + botId +  " userSubscriptionStatusValue:" + userSubscriptionStatusValue);
 }
 
 /* column chart with negative values */
@@ -541,7 +555,7 @@ var formatGraphData = (rawInputArr) => {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
     input2.push(rawInputArr[i].BASE_NETPROFIT);
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
-    var tradeDate = new Date(rawInputArr[i].APP_TS).toLocaleTimeString();  //TODO: this nees be to change as per the date format required for the chart
+    var tradeDate = rawInputArr[i].APP_TS;
     profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
     console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
     xAxisData.push(tradeDate);
