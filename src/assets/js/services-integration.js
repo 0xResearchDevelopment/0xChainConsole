@@ -1,4 +1,5 @@
 var delayInMS = 3000;
+var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -22,7 +23,7 @@ var signUp = async () => {
 
         await axios
         .post(
-            'http://localhost:3000/api/auth/register',
+            targetEndPointUrlBase +'/api/auth/register',
             myBody,
             {
                 headers: {
@@ -90,7 +91,7 @@ var verifyOtp = () => {
 
 var verifyAccount = (actionCode) => {
     console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
-    var verifyAccountUrl = 'http://localhost:3000/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    var verifyAccountUrl = targetEndPointUrlBase +'/api/auth/verify/' + sessionStorage.getItem('verficationToken');
     console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
@@ -118,7 +119,7 @@ var signIn = () => {
     if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
         axios
         .post(
-            'http://localhost:3000/api/auth/login',
+            targetEndPointUrlBase +'/api/auth/login',
             {
                 email: document.getElementById("signin-username").value,
                 password: document.getElementById("signin-password").value,
@@ -283,7 +284,7 @@ var getUserProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'http://localhost:3000/api/auth/user-profile',
+            targetEndPointUrlBase +'/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -430,7 +431,7 @@ var updateTier = (code) => {
     console.log("### Inside updateTier:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'http://localhost:3000/api/auth/upgradeTier',
+            targetEndPointUrlBase +'/api/auth/upgradeTier',
             {
                 newPlan: code
             },
@@ -503,7 +504,7 @@ var loadProfilePage = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'http://localhost:3000/api/auth/user-profile',
+            targetEndPointUrlBase +'/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -620,7 +621,7 @@ var updateProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            'http://localhost:3000/api/auth/updateProfile',
+            targetEndPointUrlBase +'/api/auth/updateProfile',
             userDetails,
             {
                 headers: {
@@ -693,7 +694,7 @@ var signout = () => {
     console.log("### Inside signout:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'http://localhost:3000/api/auth/logout',{},
+            targetEndPointUrlBase +'/api/auth/logout',{},
             {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -746,7 +747,7 @@ var forgetPassword = () => {
 
         axios
         .post(
-            'http://localhost:3000/api/password/forgot',
+            targetEndPointUrlBase +'/api/password/forgot',
             myBody,
             {
                 headers: {
@@ -790,7 +791,7 @@ var updatePassword = () => {
         };
         axios
         .post(
-            'http://localhost:3000/api/password/reset',
+            targetEndPointUrlBase +'/api/password/reset',
             requestBody
         )
         .then(res => {

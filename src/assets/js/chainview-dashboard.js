@@ -1,3 +1,4 @@
+var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 //API call : Get User Profile
 var loadChartData = () => {
     const authToken = localStorage.getItem('authToken');
@@ -5,7 +6,7 @@ var loadChartData = () => {
     axios
         .get(
             //'@API_URL@/api/auth/user-profile',
-            'http://localhost:3000/api/auth/user-profile',
+            targetEndPointUrlBase+'/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
