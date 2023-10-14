@@ -9,7 +9,7 @@ var loadHistoryData = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/tradingdata/getHistory',
+            'http://localhost:3000/api/tradingdata/getHistory',
             {},
             {
                 headers: {

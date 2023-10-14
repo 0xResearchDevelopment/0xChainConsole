@@ -9,19 +9,26 @@ function truncate (num, places) {
   return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
 }
 
-var getTokenStats = () => {
+var getTokenStats = (parentPage) => {
   const profileObj = JSON.parse(localStorage.getItem('profileObj'));
   var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
   document.getElementById("header-user-name").innerHTML = username;
   document.getElementById("header-profile-photo").src = profileObj.PROFILE_PHOTO;
 
   const botId = localStorage.getItem('botId');
+  const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
+  console.log("## botId:", botId);
   const authToken = localStorage.getItem('authToken');
   //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+  var targetEndPointUrl = 'http://localhost:3000/api/tradingdata/getTokenStats';
+  if (parentPage == 1) {
+    targetEndPointUrl = 'http://localhost:3000/api/subscription/getBotStats';
+  }
+  console.log("## targetEndPointUrl:", targetEndPointUrl);
 
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
-    'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/tradingdata/getTokenStats',
+    targetEndPointUrl,
     {
       botId: botId
     },
@@ -32,6 +39,8 @@ var getTokenStats = () => {
     })
     .then(res => {
       console.log("### Inside getTokenStats:res.data: " + res.data);
+      localStorage.removeItem('botId');
+      localStorage.removeItem('userSubscriptionStatus');
       if (res.status == 200) {
         console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
         const botDetails = res.data.tradeTransHistoryOneRow;
@@ -44,8 +53,11 @@ var getTokenStats = () => {
 
         updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
 
-        document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+  botDetails.BOT_ID +"</span>   " + botDetails.TRADE_SYMBOL;
-        document.getElementById("bot-name").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-14 '>"+  botDetails.BOT_ID +"</span>   " +  botDetails.TRADE_SYMBOL;
+        //userSubscriptionStatusValue - determine status
+        let usrBotSubscriptionStatus = userSubscriptionStatusValue == 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
+        
+        document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+ botDetails.BOT_ID +"</span>  " + botDetails.TRADE_SYMBOL + " " +usrBotSubscriptionStatus;
+        document.getElementById("bot-name").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-14 '>" + botDetails.BOT_ID +"</span>   " +  botDetails.TRADE_SYMBOL;
         document.getElementById("base-icon").src = botDetails.BOT_BASE_ICON;
         document.getElementById("token-icon").src = botDetails.BOT_TOKEN_ICON;
         document.getElementById("time-frame").innerHTML = botDetails.BOT_NAME;
@@ -91,6 +103,10 @@ var getTokenStats = () => {
           document.getElementById("tokenAsOfNowtNetProfit").innerHTML = "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_NETPROFIT + "%" + "<i class='ti ti-trending-down ms-1'></i></span>";
         }
 
+        document.getElementById("statsBaseIconUrl-0").src = botDetails.BOT_BASE_ICON;
+        document.getElementById("statsBaseIconUrl-1").src = botDetails.BOT_BASE_ICON;
+        document.getElementById("statsBaseIconUrl-2").src = botDetails.BOT_TOKEN_ICON;
+
         if(baseNetProfitValue>0){
           document.getElementById("base-net-profit").innerHTML = "Netprofit: " + "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + baseNetProfitValue + "%"+ "<i class='ti ti-trending-up ms-1'></i></span>";
           document.getElementById("baseAsOfNowtNetProfit").innerHTML = "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.BASE_NETPROFIT + "%" + "<i class='ti ti-trending-up ms-1'></i></span>";
@@ -121,9 +137,27 @@ var getTokenStats = () => {
 
         document.getElementById("symbol-statistics").innerHTML = botDetails.TRADE_SYMBOL;
         document.getElementById("total-no-of-days").innerHTML = botDetails.TOTAL_NUMOF_DAYS + " Days";
-        document.getElementById("profit-per-month").innerHTML = botDetails.PROFIT_PER_MONTH + " %";
-        document.getElementById("profit-per-trade").innerHTML = botDetails.PROFIT_PER_TRADE + " %";
-        document.getElementById("overall-profitable").innerHTML = botDetails.OVERALL_PROFITABLE + " %";
+
+        //Profit per Month
+        let profitPerMonth = botDetails.PROFIT_PER_MONTH;
+        const recommendateRating  = profitPerMonth > 10 ? 'bi-patch-check-fill' : '';
+        const profitPerMonthColor  = profitPerMonth > 10 ? 'success' : 'danger';
+        const profitPerMonthTrend  = profitPerMonth > 10 ? 'trending-up' : 'trending-down';
+        let profitPerMonthDesign = "<span class='text-" + profitPerMonthColor +"'><i class='ti ti-" + profitPerMonthTrend +" me-1 align-middle'></i>" + profitPerMonth +"%</span><i class='bi " + recommendateRating +" text-success ms-1 fs-21'></i>";
+        
+        //Profit per trade
+        let profitPerTrade = botDetails.PROFIT_PER_TRADE;
+        let profitPerTradeDesign = "<span class='text-" + profitPerMonthColor +"'><i class='ti ti-" + profitPerMonthTrend +" me-1 align-middle'></i>" + profitPerTrade +"%</span><i class='bi " + recommendateRating +" text-success ms-1 fs-21'></i>";
+
+        //Overall success rate
+        let overallSuccessRate = botDetails.OVERALL_PROFITABLE;
+        const successRateColorCode = overallSuccessRate > 40 ? 'text-success' : 'text-danger';
+        const successRateTrend = overallSuccessRate > 40 ? 'caret-up-fill' : 'caret-down-fill';
+        let overallSuccessRateDesign = "<div class='progress progress-xs progress-custom progress-animate' role='progressbar' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100'><div class='progress-bar bg-primary' style='width:"+ overallSuccessRate + "%'></div></div><span class='fs-14'>"+ overallSuccessRate + "%<i class='bi bi-"+ successRateTrend + " ms-1 " + successRateColorCode + "'></i></span>";
+
+        document.getElementById("profit-per-month").innerHTML = profitPerMonthDesign;
+        document.getElementById("profit-per-trade").innerHTML = profitPerTradeDesign;
+        document.getElementById("overall-profitable").innerHTML = overallSuccessRateDesign;
         document.getElementById("trades-per-month").innerHTML = botDetails.TRADES_PER_MONTH + " trades";
         document.getElementById("max-wins").innerHTML = botDetails.MAX_WINS + " trades";
         document.getElementById("max-losses").innerHTML = botDetails.MAX_LOSS + " trades";

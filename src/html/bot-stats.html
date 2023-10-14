@@ -6,7 +6,7 @@
 
 </head>
 
-<body onload="getTokenStats(0)">  <!-- 0 means from home page-->
+<body onload="getTokenStats(1)"> <!-- 1 means from bot-subscription page - bot-lists.html-->
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -14,7 +14,7 @@
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/page-header.html", {"title": "Token Stats"})
+        @SPK@include("partials/page-header.html", {"title": "Bot Stats"})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -283,7 +283,7 @@
                                             <span id="symbol-statistics"></span> Statistics
                                         </div>
                                         <div class="ms-auto">
-                                            <a href="index.html" class="btn btn-primary text-end"><i class="ri-arrow-left-line align-middle me-1 d-inline-block"></i> Home</a>
+                                            <a href="bots-list.html" class="btn btn-primary text-end"><i class="ri-arrow-left-line align-middle me-1 d-inline-block"></i>Bots Performance</a>
                                         </div>
                                     </div>
                                     <div class="card-body">

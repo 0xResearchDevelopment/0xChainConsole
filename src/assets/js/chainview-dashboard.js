@@ -5,7 +5,7 @@ var loadChartData = () => {
     axios
         .get(
             //'@API_URL@/api/auth/user-profile',
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'http://localhost:3000/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`

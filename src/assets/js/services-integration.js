@@ -22,7 +22,7 @@ var signUp = async () => {
 
         await axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/register',
+            'http://localhost:3000/api/auth/register',
             myBody,
             {
                 headers: {
@@ -90,7 +90,7 @@ var verifyOtp = () => {
 
 var verifyAccount = (actionCode) => {
     console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
-    var verifyAccountUrl = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/verify/' + sessionStorage.getItem('verficationToken');
+    var verifyAccountUrl = 'http://localhost:3000/api/auth/verify/' + sessionStorage.getItem('verficationToken');
     console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
@@ -118,7 +118,7 @@ var signIn = () => {
     if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/login',
+            'http://localhost:3000/api/auth/login',
             {
                 email: document.getElementById("signin-username").value,
                 password: document.getElementById("signin-password").value,
@@ -265,12 +265,25 @@ var validateCreatePwdInputs = (password, confirmPassword) => {
     }
 }
 
+var getTodayDate = () => {
+    // Date object
+    const date = new Date();
+    let currentDay = String(date.getDate()).padStart(2, '0');
+    let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+    let currentYear = date.getFullYear();
+    // we will display the date as DD-MM-YYYY 
+    let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+    console.log("The current date is " + currentDate);
+    return currentDate;
+}
+
+
 var getUserProfile = () => {
     const authToken = localStorage.getItem('authToken');
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'http://localhost:3000/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -309,7 +322,7 @@ var getUserProfile = () => {
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID);                      
                 }
 
-                document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : '01-01-1900';
+                document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
                 document.getElementById("active-bots").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.ACTIVE_BOTS : 0;
 
@@ -380,11 +393,11 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     flex4Div.setAttribute("class", "d-flex mt-2");
     if(netProfit>0){
         flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, 1)" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
     }
     else{
         flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, 1)" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">view more</a>`
     }
 
     const containerDiv = document.getElementById("dashboard-box-container");
@@ -400,8 +413,9 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex4Div);
 }
 
-var navigateTokenStats = (botId) => {
+var navigateTokenStats = (botId, userSubscriptionStatus) => {
     localStorage.setItem('botId', botId);
+    localStorage.setItem('userSubscriptionStatus', userSubscriptionStatus);
     location.href = "token-stats.html";
 };
 
@@ -416,7 +430,7 @@ var updateTier = (code) => {
     console.log("### Inside updateTier:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/devpi/auth/upgradeTier',
+            'http://localhost:3000/api/auth/upgradeTier',
             {
                 newPlan: code
             },
@@ -489,7 +503,7 @@ var loadProfilePage = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .get(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/user-profile',
+            'http://localhost:3000/api/auth/user-profile',
             {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -606,7 +620,7 @@ var updateProfile = () => {
     //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
     axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/updateProfile',
+            'http://localhost:3000/api/auth/updateProfile',
             userDetails,
             {
                 headers: {
@@ -679,7 +693,7 @@ var signout = () => {
     console.log("### Inside signout:");
     const authToken = localStorage.getItem('authToken');
     axios.post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/auth/logout',{},
+            'http://localhost:3000/api/auth/logout',{},
             {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -732,7 +746,7 @@ var forgetPassword = () => {
 
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/forgot',
+            'http://localhost:3000/api/password/forgot',
             myBody,
             {
                 headers: {
@@ -776,7 +790,7 @@ var updatePassword = () => {
         };
         axios
         .post(
-            'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev/api/password/reset',
+            'http://localhost:3000/api/password/reset',
             requestBody
         )
         .then(res => {
