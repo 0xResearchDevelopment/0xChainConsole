@@ -7,7 +7,7 @@ var loadHistoryData = () => {
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
 
     const authToken = localStorage.getItem('authToken');
-    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+    
     axios
         .post(
             targetEndPointUrlBase+'/api/tradingdata/getHistory',

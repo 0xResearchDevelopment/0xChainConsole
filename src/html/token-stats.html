@@ -41,7 +41,7 @@
                                                         <div class="flex-between">
                                                             <h3 class="fs-18 mb-0 font-weight-normal" id="bot-name">MATICBTC</h3> <!-- TRADE_SYMBOL -->
                                                             <div class="avatar avatar-md br-4 ms-auto">
-                                                                <img id="token-icon" src="" class="fs-20"><img id="base-icon" src="" class="fs-20"> <!-- ICONS -->
+                                                                <img id="token-icon" src="../assets/images/brand-logos/toggle-logo.png" class="fs-20"><img id="base-icon" src="../assets/images/brand-logos/toggle-logo.png" class="fs-20"> <!-- ICONS -->
                                                             </div>
                                                         </div>
                                                         <span class="badge bg-info-transparent" id="time-frame">30m, Binance</span> <!-- TRADE_TIMEFRAME-->
@@ -214,7 +214,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-2 lh-1">
                                                                         <span class="avatar avatar-md">
-                                                                            <img src="" class="fs-20" id="statsBaseIconUrl-0"> <!-- BOT_BASE_ICON url-->
+                                                                            <img src="../assets/images/brand-logos/toggle-logo.png" class="fs-20" id="statsBaseIconUrl-0"> <!-- BOT_BASE_ICON url-->
                                                                         </span>
                                                                     </div>
                                                                     <div>
@@ -235,7 +235,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-2 lh-1">
                                                                         <span class="avatar avatar-md">
-                                                                            <img src="" class="fs-20" id="statsBaseIconUrl-1"> <!-- BOT_BASE_ICON url-->
+                                                                            <img src="../assets/images/brand-logos/toggle-logo.png" class="fs-20" id="statsBaseIconUrl-1"> <!-- BOT_BASE_ICON url-->
                                                                         </span>
                                                                     </div>
                                                                     <div>
@@ -256,7 +256,7 @@
                                                                 <div class="d-flex align-items-center">
                                                                     <div class="me-2 lh-1">
                                                                         <span class="avatar avatar-md">
-                                                                            <img src="" class="fs-20" id="statsBaseIconUrl-2">  <!-- BOT_TOKEN_ICON url-->
+                                                                            <img src="../assets/images/brand-logos/toggle-logo.png" class="fs-20" id="statsBaseIconUrl-2">  <!-- BOT_TOKEN_ICON url-->
                                                                         </span>
                                                                     </div>
                                                                     <div>
@@ -505,6 +505,25 @@
                             <a href="index.html" class="btn btn-primary text-end"><i class="ri-arrow-left-line align-middle me-1 d-inline-block"></i>Back to Home</a>
                         </div>
             </div>
+            <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="token-stats-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <span id="alert-error-msg"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+                <div id="token-stats-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <span id="alert-success-msg"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- End::app-content -->
 
@@ -514,15 +533,6 @@
 
     </div>
 
-    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-        <div id="token-stats-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <span id="alert-error-msg"></span>
-                </div>
-            </div>
-        </div>
-    </div>
 
     @SPK@include("partials/commonjs.html")
 

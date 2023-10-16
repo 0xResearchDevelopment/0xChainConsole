@@ -1,0 +1,181 @@
+@SPK@include("partials/mainhead.html")
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+
+<!-- Axios dependency-->
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+</head>
+
+<body onload="loadHistoryData()">
+
+    @SPK@include("partials/switcher.html")
+    @SPK@include("partials/loader.html")
+
+    <div class="page">
+        @SPK@include("partials/header.html")
+        @SPK@include("partials/sidebar.html")
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Subscription", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Submit Request'})
+
+        <!-- Start::app-content -->
+        <div class="main-content app-content">
+            <div class="container-fluid">
+
+                <!-- Start:: row-2 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Submit Request
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- show selected symbol details -->
+
+                                <div class="row row-cols-12">
+                                    <div class="col-xxl-2 col-xl-12 col-md-4 col-sm-6">
+                                        <div class="card custom-card">
+                                            <div class="card-body">
+                                                <div class="flex-between mb-3">
+                                                    <span class="text-muted fs-16">Bot ID</span>
+                                                </div>
+                                                <div class="d-flex align-items-end">
+                                                    <div class="flex-1">
+                                                        <h5 class="mb-2 text-primary">27</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-4 col-xl-4 col-md-4 col-sm-6">
+                                        <div class="card custom-card">
+                                            <div class="card-body">
+                                                <div class="flex-between mb-3">
+                                                    <span class="text-muted fs-16">Bot Name</span>
+                                                </div>
+                                                <div class="d-flex align-items-end">
+                                                    <div class="flex-1">
+                                                        <h5 class="mb-2 text-primary">MATICBTC_30M_BINANCE</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3 col-xl-4 col-md-4 col-sm-6">
+                                        <div class="card custom-card">
+                                            <div class="card-body">
+                                                <div class="flex-between mb-3">
+                                                    <span class="text-muted fs-16">Subscription Date</span>
+                                                </div>
+                                                <div class="d-flex align-items-end">
+                                                    <div class="flex-1">
+                                                        <h5 class="mb-2 text-primary">15-Oct23 11:30:23 PM</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3 col-xl-4 col-md-4 col-sm-6">
+                                        <div class="card custom-card">
+                                            <div class="card-body">
+                                                <div class="flex-between mb-3">
+                                                    <span class="text-muted fs-16">Service for</span>
+                                                </div>
+                                                <div class="d-flex align-items-end">
+                                                    <div class="flex-1">
+                                                        <h5 class="mb-2 text-primary">SUBSCRIBE</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Whitlist-->
+                                <div class="col-xl-12">
+                                    <span><h6>Have you whitelisted this pair in your account?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="toggleswitchWhitelist" name="toggleswitch001" type="checkbox"> 
+                                        <label for="toggleswitchWhitelist" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
+                                    </div>
+                                </div>
+
+                                <!-- IP Address-->
+                                <div class="col-xl-12">
+                                    <span><h6>Have you added IP address in your account?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="toggleswitchIpAddress" name="toggleswitch001" type="checkbox"> 
+                                        <label for="toggleswitchIpAddress" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
+                                    </div>
+                                </div>
+
+                                <!-- Terms & Conditions-->
+                                <div class="col-xl-12">
+                                    <span><h6>Have you accept Terms-and-Conditions?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="toggleswitchTerms" name="toggleswitch001" type="checkbox"> 
+                                        <label for="toggleswitchTerms" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Agree</span>
+                                    </div>
+                                </div>
+
+                                <!-- Consent -->
+                                <div class="col-xl-12">
+                                    <span><h6>Are you aware of the RISK and agree to consent to procced this in your trading account?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="toggleswitchConsent" name="toggleswitch001" type="checkbox"> 
+                                        <label for="toggleswitchConsent" class="label-success"></label><span class="ms-3 fs-16 text-danger"> Aware of the RISK involved and I give my consent to proceed</span>
+                                    </div>
+                                </div>
+
+                               
+                                <!-- Upload signed consent document here-->
+                                <div class="col-xl-12">
+                                    <span><h6>Download, Sign and upload your consent document (PDF only)</h6></span>
+                                    <div class="input-group mb-3">
+                                        <input type="file" class="form-control  fs-16" id="inputGroupFile02">
+                                        <label class="input-group-text fs-16 text-danger" for="inputGroupFile02">Upload</label>
+                                    </div>
+                                </div>
+
+                                <!-- Remarks section-->
+                                <div class="col-xl-12 mt-6">
+                                    <span><h6>Remarks if any</h6></span>
+                                    <textarea class="form-control" id="submit-request-remarks" rows="4"></textarea>
+                                </div>
+
+                                <!-- submit section -->
+                                <div class="text-center mt-4">
+                                    <button class="btn btn-primary btn-wave waves-effect waves-light" id="submit-request">Submit Request</button>
+                                    <button class="btn btn-primary btn-wave waves-effect waves-light" id="submit-request">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End:: row-2 -->
+            </div>
+        </div>
+        <!-- End::app-content -->
+
+        @SPK@include("partials/headersearch_modal.html")
+        @SPK@include("partials/footer.html")
+        @SPK@include("partials/side-bar.html")
+
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    
+    @SPK@include("partials/commonjs.html")
+
+    @SPK@include("partials/custom_switcherjs.html")
+
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
+
+</body>
+
+</html>

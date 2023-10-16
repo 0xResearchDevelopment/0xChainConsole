@@ -36,6 +36,74 @@
                                 </div>
                             </div>
                             <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card custom-card">
+                                            <div class="card-body p-0">
+                                                <div class="row">
+                                                    <div class="col-xl-3 border-end border-inline-end-dashed">
+                                                        <div class="d-flex flex-wrap align-items-top p-2">
+                                                            <div class="me-3 lh-1">
+                                                                <span
+                                                                    class="avatar avatar-md avatar-rounded bg-primary shadow-sm">
+                                                                    <i class="ti ti-package fs-18"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h5 class="fw-semibold mb-1" id="field-tier-limit">5</h5>
+                                                                <p class="text-muted mb-0 fs-14">Tier Limit</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 border-end border-inline-end-dashed">
+                                                        <div class="d-flex flex-wrap align-items-top p-2">
+                                                            <div class="me-3 lh-1">
+                                                                <span
+                                                                    class="avatar avatar-md avatar-rounded bg-secondary shadow-sm">
+                                                                    <i class="ti ti-rocket fs-18"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h5 class="fw-semibold mb-1" id="field-active-bots">3</h5>
+                                                                <p class="text-muted mb-0 fs-14">Active Bots</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 border-end border-inline-end-dashed">
+                                                        <div class="d-flex flex-wrap align-items-top p-2">
+                                                            <div class="me-3 lh-1">
+                                                                <span
+                                                                    class="avatar avatar-md avatar-rounded bg-success shadow-sm">
+                                                                    <i class="ti ti-wallet fs-18"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h5 class="fw-semibold mb-1" id="field-pending-requests">2</h5>
+                                                                <p class="text-muted mb-0 fs-14">Pending Requests</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3">
+                                                        <div class="d-flex flex-wrap align-items-top p-2">
+                                                            <div class="me-3 lh-1">
+                                                                <span
+                                                                    class="avatar avatar-md avatar-rounded bg-warning shadow-sm">
+                                                                    <i class="ti ti-packge-import fs-18"></i>
+                                                                </span>
+                                                            </div>
+                                                            <div class="flex-fill">
+                                                                <h5 class="fw-semibold mb-1" id="field-remaining-limit">0</h5>
+                                                                <p class="text-muted mb-0 fs-14">Remaining Limit</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <table id="botsListResponsiveDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
@@ -51,9 +119,7 @@
                                             <th scope="col">Last Updated: </th> <!-- APP_TS -->
                                         </tr>
                                     </thead>
-                                   <tbody id="botList-tbody">
-   
-                                    </tbody>
+                                    <tbody id="botList-tbody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -65,13 +131,11 @@
         <!-- End::app-content -->
 
         @SPK@include("partials/headersearch_modal.html")
-         @SPK@include("partials/footer.html")
+        @SPK@include("partials/footer.html")
         @SPK@include("partials/side-bar.html")
 
     </div>
-    
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    
     @SPK@include("partials/commonjs.html")
 
     @SPK@include("partials/custom_switcherjs.html")
@@ -91,7 +155,6 @@
 
     <!-- Internal Datatables JS -->
     <!-- <script src="../assets/js/datatables.js"></script> -->
-    
     <!-- Custom JS -->
     <script src="../assets/js/custom.js"></script>
 

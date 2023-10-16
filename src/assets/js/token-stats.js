@@ -18,7 +18,7 @@ var getTokenStats = (parentPage) => {
 
   const botId = localStorage.getItem('botId');
   const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
-  console.log("## botId:", botId);
+  console.log("## botId: " + botId + " userSubscriptionStatusValue: " +userSubscriptionStatusValue);
   const authToken = localStorage.getItem('authToken');
   //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
   var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
@@ -217,8 +217,30 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
 
 
 var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
-  alert("botId:" + botId +  " userSubscriptionStatusValue:" + userSubscriptionStatusValue);
-}
+  //get submitted requests count from storage
+  //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
+  //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
+  //validation : active_bots_latest+requests_subscribe_count should be <= roleCode
+  //TODO: add this validation while placing the request
+  const requests_subscribe_count = localStorage.getItem('requests_subscribe_count');
+  const requests_unsubscribe_count = localStorage.getItem('requests_unsubscribe_count');
+  const active_bots_latest = localStorage.getItem('active_bots_latest');
+  const role_code = localStorage.getItem('role_code');
+  console.log("## requests_subscribe_count: " + requests_subscribe_count + " requests_unsubscribe_count: " + requests_unsubscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
+  //alert("botId: " + botId + " userSubscriptionStatusValue: " + userSubscriptionStatusValue + " requests_subscribe_count: " + requests_subscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
+
+  let userTotalBots = active_bots_latest + requests_subscribe_count;
+  if (userTotalBots < role_code) {
+    //allow request submission to redirect to request page
+    showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
+    setTimeout(() => {
+      window.location.href = 'workflow.html';
+    }, delayInMS);
+  } else {
+    //do not allow, stay her and show error message
+    showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
+  }
+};
 
 /* column chart with negative values */
 // var options = {

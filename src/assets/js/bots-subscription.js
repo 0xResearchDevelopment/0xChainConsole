@@ -12,7 +12,7 @@ var loadBotSummaryData = () => {
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
 
     const authToken = localStorage.getItem('authToken');
-    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+    
     axios
         .post(
             targetEndPointUrlBase+'/api/subscription/getBotsSummary',
@@ -28,6 +28,17 @@ var loadBotSummaryData = () => {
                 console.log(res.data);
                 const botsSummary = (res.data.botsSummary!=undefined && res.data.botsSummary!=null)?res.data.botsSummary:null;
                 const userSubscribedBots = (res.data.susbcribedBots!=undefined && res.data.susbcribedBots!=null)?res.data.susbcribedBots:null;
+
+                let tierLimit = localStorage.getItem('role_code');
+                let activeBots = localStorage.getItem('active_bots_latest');
+                let subscribeRequests = localStorage.getItem('requests_subscribe_count');
+                let remainingLimit = (tierLimit-activeBots-subscribeRequests);
+
+                //Fill top boxes
+                document.getElementById("field-tier-limit").innerHTML = tierLimit;
+                document.getElementById("field-active-bots").innerHTML = activeBots;
+                document.getElementById("field-pending-requests").innerHTML = subscribeRequests;
+                document.getElementById("field-remaining-limit").innerHTML = remainingLimit;
 
                 var userSubscriptionStatus = 0;
                 for (let i = 0; i < botsSummary.length; i++) {

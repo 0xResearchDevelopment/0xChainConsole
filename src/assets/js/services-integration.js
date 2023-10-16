@@ -281,7 +281,7 @@ var getTodayDate = () => {
 
 var getUserProfile = () => {
     const authToken = localStorage.getItem('authToken');
-    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+    
     axios
         .get(
             targetEndPointUrlBase +'/api/auth/user-profile',
@@ -299,6 +299,7 @@ var getUserProfile = () => {
                 const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
+                const userSubmittedRequests = (res.data.userSubmittedRequestsCount!=undefined && res.data.userSubmittedRequestsCount!=null)?res.data.userSubmittedRequestsCount:null;
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -307,7 +308,24 @@ var getUserProfile = () => {
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
                 //localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
-                localStorage.setItem('active_bots_latest', (userActiveBotsLatest != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0);
+                let userActiveBotsLatestCount = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
+                localStorage.setItem('active_bots_latest', userActiveBotsLatestCount);
+                localStorage.setItem('role_code', profile.ROLE_CODE);
+                console.log("## roleCode:" + profile.ROLE_CODE + " ACTIVE_BOTS_LATEST:"  + userActiveBotsLatestCount);
+
+                //get submitted requests count 
+                let userSubscribeSubmittedRequestsCount = 0;
+                let userUnsubscribeSubmittedRequestsCount = 0;
+                for (let i = 0; i < userSubmittedRequests.length; i++) {
+                    console.log("## userSubmittedRequests::", userSubmittedRequests);
+                    if (userSubmittedRequests[i].REQ_TYPE == 'SUBSCRIBE')
+                        userSubscribeSubmittedRequestsCount = userSubmittedRequests[i].REQUEST_COUNT;
+                    else if (userSubmittedRequests[i].REQ_TYPE == 'UNSUBSCRIBE')
+                        userUnsubscribeSubmittedRequestsCount = userSubmittedRequests[i].REQUEST_COUNT;
+                }
+                localStorage.setItem('requests_subscribe_count', userSubscribeSubmittedRequestsCount);
+                localStorage.setItem('requests_unsubscribe_count', userUnsubscribeSubmittedRequestsCount);
+                console.log("## requests_subscribe_count:" + userSubscribeSubmittedRequestsCount + " requests_unsubscribe_count:"  + userUnsubscribeSubmittedRequestsCount);
 
                 if(profile.ROLE_CODE == -2){
                     location.href = "profile.html";
@@ -327,12 +345,12 @@ var getUserProfile = () => {
 
                 document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
-                document.getElementById("active-bots").innerHTML = (userActiveBotsLatest != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
+                document.getElementById("active-bots").innerHTML = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
 
                 const theme = new Map([
                     ["PROFILE", 'success'],
                     ["SUBSCRIBE", 'secondary'],
-                    ["BOTS", 'secondary'],
+                    ["WORKFLOW", 'warning'],
                     ["NOTIFICATION", 'info']
                     //["BOTS", 'warning']
                   ]);
@@ -341,6 +359,10 @@ var getUserProfile = () => {
                 for (let i = 0; i < recentActivities.length; i++) {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
+                }
+
+                if(userActiveBotsLatestCount == 0){
+                    location.href = "bots-list.html";
                 }
             }
         }).catch(err => {
@@ -395,7 +417,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     flex4Div.id = 'flex4-div';
     flex4Div.setAttribute("class", "d-flex mt-2");
 
-    let botIdLabelDesign  = "<span class='badge bg-info ms-2 d-offline-block'>"+ subscribeStatus + " - " + botId + "</span>";
+    let botIdLabelDesign  = "<span class='badge bg-info ms-2 d-offline-block'>" + botId + "</span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>";
     if(subscribeStatus == 0)
         botIdLabelDesign  = "<span class='badge bg-danger ms-2 d-offline-block'>"+ subscribeStatus + " - " + botId + "</span>";
 
@@ -534,7 +556,7 @@ var loadProfilePage = () => {
                 document.getElementById("profile-header-city").innerHTML = (profile.CITY != null && profile.CITY != undefined) ? profile.CITY : "City"; 
                 document.getElementById("profile-header-state").innerHTML = (profile.STATE != null && profile.STATE != undefined) ? profile.STATE : "State";  
                 document.getElementById("profile-header-country").innerHTML = (profile.COUNTRY != null && profile.COUNTRY != undefined) ? profile.COUNTRY : "Country";
-                document.getElementById("profile-last-updated-on").innerHTML = profile.UPDATED_TS;
+                document.getElementById("profile-last-updated-on").innerHTML = profile.UPDATED_TS_FMT;
             
                 const profileStatus = (profile.ROLE_CODE > -2) ? 100: (profile.ROLE_CODE == -2) ? 50 : 0;
                 showProfileStatus(profileStatus);
@@ -545,7 +567,7 @@ var loadProfilePage = () => {
                 document.getElementById("profile-lastname").innerHTML = profile.NAME_LAST;
                 document.getElementById("profile-displayname").innerHTML = (profile.NAME_DISPLAY != null && profile.NAME_DISPLAY != undefined) ? profile.NAME_DISPLAY : "Display Name"; 
                 document.getElementById("profile-rolecode").innerHTML = profile.ROLE_CODE;
-                document.getElementById("profile-timestamp").innerHTML = profile.CREATED_TS;
+                document.getElementById("profile-timestamp").innerHTML = profile.CREATED_TS_FMT;
             
                 document.getElementById("profile-email").innerHTML = profile.EMAIL_ID;     
                 document.getElementById("profile-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";
@@ -603,6 +625,7 @@ var createBotNameBoxes = (botName) => {
 }
 
 var updateProfile = () => {
+    let userRoleCode = document.getElementById("profile-rolecode").innerHTML;
      const userDetails = {
                         name_first: document.getElementById("firstname-add").value,
                         name_last: document.getElementById("lastname-add").value,
@@ -621,7 +644,7 @@ var updateProfile = () => {
                         api_secret: document.getElementById("api-secret-value").value,
                         risk_plan: document.getElementById("risk-level").options[document.getElementById("risk-level").selectedIndex].text,
                         notes: document.getElementById("notes-section").value,
-                        role_code: document.getElementById("profile-rolecode").innerHTML
+                        role_code: userRoleCode
                     }
 
     const authToken = localStorage.getItem('authToken');
@@ -640,21 +663,28 @@ var updateProfile = () => {
             console.log("res: " + JSON.stringify(res.data));
             if (res.status == 200) {
                 showToastAlerts('update-profile-success','alert-success-msg',res.data.message);
-                setTimeout(()=> {
-                    window.location.href='pricing.html';
-                 }
-                 ,delayInMS);
+                if( userRoleCode < 0) {
+                    setTimeout(()=> {
+                        window.location.href='pricing.html';
+                    }
+                    ,delayInMS);
+                } else {
+                    setTimeout(()=> {
+                        window.location.href='profile.html';
+                    }
+                    ,delayInMS);
+                }
             }
         })
         .catch(err => {
             console.log(err);
              if (err.response.status == 401) {
                 showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
-            } 
-            setTimeout(()=> {
-                location.href = "sign-in-cover.html";
-             }
-             ,delayInMS);
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+            }
         });
 };
 
