@@ -1,13 +1,88 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
-var tokenNetProfitArr = [];
-var baseNetProfitArr = [];
-var overallProfitableArr = [];
-var lastTradedDateArr = [];
-
 function truncate (num, places) {
   return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
+}
+
+var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitableInput, lastTradedDateInput, tokenCode, baseCode) => {
+  console.log("tokenNetProfitInput: " + tokenNetProfitInput);
+  console.log("baseNetProfitInput: " + baseNetProfitInput);
+  console.log("overallProfitableInput: " + overallProfitableInput);
+  console.log("lastTradedDateInput: " + lastTradedDateInput);
+  console.log("baseCode: " + baseCode);
+  console.log("tokenCode: " + tokenCode);
+
+  //baseCode = baseCode + " Netprofit";
+  //tokenCode = tokenCode + " Netprofit";
+
+  var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);
+  chart.render();
+  chart.updateOptions({
+    colors: [
+      "rgba(" + myVarVal + ", 0.075)",
+      "rgba(" + myVarVal + ", 0.95)",
+      "rgba(245 ,187 ,116)",
+    ],
+    // series: [
+    //   {
+    //     name: "Token Netprofit",
+    //     type: "bar",
+    //     data: tokenNetProfitInput,
+    //   },
+    //   {
+    //     name: "Base Netprofit",
+    //     type: "line",
+    //     data: baseNetProfitInput,
+    //   },
+    //   {
+    //     name: "Overall Profitable",
+    //     type: "line",
+    //     data: overallProfitableInput,
+    //   },
+    // ],
+    series: [{
+      name: "Trade Success Rate",
+      data: tokenNetProfitInput,
+      type: 'bar',
+    }, {
+      name: tokenCode,
+      data: tokenNetProfitInput,
+      type: 'line',
+    }, {
+      name: baseCode,
+      data: baseNetProfitInput,
+      type: 'line',
+    }],
+    //labels: lastTradedDateInput,
+    xaxis: {
+      type: 'day',
+      categories: lastTradedDateArr,
+      axisBorder: {
+        show: true,
+        color: 'rgba(119, 119, 142, 0.05)',
+        offsetX: 0,
+        offsetY: 0,
+      },
+      axisTicks: {
+        show: true,
+        borderType: 'solid',
+        color: 'rgba(119, 119, 142, 0.05)',
+        width: 6,
+        offsetX: 0,
+        offsetY: 0
+      },
+      labels: {
+        rotate: -90,
+        style: {
+          colors: "#8c9097",
+          fontSize: '11px',
+          fontWeight: 600,
+          cssClass: 'apexcharts-xaxis-label',
+        },
+      }
+    }
+  });
 }
 
 var getTokenStats = (parentPage) => {
@@ -15,6 +90,9 @@ var getTokenStats = (parentPage) => {
   var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
   document.getElementById("header-user-name").innerHTML = username;
   document.getElementById("header-profile-photo").src = profileObj.PROFILE_PHOTO;
+  if(profileObj.ROLE_CODE == 99){
+    document.getElementById('admin-menu').style.display = 'block';
+  }
 
   const botId = localStorage.getItem('botId');
   const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
@@ -46,14 +124,17 @@ var getTokenStats = (parentPage) => {
         console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
         const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
         const tradeTransHistory = res.data.tradeTransHistory; //history
-        const netprofitHourlyData = res.data.netprofitHourlyData; //hourly data
-        const netprofitDailyData = res.data.netprofitDailyData; //daily data
-        const netprofitMonthlyData = res.data.netprofitMonthlyData; //monthly data
+        netprofitHourlyData = res.data.netprofitHourlyData; //hourly data
+        netprofitDailyData = res.data.netprofitDailyData; //daily data
+        netprofitMonthlyData = res.data.netprofitMonthlyData; //monthly data
+        tokenCurrencyCode = botDetails.TOKEN_CURRENCY_CODE;
+        baseCurrencyCode = botDetails.BASE_CURRENCY_CODE;
 
-        tokenNetProfitArr = formatGraphData(netprofitDailyData).tokenNetProfit;
-        baseNetProfitArr = formatGraphData(netprofitDailyData).baseNetProfit;
-        overallProfitableArr = formatGraphData(netprofitDailyData).overallProfitable;
-        lastTradedDateArr = formatGraphData(netprofitDailyData).lastTradedDate;
+        var formattedData = formatGraphData(netprofitDailyData);
+        tokenNetProfitArr = formattedData.tokenNetProfit;
+        baseNetProfitArr = formattedData.baseNetProfit;
+        overallProfitableArr = formattedData.overallProfitable;
+        lastTradedDateArr = formattedData.lastTradedDate;
 
         updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
 
@@ -197,7 +278,7 @@ var showToastAlerts = (divId, spanId, msg) => {
   toast.show();
 }
 
-var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tokenCurrencyCode) => {
+var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tokenCurrCode) => {
   const tradeActionFull = (tradeAction == 'B') ? 'Bought' : (tradeAction == 'S') ? 'Sold' : tradeAction;
   const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
   const list = document.createElement('li');
@@ -205,7 +286,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   list.innerHTML = `<div class="">
                           <i class="task-icon bg-${badgeTheme}"></i>
                           <div class="flex-1 fw-semibold">
-                            <span>${lastTradeQty} ${tokenCurrencyCode} </span>
+                            <span>${lastTradeQty} ${tokenCurrCode} </span>
                             <span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fs-12 fw-semibold ms-2">${tradeActionFull}</span>
                             <span class="text-muted fs-10 ms-2">${lastTradedDate}</span>
                           </div>
@@ -214,7 +295,6 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   const ulist = document.getElementById("transactions-ul");
   ulist.appendChild(list);
 }
-
 
 var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
   //get submitted requests count from storage
@@ -233,7 +313,7 @@ var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
   if (userTotalBots < role_code) {
     //allow request submission to redirect to request page
     showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
-    setTimeout(() => {
+     setTimeout(() => {
       window.location.href = 'workflow.html';
     }, delayInMS);
   } else {
@@ -428,6 +508,16 @@ var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
 
 
 /*  sales overview chart */
+var netprofitHourlyData = [];
+var netprofitDailyData = [];
+var netprofitMonthlyData = [];
+var tokenCurrencyCode = '';
+var baseCurrencyCode = '';
+
+var tokenNetProfitArr = [];
+var baseNetProfitArr = [];
+var overallProfitableArr = [];
+var lastTradedDateArr = [];
 
 var options = {
   chart: {
@@ -492,15 +582,15 @@ var options = {
   },
   series: [{
     name: "Trade success rate",
-    data: [66, 85, 50, 105, 65, 74, 70, 105, 100, 125, 85, 110, 85, 58, 112],
+    data: tokenNetProfitArr,
     type: 'bar'
   }, {
     name: "Token",
-    data: [65, 20, 40, 55, 80, 90, 59, 86, 120, 165, 115, 120, 50, 70, 85],
+    data: tokenNetProfitArr,
     type: 'line'
   }, {
     name: "Base",
-    data: [20, 65, 85, 38, 55, 25, 25, 165, 75, 64, 70, 75, 85, 85, 115],
+    data: baseNetProfitArr,
     type: 'line'
   }],
   colors: ["rgba(119, 119, 142, 0.075)", "rgba(0, 144, 172, 0.95)", "rgba(245 ,187 ,116)",],
@@ -566,12 +656,20 @@ document.getElementById("profit-statistics").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);
 chart.render();
 
+updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, "Token Currency Code", "Base Currency Code");
+
 var formatGraphData = (rawInputArr) => {
   var input1 = [];
   var input2 = [];
   var input3 = [];
   var xAxisData = [];
   var profitDifference = 0; 
+
+  const tbody = document.getElementById("token-stats-tbody");
+  tbody.innerHTML = '';
+  const rowDate = document.createElement('tr');
+  const rowNetProfit = document.createElement('tr');
+  const rowProfitDiff = document.createElement('tr');
 
   for (let i = 0; i < rawInputArr.length; i++) {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
@@ -581,7 +679,45 @@ var formatGraphData = (rawInputArr) => {
     profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
     console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
     xAxisData.push(tradeDate);
+
+    if(i==0) {
+      var tdDateLabel= document.createElement('td');
+      tdDateLabel.style.fontWeight = 'bold';
+      var textDateLabel = document.createTextNode("Date");
+      tdDateLabel.appendChild(textDateLabel);
+      rowDate.appendChild(tdDateLabel);
+
+      var tdNetProfitLabel = document.createElement('td');
+      var textNetProfitLabel = document.createTextNode("Profit %");
+      tdNetProfitLabel.appendChild(textNetProfitLabel);
+      rowNetProfit.appendChild(tdNetProfitLabel);
+
+      var tdProfitDiffLabel= document.createElement('td');
+      var textProfitDiffLabel = document.createTextNode("Change %");
+      tdProfitDiffLabel.appendChild(textProfitDiffLabel);
+      rowProfitDiff.appendChild(tdProfitDiffLabel);
+    }
+
+    var tdDate = document.createElement('td');
+    tdDate.style.fontWeight = 'bold';
+    var textDate = document.createTextNode(rawInputArr[i].APP_TS);
+    tdDate.appendChild(textDate);
+    rowDate.appendChild(tdDate);
+
+    var tdNetProfit = document.createElement('td');
+    var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT);
+    tdNetProfit.appendChild(textNetProfit);
+    rowNetProfit.appendChild(tdNetProfit);
+
+    var tdProfitDiff= document.createElement('td');
+    var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
+    tdProfitDiff.appendChild(textProfitDiff);
+    rowProfitDiff.appendChild(tdProfitDiff);
   }
+
+  tbody.appendChild(rowDate);
+  tbody.appendChild(rowNetProfit);
+  tbody.appendChild(rowProfitDiff);
 
   return {
     tokenNetProfit: input1,
@@ -591,56 +727,30 @@ var formatGraphData = (rawInputArr) => {
   };
 }
 
-var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitableInput, lastTradedDateInput, tokenCode, baseCode) => {
-  console.log("tokenNetProfitInput: " + tokenNetProfitInput);
-  console.log("baseNetProfitInput: " + baseNetProfitInput);
-  console.log("overallProfitableInput: " + overallProfitableInput);
-  console.log("lastTradedDateInput: " + lastTradedDateInput);
-  console.log("baseCode: " + baseCode);
-  console.log("tokenCode: " + tokenCode);
-
-  //baseCode = baseCode + " Netprofit";
-  //tokenCode = tokenCode + " Netprofit";
-
-  var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);
-  chart.render();
-  chart.updateOptions({
-    colors: [
-      "rgba(" + myVarVal + ", 0.075)",
-      "rgba(" + myVarVal + ", 0.95)",
-      "rgba(245 ,187 ,116)",
-    ],
-    // series: [
-    //   {
-    //     name: "Token Netprofit",
-    //     type: "bar",
-    //     data: tokenNetProfitInput,
-    //   },
-    //   {
-    //     name: "Base Netprofit",
-    //     type: "line",
-    //     data: baseNetProfitInput,
-    //   },
-    //   {
-    //     name: "Overall Profitable",
-    //     type: "line",
-    //     data: overallProfitableInput,
-    //   },
-    // ],
-    series: [{
-      name: "Trade Success Rate",
-      data: tokenNetProfitInput,
-      type: 'bar',
-    }, {
-      name: tokenCode,
-      data: tokenNetProfitInput,
-      type: 'line',
-    }, {
-      name: baseCode,
-      data: baseNetProfitInput,
-      type: 'line',
-    }],
-    labels: lastTradedDateInput
-  });
-}
+var changeLayout = (layout) => {
+  if(layout == 2){
+      var formattedData = formatGraphData(netprofitMonthlyData);
+      tokenNetProfitArr = formattedData.tokenNetProfit;
+      baseNetProfitArr = formattedData.baseNetProfit;
+      overallProfitableArr = formattedData.overallProfitable;
+      lastTradedDateArr = formattedData.lastTradedDate;
+      updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+  }
+  else if(layout == 1){
+    var formattedData = formatGraphData(netprofitDailyData);
+    tokenNetProfitArr = formattedData.tokenNetProfit;
+    baseNetProfitArr = formattedData.baseNetProfit;
+    overallProfitableArr = formattedData.overallProfitable;
+    lastTradedDateArr = formattedData.lastTradedDate;
+    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+  }
+  else {
+    var formattedData = formatGraphData(netprofitHourlyData);
+    tokenNetProfitArr = formattedData.tokenNetProfit;
+    baseNetProfitArr = formattedData.baseNetProfit;
+    overallProfitableArr = formattedData.overallProfitable;
+    lastTradedDateArr = formattedData.lastTradedDate;
+    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+  }
+};
 //**************************************************** */

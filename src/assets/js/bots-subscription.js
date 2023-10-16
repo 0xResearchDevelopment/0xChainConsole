@@ -10,6 +10,9 @@ var loadBotSummaryData = () => {
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+    if(profile.ROLE_CODE == 99){
+        document.getElementById('admin-menu').style.display = 'block';
+    }
 
     const authToken = localStorage.getItem('authToken');
     

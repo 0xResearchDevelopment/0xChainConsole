@@ -433,6 +433,13 @@
                         <!--Start::row-2-->
                         <div class="row">
                             <div class="col-xl-8">
+                                <div class="col-xxl-12 col-xl-12 pb-2" style="display: block; overflow-x: auto;">
+                                    <table class="table table-bordered border-primary text-nowrap rounded-3 overflow-hidden" style="width:100%">
+                                       <tbody id="token-stats-tbody">
+                                            <!-- Table contents will be generated at Run time-->
+                                       </tbody>
+                                    </table>
+                                </div>
                                 <div class="col-xxl-12 col-xl-12">
                                     <div class="card custom-card">
                                         <div class="card-header  justify-content-between">
@@ -442,9 +449,9 @@
                                                     <i class="fe fe-more-vertical"></i>
                                                 </a>
                                                 <ul class="dropdown-menu" role="menu">
-                                                    <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Hourly</a></li>
-                                                    <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Daily</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:void(0);">Monthly</a></li>
+                                                    <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(0)">Hourly</a></li>
+                                                    <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(1)">Daily</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(2)">Monthly</a></li>
                                                 </ul>
                                             </div>
                                         </div>

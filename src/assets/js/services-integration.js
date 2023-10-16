@@ -278,7 +278,6 @@ var getTodayDate = () => {
     return currentDate;
 }
 
-
 var getUserProfile = () => {
     const authToken = localStorage.getItem('authToken');
     
@@ -305,6 +304,9 @@ var getUserProfile = () => {
                 console.log("# inside getUserProfile - res - username:", username);
                 document.getElementById("header-user-name").innerHTML = username;
                 document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+                if(profile.ROLE_CODE == 99){
+                    document.getElementById('admin-menu').style.display = 'block';
+                }
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
                 //localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
@@ -384,6 +386,9 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     const cardBodyDiv = document.createElement('div');
     cardBodyDiv.id = 'card-body-div';
     cardBodyDiv.setAttribute("class", "card-body");
+    if(subscribeStatus == 0) {
+        cardBodyDiv.style.backgroundColor = '#E0E0E0';
+    }
 
     const flex1Div = document.createElement('div');
     flex1Div.id = 'flex1-div';
@@ -550,6 +555,9 @@ var loadProfilePage = () => {
                 document.getElementById("header-user-name").innerHTML = username;
                 document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
                 document.getElementById("profile-header-photo").src = profile.PROFILE_PHOTO;
+                if(profile.ROLE_CODE == 99){
+                    document.getElementById('admin-menu').style.display = 'block';
+                }
                 document.getElementById("profile-header-name").innerHTML = username;
                 document.getElementById("profile-header-email").innerHTML = profile.EMAIL_ID;     
                 document.getElementById("profile-header-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";  
@@ -688,7 +696,7 @@ var updateProfile = () => {
         });
 };
 
-var updatePricingPage = () => {
+var loadPricingPage = () => {
     const profile = JSON.parse(localStorage.getItem('profileObj'));
     //const statsSummary = JSON.parse(localStorage.getItem('statsSummaryObj'));
     let active_bots_latest = localStorage.getItem('active_bots_latest');
@@ -698,7 +706,9 @@ var updatePricingPage = () => {
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
- 
+    if(profile.ROLE_CODE == 99){
+        document.getElementById('admin-menu').style.display = 'block';
+    }
 
     if(active_bots_latest == 1){
         document.getElementById("tier-free-1m").disabled = true;

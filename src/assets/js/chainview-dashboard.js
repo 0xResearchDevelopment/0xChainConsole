@@ -85,12 +85,58 @@ var formatGraphData = (rawNetProfitArr) => {
     var netProfit = [];
     var xAxisData = [];
     var profitDifference = 0; 
+
+    const tbody = document.getElementById("dashboard-tbody");
+    tbody.innerHTML = '';
+    const rowDate = document.createElement('tr');
+    const rowNetProfit = document.createElement('tr');
+    const rowProfitDiff = document.createElement('tr');
+
     for (let i = 0; i < rawNetProfitArr.length; i++) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
         profitDifference = i+1 < rawNetProfitArr.length ? (rawNetProfitArr[i+1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
         console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change 
+    
+        if(i==0) {
+            var tdDateLabel= document.createElement('td');
+            tdDateLabel.style.fontWeight = 'bold';
+            var textDateLabel = document.createTextNode("Date");
+            tdDateLabel.appendChild(textDateLabel);
+            rowDate.appendChild(tdDateLabel);
+      
+            var tdNetProfitLabel = document.createElement('td');
+            var textNetProfitLabel = document.createTextNode("Profit %");
+            tdNetProfitLabel.appendChild(textNetProfitLabel);
+            rowNetProfit.appendChild(tdNetProfitLabel);
+      
+            var tdProfitDiffLabel= document.createElement('td');
+            var textProfitDiffLabel = document.createTextNode("Change %");
+            tdProfitDiffLabel.appendChild(textProfitDiffLabel);
+            rowProfitDiff.appendChild(tdProfitDiffLabel);
+          }
+      
+          var tdDate = document.createElement('td');
+          tdDate.style.fontWeight = 'bold';
+          var textDate = document.createTextNode(rawNetProfitArr[i].AS_OF);
+          tdDate.appendChild(textDate);
+          rowDate.appendChild(tdDate);
+      
+          var tdNetProfit = document.createElement('td');
+          var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT);
+          tdNetProfit.appendChild(textNetProfit);
+          rowNetProfit.appendChild(tdNetProfit);
+      
+          var tdProfitDiff= document.createElement('td');
+          var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
+          tdProfitDiff.appendChild(textProfitDiff);
+          rowProfitDiff.appendChild(tdProfitDiff);
+    
     }
+
+    tbody.appendChild(rowDate);
+    tbody.appendChild(rowNetProfit);
+    tbody.appendChild(rowProfitDiff);
 
     return {
         netProfitArray: netProfit,
