@@ -1,5 +1,5 @@
 var delayInMS = 2000;
-var targetEndPointUrlBase = 'http://localhost:3000';
+var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
 var loadAdminWorkflow = () => {
     const profile = JSON.parse(localStorage.getItem('profileObj'));
