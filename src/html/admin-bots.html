@@ -12,15 +12,14 @@
 
 </head>
 
-<body onload="loadAdminWorkflow()">
-
+<body onload="">
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
 
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Administrator - Workflow", "dashbordsubtitle": 'Administrator', "dashbordsubtitle2": 'Subscription Workflow'})
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Administrator - Bots", "dashbordsubtitle": 'Administrator', "dashbordsubtitle2": 'Bots List'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -32,42 +31,29 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Subscription Workflow
+                                    Bots List
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h5>Pending Requests</h5>
-                                <table id="adminSubscriptionWorkflowPendingDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                <button class="btn btn-primary btn-wave waves-effect waves-light" id="add-bot">Add Bot</button>
+                                <table id="adminBotsListDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th scope="col">REQ.ID</th> 
+                                            <th scope="col">ID</th> 
                                             <th scope="col">Action</th> 
-                                            <th scope="col">Type</th> 
-                                            <th scope="col">Status</th> 
-                                            <th scope="col">Description</th> 
-                                            <th scope="col">Bot ID</th> 
-                                            <th scope="col">Requested User</th> 
-                                            <th scope="col">Submitted on</th>
+                                            <th scope="col">Bot Symbol</th> 
+                                            <th scope="col">Timeframe</th> 
+                                            <th scope="col">Exchange</th> 
+                                            <th scope="col">Bot Name</th> <!-- TODO: should be read only - auto populate when ADD, EDIT action by concatenating Symbol+timeframe+exchange in uppercase -->
+                                            <th scope="col">Sumulate</th> <!-- Yes or NO : 1 - yes-->
+                                            <th scope="col">Status</th> <!-- Active or Inactive : 1 - Active-->
+                                            <th scope="col">Base Icon</th> <!-- img to show icon -->
+                                            <th scope="col">Token Icon</th> <!-- img to show icon -->
+                                            <th scope="col">Created On</th> 
+                                            <th scope="col">Updated On</th>
                                         </tr>
                                     </thead>
-                                   <tbody id="workflow-pending-tbody"></tbody>
-                                </table>
-
-                                <h5>Processed Requests</h5>
-                                <table id="adminSubscriptionWorkflowProcessedDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">REQ.ID</th> 
-                                            <th scope="col">Type</th> 
-                                            <th scope="col">Status</th> 
-                                            <th scope="col">Description</th> 
-                                            <th scope="col">Bot ID</th> 
-                                            <th scope="col">Requested User</th> 
-                                            <th scope="col">Submitted on</th>
-                                            <th scope="col">Processed on</th>
-                                        </tr>
-                                    </thead>
-                                   <tbody id="workflow-processed-tbody"></tbody>
+                                   <tbody id="workflow-bots-list-tbody"></tbody>
                                 </table>
                             </div>
                         </div>

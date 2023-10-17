@@ -304,6 +304,7 @@ var getUserProfile = () => {
                 console.log("# inside getUserProfile - res - username:", username);
                 document.getElementById("header-user-name").innerHTML = username;
                 document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+                // Role based menu access - Administrator 
                 if(profile.ROLE_CODE == 99){
                     document.getElementById('admin-menu').style.display = 'block';
                 }
@@ -329,13 +330,15 @@ var getUserProfile = () => {
                 localStorage.setItem('requests_unsubscribe_count', userUnsubscribeSubmittedRequestsCount);
                 console.log("## requests_subscribe_count:" + userSubscribeSubmittedRequestsCount + " requests_unsubscribe_count:"  + userUnsubscribeSubmittedRequestsCount);
 
+                if(userActiveBotsLatestCount == 0 && profile.ROLE_CODE >= 0){
+                    location.href = "bots-list.html";
+                }
+
                 if(profile.ROLE_CODE == -2){
                     location.href = "profile.html";
-                }
-                else if(profile.ROLE_CODE == -1){
+                } else if(profile.ROLE_CODE == -1){
                     location.href = "pricing.html";
-                }
-                else if(profile.ROLE_CODE < -2 && profile.ROLE_CODE > 5){
+                } else if(profile.ROLE_CODE < -2 && profile.ROLE_CODE > 99){
                     location.href = "sign-in-cover.html";
                 }
 
@@ -361,10 +364,6 @@ var getUserProfile = () => {
                 for (let i = 0; i < recentActivities.length; i++) {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
-                }
-
-                if(userActiveBotsLatestCount == 0){
-                    location.href = "bots-list.html";
                 }
             }
         }).catch(err => {

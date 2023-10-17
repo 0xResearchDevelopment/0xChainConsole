@@ -11,47 +11,72 @@ var loadAdminWorkflow = () => {
     }
 
     const authToken = localStorage.getItem('authToken');
-    axios
-        .post(
-            targetEndPointUrlBase+'/api/subscription/getWorkflow',
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
+    if (profile.ROLE_CODE == 99) {
+        showToastAlerts('process-stats-success', 'alert-success-msg', 'You are eligible to access');
+        axios
+            .post(
+                targetEndPointUrlBase + '/api/subscription/getWorkflow',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
                 }
-            }
-        )
-        .then(res => {
-            if (res.status == 200) {
-                console.log(res.data);
-                const pendingRequests = (res.data.pendingRequests!=undefined && res.data.pendingRequests!=null)?res.data.pendingRequests:null;
-        
-                for (let i = 0; i < pendingRequests.length; i++) {
-                    createTableRows(
-                        pendingRequests[i].REQ_ID,
-                        pendingRequests[i].REQ_TYPE,
-                        pendingRequests[i].REQ_STATUS,
-                        pendingRequests[i].REQ_DESC,
-                        pendingRequests[i].BOT_ID,
-                        pendingRequests[i].EMAIL_ID,
-                        pendingRequests[i].SUBMITTED_ON,
-                        );                      
-                } 
-                applyResponsiveness();
-            }
-        }).catch(err => {
-            console.log("inside err");
-            console.log(err, err.response);
-            if (err.response.status == 401) {
-                setTimeout(() => {
-                  window.location.href = 'sign-in-cover.html';
+            )
+            .then(res => {
+                if (res.status == 200) {
+                    console.log(res.data);
+                    const pendingRequests = (res.data.pendingRequests != undefined && res.data.pendingRequests != null) ? res.data.pendingRequests : null;
+                    const processedRequests = (res.data.processedRequests != undefined && res.data.processedRequests != null) ? res.data.processedRequests : null;
+
+                    for (let i = 0; i < pendingRequests.length; i++) {
+                        createTableRowsPending(
+                            pendingRequests[i].REQ_ID,
+                            pendingRequests[i].REQ_TYPE,
+                            pendingRequests[i].REQ_STATUS,
+                            pendingRequests[i].REQ_DESC,
+                            pendingRequests[i].BOT_ID,
+                            pendingRequests[i].EMAIL_ID,
+                            pendingRequests[i].SUBMITTED_ON,
+                        );
+                    }
+
+                    for (let i = 0; i < processedRequests.length; i++) {
+                        createTableRowsProcessed(
+                            processedRequests[i].REQ_ID,
+                            processedRequests[i].REQ_TYPE,
+                            processedRequests[i].REQ_STATUS,
+                            processedRequests[i].REQ_DESC,
+                            processedRequests[i].BOT_ID,
+                            processedRequests[i].EMAIL_ID,
+                            processedRequests[i].SUBMITTED_ON,
+                            processedRequests[i].PROCESSED_ON
+                        );
+                    }
+
+                    applyResponsivenessPending();
+                    applyResponsivenessProcessed();
                 }
-                  , delayInMS);
-              }
-        });
+            }).catch(err => {
+                console.log("inside err");
+                console.log(err, err.response);
+                if (err.response.status == 401) {
+                    showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
+                    setTimeout(()=> {
+                       window.location.href = 'sign-in-cover.html';
+                     }
+                     ,delayInMS);
+                }
+            });
+    } else {
+        showToastAlerts('process-stats-error', 'alert-error-msg', 'Unauthorized access');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+          }, delayInMS);
+    }
 };
 
-var createTableRows = (reqId, reqType, reqStatus, reqDesc, botId, userEmailID, submittedTS) => {
+var createTableRowsPending = (reqId, reqType, reqStatus, reqDesc, botId, userEmailID, submittedTS) => {
     const colorCode = (reqType == 'SUBSCRIBE') ? 'success' : 'secondary';
     const row = document.createElement('tr');
     let reqTypeValue = "\"" + reqType + "\"";
@@ -65,18 +90,53 @@ var createTableRows = (reqId, reqType, reqStatus, reqDesc, botId, userEmailID, s
     <td style = 'font-size: 12px;'>${userEmailID}</td>
     <td style = 'font-size: 12px;'>${submittedTS}</td>`;
 
-    const tbody = document.getElementById("workflow-tbody");
+    const tbody = document.getElementById("workflow-pending-tbody");
     tbody.appendChild(row);
 }
 
-var applyResponsiveness = () => {
-    $('#adminSubscriptionWorkflowDataTable').DataTable({
+
+var createTableRowsProcessed = (reqId, reqType, reqStatus, reqDesc, botId, userEmailID, submittedTS, processedTS) => {
+    const colorCode = (reqType == 'SUBSCRIBE') ? 'success' : 'secondary';
+    const row = document.createElement('tr');
+    let reqTypeValue = "\"" + reqType + "\"";
+    let userEmailIDValue = "\"" + userEmailID + "\"";
+    row.innerHTML = `<td style = 'font-size: 12px;'>${reqId}</td>
+    <td style = 'font-size: 12px;'><span class='text-${colorCode} fs-12'>${reqType}</span></td>
+    <td style = 'font-size: 12px;'>${reqStatus}</td>
+    <td style = 'font-size: 12px;'>${reqDesc}</td>
+    <td style = 'font-size: 12px;'>${botId}</td>
+    <td style = 'font-size: 12px;'>${userEmailID}</td>
+    <td style = 'font-size: 12px;'>${submittedTS}</td>
+    <td style = 'font-size: 12px;'>${processedTS}</td>`;
+
+    const tbody = document.getElementById("workflow-processed-tbody");
+    tbody.appendChild(row);
+}
+
+var applyResponsivenessPending = () => {
+    $('#adminSubscriptionWorkflowPendingDataTable').DataTable({
         responsive: true,
         language: {
             searchPlaceholder: 'Search...',
             sSearch: ''
         },
         order: [[0, 'desc']],   //Soring by EventID decensing order
+        "pageLength": 10,
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ], dom: 'flirtBlp' //'Bfrtip'
+    });
+};
+
+
+var applyResponsivenessProcessed = () => {
+    $('#adminSubscriptionWorkflowProcessedDataTable').DataTable({
+        responsive: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: ''
+        },
+        //order: [[7, 'desc']],   //Soring by EventID decensing order
         "pageLength": 10,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
