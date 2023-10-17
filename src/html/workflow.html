@@ -4,12 +4,17 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <!-- Axios dependency-->
 <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
 
+<!-- API Integration & functionalities-->
+<script src="../assets/js/workflow.js"></script> 
+
 </head>
 
-<body>
+<body onload="loadWorkflowPage()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -24,7 +29,7 @@
             <div class="container-fluid">
 
                 <!-- Start:: row-2 -->
-                <div class="row">
+                <div class="row" id="workflow-container">
                     <div class="col-xl-12">
                         <div class="card custom-card">
                             <div class="card-header">
@@ -36,57 +41,68 @@
                                 <!-- show selected symbol details -->
 
                                 <div class="row row-cols-12">
-                                    <div class="col-xxl-2 col-xl-12 col-md-4 col-sm-6">
+                                    <div class="col-xl-2 col-lg-2 col-md-2">
                                         <div class="card custom-card">
                                             <div class="card-body">
-                                                <div class="flex-between mb-3">
-                                                    <span class="text-muted fs-16">Bot ID</span>
-                                                </div>
-                                                <div class="d-flex align-items-end">
+                                                <div class="d-flex align-items-center">
                                                     <div class="flex-1">
-                                                        <h5 class="mb-2 text-primary">27</h5>
+                                                        <div class="mb-3"> 
+                                                            <p class="mb-0 text-muted fs-16">Bot ID</p>
+                                                        </div>
+                                                        <div class="flex-between">
+                                                            <h5 class="mb-2 text-primary fs-20" id="workflow-bot-id"></h5>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xxl-4 col-xl-4 col-md-4 col-sm-6">
+                                    <div class="col-xl-4 col-lg-4 col-md-4">
                                         <div class="card custom-card">
                                             <div class="card-body">
-                                                <div class="flex-between mb-3">
-                                                    <span class="text-muted fs-16">Bot Name</span>
-                                                </div>
-                                                <div class="d-flex align-items-end">
+                                                <div class="d-flex align-items-center">
                                                     <div class="flex-1">
-                                                        <h5 class="mb-2 text-primary">MATICBTC_30M_BINANCE</h5>
+                                                        <div style="margin-bottom:0.7rem">
+                                                            <p class="mb-0 text-muted fs-16">Bot Name</p>
+                                                        </div>
+                                                        <div class="flex-between">
+                                                            <h5 class="mb-2 text-primary fs-20" id="workflow-bot-name"></h5>
+                                                            <div class="avatar avatar-md br-4 ms-auto">
+                                                                <img id="workflow-token-icon" src="../assets/images/brand-logos/toggle-logo.png" class="fs-20"><img id="workflow-base-icon" src="../assets/images/brand-logos/toggle-logo.png" class="fs-20"> <!-- ICONS -->
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xxl-3 col-xl-4 col-md-4 col-sm-6">
+                                    <div class="col-xl-4 col-lg-4 col-md-3">
                                         <div class="card custom-card">
                                             <div class="card-body">
-                                                <div class="flex-between mb-3">
-                                                    <span class="text-muted fs-16">Subscription Date</span>
-                                                </div>
-                                                <div class="d-flex align-items-end">
+                                                <div class="d-flex align-items-center">
                                                     <div class="flex-1">
-                                                        <h5 class="mb-2 text-primary">15-Oct23 11:30:23 PM</h5>
+                                                        <div class="mb-3">
+                                                            <p class="mb-0 text-muted fs-16">Subscription Date</p>
+                                                        </div>
+                                                        <div class="flex-between"> 
+                                                            <h5 class="mb-2 text-primary fs-20" id="subscription-date"></h5>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xxl-3 col-xl-4 col-md-4 col-sm-6">
+                                    <div class="col-xl-2 col-lg-2 col-md-3">
                                         <div class="card custom-card">
                                             <div class="card-body">
-                                                <div class="flex-between mb-3">
-                                                    <span class="text-muted fs-16">Service for</span>
-                                                </div>
-                                                <div class="d-flex align-items-end">
+                                                <div class="d-flex align-items-center">
                                                     <div class="flex-1">
-                                                        <h5 class="mb-2 text-primary">SUBSCRIBE</h5>
+                                                        <div class="mb-3">
+                                                            <p class="mb-0 text-muted fs-16">Service for</p>
+                                                        </div>
+                                                        <div class="flex-between">
+                                                            <h5 class="mb-2 text-primary fs-20" id="service-for"></h5>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -94,13 +110,12 @@
                                     </div>
                                 </div>
 
-
                                 <!-- Whitlist-->
                                 <div class="col-xl-12">
                                     <span><h6>Have you whitelisted this pair in your account?</h6></span>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
-                                        <input id="toggleswitchWhitelist" name="toggleswitch001" type="checkbox"> 
-                                        <label for="toggleswitchWhitelist" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
+                                        <input id="workflow-whitelist" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-whitelist" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
                                     </div>
                                 </div>
 
@@ -108,8 +123,8 @@
                                 <div class="col-xl-12">
                                     <span><h6>Have you added IP address in your account?</h6></span>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
-                                        <input id="toggleswitchIpAddress" name="toggleswitch001" type="checkbox"> 
-                                        <label for="toggleswitchIpAddress" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
+                                        <input id="workflow-ip-address" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-ip-address" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Confirm</span>
                                     </div>
                                 </div>
 
@@ -117,8 +132,8 @@
                                 <div class="col-xl-12">
                                     <span><h6>Have you accept Terms-and-Conditions?</h6></span>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
-                                        <input id="toggleswitchTerms" name="toggleswitch001" type="checkbox"> 
-                                        <label for="toggleswitchTerms" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Agree</span>
+                                        <input id="workflow-terms" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-terms" class="label-success"></label><span class="ms-3 fs-16 text-danger">I Agree</span>
                                     </div>
                                 </div>
 
@@ -126,31 +141,35 @@
                                 <div class="col-xl-12">
                                     <span><h6>Are you aware of the RISK and agree to consent to procced this in your trading account?</h6></span>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
-                                        <input id="toggleswitchConsent" name="toggleswitch001" type="checkbox"> 
-                                        <label for="toggleswitchConsent" class="label-success"></label><span class="ms-3 fs-16 text-danger"> Aware of the RISK involved and I give my consent to proceed</span>
+                                        <input id="workflow-consent" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-consent" class="label-success"></label><span class="ms-3 fs-16 text-danger"> Aware of the RISK involved and I give my consent to proceed</span>
                                     </div>
                                 </div>
 
-                               
+                                <!-- Generate PDF -->
+                                <div class="text-center mt-3 mb-3">
+                                    <button class="btn btn-primary btn-wave waves-effect waves-light" onclick="htmlToPdf()">Generate PDF</button>
+                                </div>
+
                                 <!-- Upload signed consent document here-->
                                 <div class="col-xl-12">
                                     <span><h6>Download, Sign and upload your consent document (PDF only)</h6></span>
                                     <div class="input-group mb-3">
-                                        <input type="file" class="form-control  fs-16" id="inputGroupFile02">
-                                        <label class="input-group-text fs-16 text-danger" for="inputGroupFile02">Upload</label>
+                                        <input type="file" class="form-control  fs-16" id="workflow-file" oninput="validateInputs()">
+                                        <label class="input-group-text fs-16 text-danger" for="workflow-file">Upload</label>
                                     </div>
                                 </div>
 
                                 <!-- Remarks section-->
                                 <div class="col-xl-12 mt-6">
                                     <span><h6>Remarks if any</h6></span>
-                                    <textarea class="form-control" id="submit-request-remarks" rows="4"></textarea>
+                                    <textarea class="form-control" id="workflow-remarks" rows="4" oninput="validateInputs()"></textarea>
                                 </div>
 
                                 <!-- submit section -->
                                 <div class="text-center mt-4">
-                                    <button class="btn btn-primary btn-wave waves-effect waves-light" id="submit-request">Submit Request</button>
-                                    <button class="btn btn-primary btn-wave waves-effect waves-light" id="submit-request">Back</button>
+                                    <button class="btn btn-primary btn-wave waves-effect waves-light" id="workflow-submit-request" onclick="submitRequest()" disabled>Submit Request</button>
+                                    <button class="btn btn-primary btn-wave waves-effect waves-light">Back</button>
                                 </div>
                             </div>
                         </div>
@@ -165,6 +184,26 @@
         @SPK@include("partials/footer.html")
         @SPK@include("partials/side-bar.html")
 
+    </div>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+        <div id="workflow-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+            <span id="alert-error-msg" class="fs-18"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+        <div id="workflow-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="alert-success-msg" class="fs-18"></span>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>

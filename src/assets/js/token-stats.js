@@ -1,8 +1,81 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
+const botId = localStorage.getItem('botId');
+const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
+const authToken = localStorage.getItem('authToken');
+
 function truncate (num, places) {
   return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
+}
+
+var formatGraphData = (rawInputArr) => {
+  var input1 = [];
+  var input2 = [];
+  var input3 = [];
+  var xAxisData = [];
+  var profitDifference = 0; 
+
+  const tbody = document.getElementById("token-stats-tbody");
+  tbody.innerHTML = '';
+  const rowDate = document.createElement('tr');
+  const rowNetProfit = document.createElement('tr');
+  const rowProfitDiff = document.createElement('tr');
+
+  for (let i = 0; i < rawInputArr.length; i++) {
+    input1.push(rawInputArr[i].TOKEN_NETPROFIT);
+    input2.push(rawInputArr[i].BASE_NETPROFIT);
+    input3.push(rawInputArr[i].OVERALL_PROFITABLE);
+    var tradeDate = rawInputArr[i].APP_TS;
+    profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
+    console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
+    xAxisData.push(tradeDate);
+
+    if(i==0) {
+      var tdDateLabel= document.createElement('td');
+      tdDateLabel.style.fontWeight = 'bold';
+      var textDateLabel = document.createTextNode("Date");
+      tdDateLabel.appendChild(textDateLabel);
+      rowDate.appendChild(tdDateLabel);
+
+      var tdNetProfitLabel = document.createElement('td');
+      var textNetProfitLabel = document.createTextNode("Profit %");
+      tdNetProfitLabel.appendChild(textNetProfitLabel);
+      rowNetProfit.appendChild(tdNetProfitLabel);
+
+      var tdProfitDiffLabel= document.createElement('td');
+      var textProfitDiffLabel = document.createTextNode("Change %");
+      tdProfitDiffLabel.appendChild(textProfitDiffLabel);
+      rowProfitDiff.appendChild(tdProfitDiffLabel);
+    }
+
+    var tdDate = document.createElement('td');
+    tdDate.style.fontWeight = 'bold';
+    var textDate = document.createTextNode(rawInputArr[i].APP_TS);
+    tdDate.appendChild(textDate);
+    rowDate.appendChild(tdDate);
+
+    var tdNetProfit = document.createElement('td');
+    var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT);
+    tdNetProfit.appendChild(textNetProfit);
+    rowNetProfit.appendChild(tdNetProfit);
+
+    var tdProfitDiff= document.createElement('td');
+    var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
+    tdProfitDiff.appendChild(textProfitDiff);
+    rowProfitDiff.appendChild(tdProfitDiff);
+  }
+
+  tbody.appendChild(rowDate);
+  tbody.appendChild(rowNetProfit);
+  tbody.appendChild(rowProfitDiff);
+
+  return {
+    tokenNetProfit: input1,
+    baseNetProfit: input2,
+    overallProfitable: input3,
+    lastTradedDate: xAxisData
+  };
 }
 
 var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitableInput, lastTradedDateInput, tokenCode, baseCode) => {
@@ -42,7 +115,7 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
     //   },
     // ],
     series: [{
-      name: "Trade Success Rate",
+      name: tokenCode,
       data: tokenNetProfitInput,
       type: 'bar',
     }, {
@@ -94,10 +167,7 @@ var getTokenStats = (parentPage) => {
     document.getElementById('admin-menu').style.display = 'block';
   }
 
-  const botId = localStorage.getItem('botId');
-  const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
   console.log("## botId: " + botId + " userSubscriptionStatusValue: " +userSubscriptionStatusValue);
-  const authToken = localStorage.getItem('authToken');
   //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
   var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
   if (parentPage == 1) {
@@ -118,8 +188,6 @@ var getTokenStats = (parentPage) => {
     })
     .then(res => {
       console.log("### Inside getTokenStats:res.data: " + res.data);
-      localStorage.removeItem('botId');
-      localStorage.removeItem('userSubscriptionStatus');
       if (res.status == 200) {
         console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
         const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
@@ -151,10 +219,17 @@ var getTokenStats = (parentPage) => {
         document.getElementById("time-frame").innerHTML = botDetails.BOT_NAME;
         //document.getElementById("total-no-of-trades").innerHTML = botDetails.TOTAL_NUMOF_TRADES;
         document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
-        document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate(" + botId + "," + userSubscriptionStatusValue + ");' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+        if(userSubscriptionStatusValue == 0) {
+          document.getElementById("id-subscription-box-button").innerHTML = '';
+          document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate();' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+        }
+        else if(userSubscriptionStatusValue == 1){
+          document.getElementById("id-subscription-box-button").innerHTML = '';
+          document.getElementById("id-subscription-box-button").innerHTML = "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+        }
+        
         document.getElementById("subscription-status-box-text-below").innerHTML = subscriptionStatusBoxTextBelow; 
         
-
         document.getElementById("traded-date1").innerHTML = botDetails.APP_TS;
         document.getElementById("investment").innerHTML = botDetails.TOKEN_ENTRY_AMOUNT;
         document.getElementById("subscribed-on").innerHTML = "Started on: " + botDetails.SUBSCRIBED_ON;
@@ -175,7 +250,6 @@ var getTokenStats = (parentPage) => {
         var initialBalance = "Invested: " + botDetails.BASE_INITIAL_CAPITAL + " " + botDetails.BASE_CURRENCY_CODE;
         document.getElementById("current-balance").innerHTML = currentBalance;
         document.getElementById("initial-balance").innerHTML = initialBalance;
-
 
         //Profit Summary - Chart setup - starts
         var netProfitValue = botDetails.TOKEN_NETPROFIT;
@@ -296,31 +370,76 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   ulist.appendChild(list);
 }
 
-var proceedSubscriptionUpdate = (botId, userSubscriptionStatusValue) => {
+var proceedSubscriptionUpdate = () => {
   //get submitted requests count from storage
   //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
   //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
   //validation : active_bots_latest+requests_subscribe_count should be <= roleCode
   //TODO: add this validation while placing the request
+
   const requests_subscribe_count = localStorage.getItem('requests_subscribe_count');
   const requests_unsubscribe_count = localStorage.getItem('requests_unsubscribe_count');
   const active_bots_latest = localStorage.getItem('active_bots_latest');
   const role_code = localStorage.getItem('role_code');
   console.log("## requests_subscribe_count: " + requests_subscribe_count + " requests_unsubscribe_count: " + requests_unsubscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
-  //alert("botId: " + botId + " userSubscriptionStatusValue: " + userSubscriptionStatusValue + " requests_subscribe_count: " + requests_subscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
-
   let userTotalBots = active_bots_latest + requests_subscribe_count;
   if (userTotalBots < role_code) {
     //allow request submission to redirect to request page
     showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
-     setTimeout(() => {
+    setTimeout(() => {
       window.location.href = 'workflow.html';
     }, delayInMS);
   } else {
     //do not allow, stay her and show error message
     showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
   }
+  
 };
+
+var unsubscribeBot = (requestDescribtion) => {
+  const requestBody = {
+    reqType: 'UNSUBSCRIBE',
+    reqDesc: requestDescribtion,
+    botId: botId,
+    agreeWhitelist: 1,
+    agreeIpAdded: 1,
+    agreeTerms: 1,
+    agreeConsent: 1,
+    agreeTermsDocPath: '',
+  }
+
+  //authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+  axios
+  .post(
+      targetEndPointUrlBase +'/api/subscription/placeRequest',
+      requestBody,
+      {
+          headers: {
+              Authorization: `Bearer ${authToken}`
+          }
+      }
+  )
+  .then(res => {
+      console.log("res: " + JSON.stringify(res.data));
+      if (res.status == 200) {
+          showToastAlerts('token-stats-success','alert-success-msg',res.data.message);
+          setTimeout(()=> {
+              window.location.href='bots-list.html';
+          }
+          ,delayInMS);
+      }
+  })
+  .catch(err => {
+      console.log(err);
+          if (err.response.status == 401) {
+          showToastAlerts('token-stats-error','alert-error-msg',err.response.data.message);
+          setTimeout(()=> {
+              location.href = "sign-in-cover.html";
+              }
+              ,delayInMS);
+      }
+  });
+}
 
 /* column chart with negative values */
 // var options = {
@@ -581,7 +700,7 @@ var options = {
     }
   },
   series: [{
-    name: "Trade success rate",
+    name: "Token",
     data: tokenNetProfitArr,
     type: 'bar'
   }, {
@@ -658,75 +777,6 @@ chart.render();
 
 updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, "Token Currency Code", "Base Currency Code");
 
-var formatGraphData = (rawInputArr) => {
-  var input1 = [];
-  var input2 = [];
-  var input3 = [];
-  var xAxisData = [];
-  var profitDifference = 0; 
-
-  const tbody = document.getElementById("token-stats-tbody");
-  tbody.innerHTML = '';
-  const rowDate = document.createElement('tr');
-  const rowNetProfit = document.createElement('tr');
-  const rowProfitDiff = document.createElement('tr');
-
-  for (let i = 0; i < rawInputArr.length; i++) {
-    input1.push(rawInputArr[i].TOKEN_NETPROFIT);
-    input2.push(rawInputArr[i].BASE_NETPROFIT);
-    input3.push(rawInputArr[i].OVERALL_PROFITABLE);
-    var tradeDate = rawInputArr[i].APP_TS;
-    profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
-    console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
-    xAxisData.push(tradeDate);
-
-    if(i==0) {
-      var tdDateLabel= document.createElement('td');
-      tdDateLabel.style.fontWeight = 'bold';
-      var textDateLabel = document.createTextNode("Date");
-      tdDateLabel.appendChild(textDateLabel);
-      rowDate.appendChild(tdDateLabel);
-
-      var tdNetProfitLabel = document.createElement('td');
-      var textNetProfitLabel = document.createTextNode("Profit %");
-      tdNetProfitLabel.appendChild(textNetProfitLabel);
-      rowNetProfit.appendChild(tdNetProfitLabel);
-
-      var tdProfitDiffLabel= document.createElement('td');
-      var textProfitDiffLabel = document.createTextNode("Change %");
-      tdProfitDiffLabel.appendChild(textProfitDiffLabel);
-      rowProfitDiff.appendChild(tdProfitDiffLabel);
-    }
-
-    var tdDate = document.createElement('td');
-    tdDate.style.fontWeight = 'bold';
-    var textDate = document.createTextNode(rawInputArr[i].APP_TS);
-    tdDate.appendChild(textDate);
-    rowDate.appendChild(tdDate);
-
-    var tdNetProfit = document.createElement('td');
-    var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT);
-    tdNetProfit.appendChild(textNetProfit);
-    rowNetProfit.appendChild(tdNetProfit);
-
-    var tdProfitDiff= document.createElement('td');
-    var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
-    tdProfitDiff.appendChild(textProfitDiff);
-    rowProfitDiff.appendChild(tdProfitDiff);
-  }
-
-  tbody.appendChild(rowDate);
-  tbody.appendChild(rowNetProfit);
-  tbody.appendChild(rowProfitDiff);
-
-  return {
-    tokenNetProfit: input1,
-    baseNetProfit: input2,
-    overallProfitable: input3,
-    lastTradedDate: xAxisData
-  };
-}
-
 var changeLayout = (layout) => {
   if(layout == 2){
       var formattedData = formatGraphData(netprofitMonthlyData);
@@ -753,4 +803,13 @@ var changeLayout = (layout) => {
     updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
   }
 };
+
+var validateModalInputs = () => {
+  if(document.getElementById('unsubscription-note').value.length > 0){
+    document.getElementById('unsubscription-submit').disabled = false;
+  }
+  else {
+    document.getElementById('unsubscription-submit').disabled = true;
+  }
+}
 //**************************************************** */

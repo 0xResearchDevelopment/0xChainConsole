@@ -91,6 +91,8 @@ var formatGraphData = (rawNetProfitArr) => {
     const rowDate = document.createElement('tr');
     const rowNetProfit = document.createElement('tr');
     const rowProfitDiff = document.createElement('tr');
+    const rowActiveBots = document.createElement('tr');
+    const rowSubNetProfit = document.createElement('tr');
 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
@@ -114,6 +116,16 @@ var formatGraphData = (rawNetProfitArr) => {
             var textProfitDiffLabel = document.createTextNode("Change %");
             tdProfitDiffLabel.appendChild(textProfitDiffLabel);
             rowProfitDiff.appendChild(tdProfitDiffLabel);
+
+            var tdActiveBotsLabel = document.createElement('td');
+            var textActiveBotsLabel = document.createTextNode("Active Bots");
+            tdActiveBotsLabel.appendChild(textActiveBotsLabel);
+            rowActiveBots.appendChild(tdActiveBotsLabel);
+      
+            var tdSubNetProfitLabel= document.createElement('td');
+            var textSubNetProfitLabel = document.createTextNode("Sub Net Profit");
+            tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
+            rowSubNetProfit.appendChild(tdSubNetProfitLabel);
           }
       
           var tdDate = document.createElement('td');
@@ -131,12 +143,23 @@ var formatGraphData = (rawNetProfitArr) => {
           var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
           tdProfitDiff.appendChild(textProfitDiff);
           rowProfitDiff.appendChild(tdProfitDiff);
-    
+
+          var tdActiveBots = document.createElement('td');
+          var textActiveBots = document.createTextNode(rawNetProfitArr[i].ACTIVE_BOTS);
+          tdActiveBots.appendChild(textActiveBots);
+          rowActiveBots.appendChild(tdActiveBots);
+
+          var tdSubNetProfit= document.createElement('td');
+          var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT);
+          tdSubNetProfit.appendChild(textSubNetProfit);
+          rowSubNetProfit.appendChild(tdSubNetProfit);
     }
 
     tbody.appendChild(rowDate);
     tbody.appendChild(rowNetProfit);
     tbody.appendChild(rowProfitDiff);
+    tbody.appendChild(rowActiveBots);
+    tbody.appendChild(rowSubNetProfit);
 
     return {
         netProfitArray: netProfit,

@@ -531,6 +531,31 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="botUnsubscribeModal" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Confirm Unsubscription
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Please leave the Unsubscription note here.</p>
+                            <textarea class="form-control" rows="3" id="unsubscription-note" oninput="validateModalInputs()"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-outline-primary" id="unsubscription-submit"
+                                data-bs-dismiss="modal" disabled onclick="unsubscribeBot(document.getElementById('unsubscription-note').value)">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- End::app-content -->
 

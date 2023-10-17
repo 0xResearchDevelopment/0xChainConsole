@@ -356,8 +356,8 @@ var getUserProfile = () => {
                     ["PROFILE", 'success'],
                     ["SUBSCRIBE", 'secondary'],
                     ["WORKFLOW", 'warning'],
-                    ["NOTIFICATION", 'info']
-                    //["BOTS", 'warning']
+                    ["NOTIFICATION", 'info'],
+                    ["BOTS", 'primary']
                   ]);
 
                 const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
