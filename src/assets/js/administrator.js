@@ -144,7 +144,7 @@ var applyResponsivenessProcessed = () => {
             searchPlaceholder: 'Search...',
             sSearch: ''
         },
-        //order: [[7, 'desc']],   //Soring by EventID decensing order
+        order: [[7, 'desc']],   //Soring by EventID decensing order
         "pageLength": 10,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
@@ -193,6 +193,7 @@ var processRequest = (reqId, reqType, reqAction, botId, userEmailID) => {
                     reqActionValue = "REJECTED";
                     showToastAlerts('process-stats-error', 'alert-error-msg', 'Rejected request# '+reqId);
                 }
+                window.location.href = 'admin-workflow.html';
             }
         }).catch(err => {
             console.log("inside err");
