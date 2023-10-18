@@ -33,7 +33,13 @@ var loadChartData = () => {
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            location.href = "sign-in-cover.html";
+            if (err.response.status == 401) {
+                showToastAlerts('index-error','alert-error-msg',err.response.data.message);
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+            }
         })
 }
 
@@ -136,11 +142,15 @@ var formatGraphData = (rawNetProfitArr) => {
 
         var tdNetProfit = document.createElement('td');
         var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT+ "%");
+        var fontColorNetProfit = rawNetProfitArr[i].NETPROFIT >= 0 ? "text-success" : "text-danger";
+        tdNetProfit.classList.add(fontColorNetProfit);
         tdNetProfit.appendChild(textNetProfit);
         rowNetProfit.appendChild(tdNetProfit);
 
         var tdProfitDiff = document.createElement('td');
         var textProfitDiff = document.createTextNode(truncate(profitDifference, 2)+ "%");
+        var fontColorProfitDiff = profitDifference >= 0 ? "text-success" : "text-danger";
+        tdProfitDiff.classList.add(fontColorProfitDiff);
         tdProfitDiff.appendChild(textProfitDiff);
         rowProfitDiff.appendChild(tdProfitDiff);
 

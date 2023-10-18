@@ -28,7 +28,7 @@ var formatGraphData = (rawInputArr) => {
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
     var tradeDate = rawInputArr[i].APP_TS;
     profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
-    console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
+    //console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
     xAxisData.push(tradeDate);
 
     if(i==0) {
@@ -57,11 +57,15 @@ var formatGraphData = (rawInputArr) => {
 
     var tdNetProfit = document.createElement('td');
     var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT);
+    var fontColorNetProfit = rawInputArr[i].NETPROFIT >= 0 ? "text-success" : "text-danger";
+    tdNetProfit.classList.add(fontColorNetProfit);
     tdNetProfit.appendChild(textNetProfit);
     rowNetProfit.appendChild(tdNetProfit);
 
     var tdProfitDiff= document.createElement('td');
     var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
+    var fontColorProfitDiff = profitDifference >= 0 ? "text-success" : "text-danger";
+    tdProfitDiff.classList.add(fontColorProfitDiff);
     tdProfitDiff.appendChild(textProfitDiff);
     rowProfitDiff.appendChild(tdProfitDiff);
   }
@@ -86,9 +90,6 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
   console.log("baseCode: " + baseCode);
   console.log("tokenCode: " + tokenCode);
 
-  //baseCode = baseCode + " Netprofit";
-  //tokenCode = tokenCode + " Netprofit";
-
   var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);
   chart.render();
   chart.updateOptions({
@@ -97,23 +98,6 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
       "rgba(" + myVarVal + ", 0.95)",
       "rgba(245 ,187 ,116)",
     ],
-    // series: [
-    //   {
-    //     name: "Token Netprofit",
-    //     type: "bar",
-    //     data: tokenNetProfitInput,
-    //   },
-    //   {
-    //     name: "Base Netprofit",
-    //     type: "line",
-    //     data: baseNetProfitInput,
-    //   },
-    //   {
-    //     name: "Overall Profitable",
-    //     type: "line",
-    //     data: overallProfitableInput,
-    //   },
-    // ],
     series: [{
       name: tokenCode,
       data: tokenNetProfitInput,
@@ -198,14 +182,19 @@ var getTokenStats = (parentPage) => {
         tokenCurrencyCode = botDetails.TOKEN_CURRENCY_CODE;
         baseCurrencyCode = botDetails.BASE_CURRENCY_CODE;
         const pendingWorkflowRequestsCount = res.data.pendingRequestsCounts.REQ_COUNT; //pendingRequestsCounts
-        
+        const requestSubmittedOn = res.data.pendingRequestsCounts.SUBMITTED_ON; //pendingRequests Submitted On
+
         var formattedData = formatGraphData(netprofitDailyData);
         tokenNetProfitArr = formattedData.tokenNetProfit;
         baseNetProfitArr = formattedData.baseNetProfit;
         overallProfitableArr = formattedData.overallProfitable;
         lastTradedDateArr = formattedData.lastTradedDate;
 
-        updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
+        //updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
+       setTimeout(() => {
+          updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
+        }
+          , 200);
 
         //userSubscriptionStatusValue - determine status
         let usrBotSubscriptionStatus = userSubscriptionStatusValue == 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
@@ -222,11 +211,12 @@ var getTokenStats = (parentPage) => {
         document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
         if(userSubscriptionStatusValue == 0) {
           document.getElementById("id-subscription-box-button").innerHTML = '';
-          document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate("+ parentPage + "," + pendingWorkflowRequestsCount +");' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+          document.getElementById("id-subscription-box-button").innerHTML = '<a href="javascript:proceedSubscriptionUpdate(\'' + parentPage + '\' , \'' + pendingWorkflowRequestsCount + '\' , \'' + requestSubmittedOn + '\');" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
         else if(userSubscriptionStatusValue == 1){
           document.getElementById("id-subscription-box-button").innerHTML = '';
-          document.getElementById("id-subscription-box-button").innerHTML = "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+          document.getElementById("id-subscription-box-button").innerHTML = pendingWorkflowRequestsCount == 0 ? "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>"
+                                                                                                              : '<a href="javascript:showErrorToast(\'' + requestSubmittedOn + '\')" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
         
         document.getElementById("subscription-status-box-text-below").innerHTML = subscriptionStatusBoxTextBelow; 
@@ -371,7 +361,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   ulist.appendChild(list);
 }
 
-var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount) => {
+var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, requestSubmittedOn) => {
   //get submitted requests count from storage
   //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
   //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
@@ -397,7 +387,7 @@ var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount) => {
       showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
     }
   } else {
-    showToastAlerts('token-stats-error', 'alert-error-msg', 'Already submitted request is under review process, please contact support team');
+    showToastAlerts('token-stats-error', 'alert-error-msg', `Already request was submitted on ${requestSubmittedOn} and it is under review process, please contact support team`);
   } 
 };
 
@@ -444,6 +434,10 @@ var unsubscribeBot = (requestDescribtion) => {
               ,delayInMS);
       }
   });
+}
+
+var showErrorToast = (requestSubmittedOn) => {
+  showToastAlerts('token-stats-error', 'alert-error-msg', `Already request was submitted on ${requestSubmittedOn} and it is under review process, please contact support team`);
 }
 
 /* column chart with negative values */
@@ -630,7 +624,6 @@ var unsubscribeBot = (requestDescribtion) => {
 
 // }
 
-
 /*  sales overview chart */
 var netprofitHourlyData = [];
 var netprofitDailyData = [];
@@ -774,7 +767,7 @@ var options = {
       },
     }
   }
-}
+};
 
 document.getElementById("profit-statistics").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);

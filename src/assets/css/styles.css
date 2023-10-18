@@ -11308,7 +11308,7 @@ body {
 
 .table > :not(caption) > * > * {
   background-color: var(--custom-white) !important;
-  color: var(--default-text-color) !important;
+  color: var(--default-text-color);
 }
 
 .card.custom-card {

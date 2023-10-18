@@ -87,6 +87,15 @@ var validateInputs = () => {
     else{
         document.getElementById('workflow-submit-request').disabled = true;
     }
+    if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
+        && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked)
+        {
+            document.getElementById('workflow-generate-pdf').disabled = false;
+        }
+    else{
+    document.getElementById('workflow-generate-pdf').disabled = true;
+    }
+
 }
 
 var htmlToPdf = () => {
@@ -123,11 +132,9 @@ var submitRequest = () => {
         agreeConsent: document.getElementById('workflow-consent').checked ? 1 : 0,
         agreeTermsDocPath: document.getElementById('workflow-file').value,
     }
-
-    console.log(requestBody);
     
     //authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
-    axios
+   axios
     .post(
         targetEndPointUrlBase +'/api/subscription/placeRequest',
         requestBody,
@@ -141,6 +148,7 @@ var submitRequest = () => {
         console.log("res: " + JSON.stringify(res.data));
         if (res.status == 200) {
             showToastAlerts('workflow-success','alert-success-msg',res.data.message);
+            document.getElementById('workflow-submit-request').disabled = true;
             setTimeout(()=> {
               goBackToPreviousPage();
             }

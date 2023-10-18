@@ -12,7 +12,7 @@
 
 </head>
 
-<body onload="">
+<body onload="loadAdminBots()">
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
 
@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <button class="btn btn-primary btn-wave waves-effect waves-light" id="add-bot">Add Bot</button>
+                                <button class="btn btn-primary btn-wave waves-effect waves-light" id="add-bot" onclick="addBotClicked()">Add Bot</button>
                                 <table id="adminBotsListDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
@@ -45,7 +45,7 @@
                                             <th scope="col">Timeframe</th> 
                                             <th scope="col">Exchange</th> 
                                             <th scope="col">Bot Name</th> <!-- TODO: should be read only - auto populate when ADD, EDIT action by concatenating Symbol+timeframe+exchange in uppercase -->
-                                            <th scope="col">Sumulate</th> <!-- Yes or NO : 1 - yes-->
+                                            <th scope="col">Simulate</th> <!-- Yes or NO : 1 - yes-->
                                             <th scope="col">Status</th> <!-- Active or Inactive : 1 - Active-->
                                             <th scope="col">Base Icon</th> <!-- img to show icon -->
                                             <th scope="col">Token Icon</th> <!-- img to show icon -->
@@ -53,7 +53,7 @@
                                             <th scope="col">Updated On</th>
                                         </tr>
                                     </thead>
-                                   <tbody id="workflow-bots-list-tbody"></tbody>
+                                   <tbody id="admin-bots-list-tbody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                 <!-- End:: row-2 -->
             </div>
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
-                <div id="process-stats-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="admin-bots-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
                             <span id="alert-error-msg" class='fs-18'></span>
@@ -72,7 +72,7 @@
             </div>
         
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
-                <div id="process-stats-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="admin-bots-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
                             <span id="alert-success-msg" class='fs-18'></span>
@@ -80,6 +80,66 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="updateBotModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Update Bot
+                            </h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label" style="font-weight: bold">Bot Simulate</label>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4" style="margin-top: .85rem; margin-left: .5rem;"> 
+                                        <input id="bot-simulate" name="bot-simulate" type="checkbox"> 
+                                        <label for="bot-simulate" class="label-primary"></label>
+                                        <!-- <span class="ms-3"></span> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3 row">
+                                    <label class="form-label" style="font-weight: bold">Bot Status</label>
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="bot-status-radio" value="active" id="bot-status-active" checked="">
+                                        <label class="form-check-label text-muted" for="bot-status-active">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="bot-status-radio"  value="inactive" id="bot-status-inactive">
+                                        <label class="form-check-label text-muted" for="bot-status-inactive">
+                                            Inactive
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="bot-base-icon" style="font-weight: bold">Bot Base Icon URL</label>
+                                    <input type="text" id="bot-base-icon" class="form-control" placeholder="Enter Bot Base Icon URL">
+                                    <div class="invalid-feedback" id="bot-base-icon-empty" style="display:none;">
+                                        Bot Base Icon URL cannot be emtpty.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="bot-token-icon" style="font-weight: bold">Bot Token Icon URL</label>
+                                    <input type="text" id="bot-token-icon" class="form-control" placeholder="Enter Bot Token Icon URL">
+                                    <div class="invalid-feedback" id="bot-token-icon-empty" style="display:none;">
+                                        Bot Token Icon URL cannot be emtpty.
+                                    </div>
+                                </div>
+
+                            </div>  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-outline-primary" id="update-modal-submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <!-- End::app-content -->
         @SPK@include("partials/headersearch_modal.html")

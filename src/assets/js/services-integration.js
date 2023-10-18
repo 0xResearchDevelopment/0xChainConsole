@@ -369,7 +369,13 @@ var getUserProfile = () => {
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            location.href = "sign-in-cover.html";
+            if (err.response.status == 401) {
+                showToastAlerts('index-error','alert-error-msg',err.response.data.message);
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+            }
         })
 }
 
@@ -685,7 +691,7 @@ var updateProfile = () => {
         })
         .catch(err => {
             console.log(err);
-             if (err.response.status == 401) {
+            if (err.response.status == 401) {
                 showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
                 setTimeout(()=> {
                     location.href = "sign-in-cover.html";

@@ -1,0 +1,154 @@
+@SPK@include("partials/mainhead.html")
+
+<!-- Axios dependency-->
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+<!-- API Integration & functionalities-->
+<script src="../assets/js/workflow.js"></script> 
+
+<!-- API Integration & functionalities-->
+<script src="../assets/js/administrator.js"></script>
+
+</head>
+
+<body onload="loadAddBotPage()">
+
+    @SPK@include("partials/switcher.html")
+    @SPK@include("partials/loader.html")
+
+    <div class="page">
+        @SPK@include("partials/header.html")
+        @SPK@include("partials/sidebar.html")
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Subscription", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Submit Request'})
+
+        <!-- Start::app-content -->
+        <div class="main-content app-content">
+            <div class="container-fluid">
+
+                <!-- Start:: row-2 -->
+                <div class="row" id="workflow-container">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Add Bot
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-symbol" style="font-weight: bold">Bot Symbol</label>
+                                        <input type="text" id="bot-symbol" class="form-control" placeholder="Enter Bot Symbol">
+                                        <div class="invalid-feedback" id="bot-symbol-empty" style="display:none;">
+                                            Bot Symbol cannot be emtpty.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-timeframe" style="font-weight: bold">Bot Timeframe</label>
+                                        <select class="form-select" id="bot-timeframe">
+                                            <option selected="">Select
+                                            </option>
+                                            <option value="1H">1H</option>
+                                            <option value="2H">2H</option>
+                                            <option value="4H">4H</option>
+                                            <option value="8H">8H</option>
+                                            <option value="12H">12H</option>
+                                            <option value="1D">1D</option>
+                                        </select>
+                                        <div class="invalid-feedback" id="bot-timeframe-empty" style="display:none;">
+                                            Bot Timeframe cannot be emtpty.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-exchange" style="font-weight: bold">Bot Exchange</label>
+                                        <input type="text" id="bot-exchange" class="form-control" placeholder="Enter Bot Exchange">
+                                        <div class="invalid-feedback" id="bot-exchange-empty" style="display:none;">
+                                            Bot Exchange cannot be emtpty.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label" style="font-weight: bold">Bot Simulate</label>
+                                        <div class="custom-toggle-switch d-flex align-items-center mb-4" style="margin-top: .85rem; margin-left: .5rem;"> 
+                                            <input id="bot-simulate" name="bot-simulate" type="checkbox"> 
+                                            <label for="bot-simulate" class="label-primary"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3 row">
+                                        <label class="form-label" style="font-weight: bold">Bot Status</label>
+                                        <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                            <input class="form-check-input" type="radio" name="bot-status-radio" value="active" id="bot-status-active" checked="">
+                                            <label class="form-check-label text-muted" for="bot-status-active">
+                                                Active
+                                            </label>
+                                        </div>
+                                        <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                            <input class="form-check-input" type="radio" name="bot-status-radio"  value="inactive" id="bot-status-inactive">
+                                            <label class="form-check-label text-muted" for="bot-status-inactive">
+                                                Inactive
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-base-icon" style="font-weight: bold">Bot Base Icon URL</label>
+                                        <input type="text" id="bot-base-icon" class="form-control" placeholder="Enter Bot Base Icon URL">
+                                        <div class="invalid-feedback" id="bot-base-icon-empty" style="display:none;">
+                                            Bot Base Icon URL cannot be emtpty.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-token-icon" style="font-weight: bold">Bot Token Icon URL</label>
+                                        <input type="text" id="bot-token-icon" class="form-control" placeholder="Enter Bot Token Icon URL">
+                                        <div class="invalid-feedback" id="bot-token-icon-empty" style="display:none;">
+                                            Bot Token Icon URL cannot be emtpty.
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="btn btn-primary" onclick="createBot()">Create Bot</button>
+                                    </div>
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End:: row-2 -->
+            </div>
+        </div>
+        <!-- End::app-content -->
+
+        @SPK@include("partials/headersearch_modal.html")
+        @SPK@include("partials/footer.html")
+        @SPK@include("partials/side-bar.html")
+
+    </div>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+        <div id="add-bot-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+            <span id="alert-error-msg" class="fs-18"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+        <div id="add-bot-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <span id="alert-success-msg" class="fs-18"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @SPK@include("partials/commonjs.html")
+
+    @SPK@include("partials/custom_switcherjs.html")
+
+    <!-- Custom JS -->
+    <script src="../assets/js/custom.js"></script>
+
+</body>
+
+</html>

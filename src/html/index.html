@@ -125,7 +125,7 @@
                         <div class="col-xxl-12">
                             <div style="display: block; overflow-x: auto;">
                                 <table class="table table-bordered border-primary text-nowrap rounded-3 overflow-hidden" style="width:100%">
-                                    <tbody id="dashboard-tbody">
+                                    <tbody id="dashboard-tbody" class="text-center">
                                         <!-- Table contents will be generated at Run time-->
                                     </tbody>
                                 </table>
@@ -156,6 +156,28 @@
             </div>
         </div>
         <!-- End::app-content -->
+
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+            <div id="index-error" class="toast colored-toast text-bg-secondary" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <span id="alert-error-msg" class="fs-18"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+            <div id="index-success" class="toast colored-toast text-bg-success" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <span id="alert-success-msg" class="fs-18"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         @SPK@include("partials/headersearch_modal.html")
         @SPK@include("partials/footer.html")
