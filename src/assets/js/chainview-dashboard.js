@@ -97,62 +97,62 @@ var formatGraphData = (rawNetProfitArr) => {
     for (let i = 0; i < rawNetProfitArr.length; i++) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
-        profitDifference = i+1 < rawNetProfitArr.length ? (rawNetProfitArr[i+1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
-        console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change 
-    
-        if(i==0) {
-            var tdDateLabel= document.createElement('td');
+        profitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
+        console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); //TODO: implement a table to show profit change 
+
+        if (i == 0) {
+            var tdDateLabel = document.createElement('td');
             tdDateLabel.style.fontWeight = 'bold';
             var textDateLabel = document.createTextNode("Date");
             tdDateLabel.appendChild(textDateLabel);
             rowDate.appendChild(tdDateLabel);
-      
+
             var tdNetProfitLabel = document.createElement('td');
-            var textNetProfitLabel = document.createTextNode("Profit %");
+            var textNetProfitLabel = document.createTextNode("Profit");
             tdNetProfitLabel.appendChild(textNetProfitLabel);
             rowNetProfit.appendChild(tdNetProfitLabel);
-      
-            var tdProfitDiffLabel= document.createElement('td');
-            var textProfitDiffLabel = document.createTextNode("Change %");
+
+            var tdProfitDiffLabel = document.createElement('td');
+            var textProfitDiffLabel = document.createTextNode("Change");
             tdProfitDiffLabel.appendChild(textProfitDiffLabel);
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 
             var tdActiveBotsLabel = document.createElement('td');
-            var textActiveBotsLabel = document.createTextNode("Active Bots");
+            var textActiveBotsLabel = document.createTextNode("Strategies");
             tdActiveBotsLabel.appendChild(textActiveBotsLabel);
             rowActiveBots.appendChild(tdActiveBotsLabel);
-      
-            var tdSubNetProfitLabel= document.createElement('td');
-            var textSubNetProfitLabel = document.createTextNode("Sub Net Profit");
+
+            var tdSubNetProfitLabel = document.createElement('td');
+            var textSubNetProfitLabel = document.createTextNode("Total Profit");
             tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
             rowSubNetProfit.appendChild(tdSubNetProfitLabel);
-          }
-      
-          var tdDate = document.createElement('td');
-          tdDate.style.fontWeight = 'bold';
-          var textDate = document.createTextNode(rawNetProfitArr[i].AS_OF);
-          tdDate.appendChild(textDate);
-          rowDate.appendChild(tdDate);
-      
-          var tdNetProfit = document.createElement('td');
-          var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT);
-          tdNetProfit.appendChild(textNetProfit);
-          rowNetProfit.appendChild(tdNetProfit);
-      
-          var tdProfitDiff= document.createElement('td');
-          var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
-          tdProfitDiff.appendChild(textProfitDiff);
-          rowProfitDiff.appendChild(tdProfitDiff);
+        }
 
-          var tdActiveBots = document.createElement('td');
-          var textActiveBots = document.createTextNode(rawNetProfitArr[i].ACTIVE_BOTS);
-          tdActiveBots.appendChild(textActiveBots);
-          rowActiveBots.appendChild(tdActiveBots);
+        var tdDate = document.createElement('td');
+        tdDate.style.fontWeight = 'bold';
+        var textDate = document.createTextNode(rawNetProfitArr[i].AS_OF);
+        tdDate.appendChild(textDate);
+        rowDate.appendChild(tdDate);
 
-          var tdSubNetProfit= document.createElement('td');
-          var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT);
-          tdSubNetProfit.appendChild(textSubNetProfit);
-          rowSubNetProfit.appendChild(tdSubNetProfit);
+        var tdNetProfit = document.createElement('td');
+        var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT+ "%");
+        tdNetProfit.appendChild(textNetProfit);
+        rowNetProfit.appendChild(tdNetProfit);
+
+        var tdProfitDiff = document.createElement('td');
+        var textProfitDiff = document.createTextNode(truncate(profitDifference, 2)+ "%");
+        tdProfitDiff.appendChild(textProfitDiff);
+        rowProfitDiff.appendChild(tdProfitDiff);
+
+        var tdActiveBots = document.createElement('td');
+        var textActiveBots = document.createTextNode(rawNetProfitArr[i].ACTIVE_BOTS);
+        tdActiveBots.appendChild(textActiveBots);
+        rowActiveBots.appendChild(tdActiveBots);
+
+        var tdSubNetProfit = document.createElement('td');
+        var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
+        tdSubNetProfit.appendChild(textSubNetProfit);
+        rowSubNetProfit.appendChild(tdSubNetProfit);
     }
 
     tbody.appendChild(rowDate);
@@ -164,8 +164,8 @@ var formatGraphData = (rawNetProfitArr) => {
     return {
         netProfitArray: netProfit,
         xAxisDataArray: xAxisData
-       };
-}
+    };
+};
 
 var updateChartData = (dataInput, XAxisInput) => {
     var chart = new ApexCharts(document.querySelector("#earnings"), chartData);

@@ -3,8 +3,16 @@ var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.
 const botId = localStorage.getItem('botId');
 const authToken = localStorage.getItem('authToken');
 const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus');
+let backToPreviousPage = "token-stats.html";
 
 var loadWorkflowPage = () => {
+    //Read parent page from this
+    var url_string = window.location.search;
+    const urlParams = new URLSearchParams(url_string);
+    const parentPage = urlParams.get('code');
+
+    console.log("## parentPage::", parentPage);
+
     const profileObj = JSON.parse(localStorage.getItem('profileObj'));
     var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
@@ -13,8 +21,15 @@ var loadWorkflowPage = () => {
         document.getElementById('admin-menu').style.display = 'block';
       }
 
+    var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
+    if (parentPage == 1) {
+      targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getBotStats';
+      backToPreviousPage = "bot-stats.html";
+    }
+    console.log("## targetEndPointUrl:", targetEndPointUrl);
+
     axios.post(
-        targetEndPointUrlBase+'/api/subscription/getBotStats',
+        targetEndPointUrl,
         {
           botId: botId
         },
@@ -28,9 +43,15 @@ var loadWorkflowPage = () => {
           if (res.status == 200) {
             console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
             const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
-            const serviceFor = userSubscriptionStatusValue == 0 ? 'SUBSCRIBE' : 'UNSUBSCRIBE'; 
-            const currentDateTime =  new Date().getDate() + "/"
-                            + (new Date().getMonth()+1)  + "/" 
+            const serviceFor = userSubscriptionStatusValue == 0 ? 'SUBSCRIBE' : 'UNSUBSCRIBE';  //FIXME: date format needs to be changes and Date format
+
+            //const appCurrentDateTime = new Date().toLocaleString("sv");
+            //console.log("### Date & Timezone:", appCurrentDateTime);
+
+            const currentMonth = new Date();
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const currentDateTime =  new Date().getDate() + "-"
+                            + months[currentMonth.getMonth()]  + "-" 
                             + new Date().getFullYear() + " "  
                             + new Date().getHours() + ":"  
                             + new Date().getMinutes() + ":" 
@@ -86,10 +107,15 @@ var htmlToPdf = () => {
     html2pdf().set(opt).from(element).save();
 }
 
+var goBackToPreviousPage = () => {
+  window.location.href=backToPreviousPage;//'bots-list.html';
+};
+
 var submitRequest = () => {
+  let requestDescription = document.getElementById("workflow-bot-name").innerHTML + ":" + document.getElementById('workflow-remarks').value;
     const requestBody = {
         reqType: document.getElementById("service-for").innerHTML,
-        reqDesc: document.getElementById('workflow-remarks').value,
+        reqDesc: requestDescription,
         botId: botId,
         agreeWhitelist: document.getElementById('workflow-whitelist').checked ? 1 : 0,
         agreeIpAdded: document.getElementById('workflow-ip-address').checked ? 1 : 0,
@@ -116,7 +142,7 @@ var submitRequest = () => {
         if (res.status == 200) {
             showToastAlerts('workflow-success','alert-success-msg',res.data.message);
             setTimeout(()=> {
-                window.location.href='bots-list.html';
+              goBackToPreviousPage();
             }
             ,delayInMS);
         }

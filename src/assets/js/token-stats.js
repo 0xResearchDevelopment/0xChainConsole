@@ -197,7 +197,8 @@ var getTokenStats = (parentPage) => {
         netprofitMonthlyData = res.data.netprofitMonthlyData; //monthly data
         tokenCurrencyCode = botDetails.TOKEN_CURRENCY_CODE;
         baseCurrencyCode = botDetails.BASE_CURRENCY_CODE;
-
+        const pendingWorkflowRequestsCount = res.data.pendingRequestsCounts.REQ_COUNT; //pendingRequestsCounts
+        
         var formattedData = formatGraphData(netprofitDailyData);
         tokenNetProfitArr = formattedData.tokenNetProfit;
         baseNetProfitArr = formattedData.baseNetProfit;
@@ -221,7 +222,7 @@ var getTokenStats = (parentPage) => {
         document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
         if(userSubscriptionStatusValue == 0) {
           document.getElementById("id-subscription-box-button").innerHTML = '';
-          document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate();' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
+          document.getElementById("id-subscription-box-button").innerHTML = "<a href='javascript:proceedSubscriptionUpdate("+ parentPage + "," + pendingWorkflowRequestsCount +");' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>";
         }
         else if(userSubscriptionStatusValue == 1){
           document.getElementById("id-subscription-box-button").innerHTML = '';
@@ -370,7 +371,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   ulist.appendChild(list);
 }
 
-var proceedSubscriptionUpdate = () => {
+var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount) => {
   //get submitted requests count from storage
   //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
   //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
@@ -383,17 +384,21 @@ var proceedSubscriptionUpdate = () => {
   const role_code = localStorage.getItem('role_code');
   console.log("## requests_subscribe_count: " + requests_subscribe_count + " requests_unsubscribe_count: " + requests_unsubscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
   let userTotalBots = active_bots_latest + requests_subscribe_count;
-  if (userTotalBots < role_code) {
-    //allow request submission to redirect to request page
-    showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
-    setTimeout(() => {
-      window.location.href = 'workflow.html';
-    }, delayInMS);
+
+  if (pendingWorkflowRequestsCount <= 0) {
+    if (userTotalBots < role_code) {
+      //allow request submission to redirect to request page
+      showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
+      setTimeout(() => {
+        window.location.href = 'workflow.html?code='+parentPage;
+      }, delayInMS);
+    } else {
+      //do not allow, stay her and show error message
+      showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
+    }
   } else {
-    //do not allow, stay her and show error message
-    showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
-  }
-  
+    showToastAlerts('token-stats-error', 'alert-error-msg', 'Already submitted request is under review process, please contact support team');
+  } 
 };
 
 var unsubscribeBot = (requestDescribtion) => {
