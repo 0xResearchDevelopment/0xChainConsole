@@ -36,7 +36,12 @@ var loadHistoryData = () => {
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            location.href = "sign-in-cover.html";
+            if(err.response.status == 401) {
+                setTimeout(()=> {
+                    window.location.href='sign-in-cover.html';
+                 }
+                 ,delayInMS);
+            }
         }) 
 }
 

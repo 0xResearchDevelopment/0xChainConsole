@@ -102,7 +102,7 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     const profitPerMonthColor  = profitPerMonth > 0 ? 'success' : 'danger';
     const profitPerMonthTrend  = profitPerMonth > 0 ? 'trending-up' : 'trending-down';
 
-    const userSubscriptionStatusDesign = userSubscriptionStatus == 1 ? "Active" : 'Subscribe';
+    const userSubscriptionStatusDesign = userSubscriptionStatus == 1 ? 'Active' : 'Subscribe';
     const userSubscriptionStatusColor = userSubscriptionStatus == 1 ? 'success' : 'primary';
 
     //const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
@@ -114,13 +114,13 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     //<span class='badge bg-primary ms-0 d-offline-block fs-12 '>5</span>
     //<span class='badge bg-${userSubscriptionStatusColor} ms-0 d-offline-block fs-12 '>${userSubscriptionStatusDesign}</span>
 
-    row.innerHTML = `<td style = 'font-size: 12px;'>${botId} <span class="badge bg-${userSubscriptionStatusColor}-transparent">${userSubscriptionStatusDesign}</span></td>
-    <td style = 'font-size: 12px;'><div class="lh-1 d-flex align-items-center"><span class="avatar avatar-xs avatar-rounded"><img src='${tokenIcon}' alt=""></span><span>-  <a href='javascript:void(0);' onclick='navigateBotStats(${botId}, ${userSubscriptionStatus})' class='fs-12 ms-auto mt-auto'>${botName}</a></span></div></td>
+    row.innerHTML = `<td style = 'font-size: 12px;'>${botId} <span class='badge bg-${userSubscriptionStatusColor}-transparent'>${userSubscriptionStatusDesign}</span></td>
+    <td style = 'font-size: 12px;'><div class='lh-1 d-flex align-items-center'><span class='avatar avatar-xs avatar-rounded'><img src='${tokenIcon}'></span><span>-  <a href='javascript:void(0);' onclick='navigateBotStats(${botId}, ${userSubscriptionStatus})' class='fs-12 ms-auto mt-auto'>${botName}</a></span></div></td>
     <td style = 'font-size: 12px;'>${totalNoOfDays} days</td>
-    <td style = 'font-size: 12px;'><span class="text-${tokenNetProfitColorCode}"><i class="ti ti-${tokanNetprofitTrend} me-1 align-middle"></i>${tokenNetProfit}%</span></td>    
-    <td style = 'font-size: 12px;'><span class="text-${baseNetProfitColorCode}"><i class="ti ti-${baseNetprofitTrend} me-1 align-middle"></i>${baseNetprofit}%</span></td>
-    <td style = 'font-size: 14px;'> <span class="text-${profitPerMonthColor}"><i class="ti ti-${profitPerMonthTrend} me-1 align-middle"></i>${profitPerMonth}%</span><i class="bi ${recommendateRating} text-success ms-1 fs-21"></i></td>
-    <td style = 'font-size: 12px;'><div class="progress progress-xs progress-custom progress-animate" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar bg-primary" style="width: ${successRate}%"></div></div><span class='fs-11'>${successRate}%<i class='bi bi-${successRateTrend} ms-1 ${successRateColorCode}'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='text-${tokenNetProfitColorCode}'><i class='ti ti-${tokanNetprofitTrend} me-1 align-middle'></i>${tokenNetProfit}%</span></td>    
+    <td style = 'font-size: 12px;'><span class='text-${baseNetProfitColorCode}'><i class='ti ti-${baseNetprofitTrend} me-1 align-middle'></i>${baseNetprofit}%</span></td>
+    <td style = 'font-size: 14px;'> <span class='text-${profitPerMonthColor}'><i class='ti ti-${profitPerMonthTrend} me-1 align-middle'></i>${profitPerMonth}%</span><i class='bi ${recommendateRating} text-success ms-1 fs-21'></i></td>
+    <td style = 'font-size: 12px;'><div class='progress progress-xs progress-custom progress-animate' role='progressbar' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100'><div class='progress-bar bg-primary' style='width: ${successRate}%'></div></div><span class='fs-11'>${successRate}%<i class='bi bi-${successRateTrend} ms-1 ${successRateColorCode}'></i></span></td>
     <td style = 'font-size: 12px;'>${noOfTrades}</td>
     <td style = 'font-size: 12px;'>${avgTimePerTrade}</td>
     <td style = 'font-size: 12px;'>${appTS}</td>`;

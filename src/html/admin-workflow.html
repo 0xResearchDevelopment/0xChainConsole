@@ -32,11 +32,10 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Subscription Workflow
+                                    Pending Requests
                                 </div>
                             </div>
                             <div class="card-body">
-                                <h5>Pending Requests</h5>
                                 <table id="adminSubscriptionWorkflowPendingDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
@@ -52,23 +51,49 @@
                                     </thead>
                                    <tbody id="workflow-pending-tbody"></tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End:: row-2 -->
 
-                                <h5>Processed Requests</h5>
-                                <table id="adminSubscriptionWorkflowProcessedDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">REQ.ID</th> 
-                                            <th scope="col">Type</th> 
-                                            <th scope="col">Status</th> 
-                                            <th scope="col">Description</th> 
-                                            <th scope="col">Bot ID</th> 
-                                            <th scope="col">Requested User</th> 
-                                            <th scope="col">Submitted on</th>
-                                            <th scope="col">Processed on</th>
-                                        </tr>
-                                    </thead>
-                                   <tbody id="workflow-processed-tbody"></tbody>
-                                </table>
+
+                <!-- Start:: row-2 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Processed Requests
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card custom-card">
+                                            <div class="card-body p-0">
+                                                
+                                                <table id="adminSubscriptionWorkflowProcessedDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">REQ.ID</th> 
+                                                            <th scope="col">Type</th> 
+                                                            <th scope="col">Status</th> 
+                                                            <th scope="col">Description</th> 
+                                                            <th scope="col">Bot ID</th> 
+                                                            <th scope="col">Requested User</th> 
+                                                            <th scope="col">Submitted on</th>
+                                                            <th scope="col">Processed on</th>
+                                                        </tr>
+                                                    </thead>
+                                                   <tbody id="workflow-processed-tbody"></tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

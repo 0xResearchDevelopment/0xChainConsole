@@ -32,7 +32,7 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Bots Performance
+                                    
                                 </div>
                             </div>
                             <div class="card-body">
@@ -103,24 +103,51 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End:: row-1 -->
 
-                                <table id="botsListResponsiveDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th> <!-- BOTID -->
-                                            <th scope="col">Bot Name: </th> <!-- Botname -->
-                                            <th scope="col">Active for: </th> <!-- No OF days -->
-                                            <th scope="col">Profit: </th> <!-- TOKEN_NETPROFIT -->
-                                            <th scope="col">Base Profit: </th> <!-- Base profit -->
-                                            <th scope="col">% Profit/Month: </th> <!-- Profit per month -->
-                                            <th scope="col">Success Rate: </th> <!-- overall profiotable-->
-                                            <th scope="col">Trades: </th> <!-- TOTAL_NUMOF_TRADES -->
-                                            <th scope="col">AvgTime/Trade: </th> <!-- AvgTimePerTrade -->
-                                            <th scope="col">Last Updated: </th> <!-- APP_TS -->
-                                        </tr>
-                                    </thead>
-                                    <tbody id="botList-tbody"></tbody>
-                                </table>
+
+                <!-- Start:: row-2 -->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card custom-card">
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Bots Performance
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <div class="card custom-card">
+                                            <div class="card-body p-0">
+                                                
+                                                <table id="botsListResponsiveDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">ID</th> 
+                                                            <th scope="col">Bot Name: </th>
+                                                            <th scope="col">Active for: </th>
+                                                            <th scope="col">Profit: </th>
+                                                            <th scope="col">Base Profit: </th>
+                                                            <th scope="col">% Profit/Month: </th>
+                                                            <th scope="col">Success Rate: </th>
+                                                            <th scope="col">Trades: </th>
+                                                            <th scope="col">AvgTime/Trade: </th>
+                                                            <th scope="col">Last Updated: </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="botList-tbody"></tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -137,7 +164,6 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     @SPK@include("partials/commonjs.html")
-
     @SPK@include("partials/custom_switcherjs.html")
 
     <!-- Jquery Cdn -->
