@@ -104,7 +104,7 @@ var formatGraphData = (rawNetProfitArr) => {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
         profitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
-        console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); //TODO: implement a table to show profit change 
+        //console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); 
 
         if (i == 0) {
             var tdDateLabel = document.createElement('td');
@@ -114,12 +114,12 @@ var formatGraphData = (rawNetProfitArr) => {
             rowDate.appendChild(tdDateLabel);
 
             var tdNetProfitLabel = document.createElement('td');
-            var textNetProfitLabel = document.createTextNode("Profit");
+            var textNetProfitLabel = document.createTextNode("Profit %");
             tdNetProfitLabel.appendChild(textNetProfitLabel);
             rowNetProfit.appendChild(tdNetProfitLabel);
 
             var tdProfitDiffLabel = document.createElement('td');
-            var textProfitDiffLabel = document.createTextNode("Change");
+            var textProfitDiffLabel = document.createTextNode("Change %");
             tdProfitDiffLabel.appendChild(textProfitDiffLabel);
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 

@@ -31,19 +31,19 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Bots List
+                                    Bots List (Active & Inactive)
                                 </div>
                             </div>
                             <div class="card-body">
-                                <button class="btn btn-primary btn-wave waves-effect waves-light" id="add-bot" onclick="addBotClicked()">Add Bot</button>
+                                <button class="btn btn-primary btn-wave waves-effect waves-light" id="add-bot" onclick="addBotClicked()">Create Bot</button>
                                 <table id="adminBotsListDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th scope="col">ID</th> 
+                                            <th scope="col">Bot ID</th> 
                                             <th scope="col">Action</th> 
-                                            <th scope="col">Bot Symbol</th> 
+                                            <!-- <th scope="col">Bot Symbol</th> 
                                             <th scope="col">Timeframe</th> 
-                                            <th scope="col">Exchange</th> 
+                                            <th scope="col">Exchange</th>  -->
                                             <th scope="col">Bot Name</th> <!-- TODO: should be read only - auto populate when ADD, EDIT action by concatenating Symbol+timeframe+exchange in uppercase -->
                                             <th scope="col">Simulate</th> <!-- Yes or NO : 1 - yes-->
                                             <th scope="col">Status</th> <!-- Active or Inactive : 1 - Active-->
@@ -86,8 +86,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h6 class="modal-title" id="staticBackdropLabel">Update Bot
-                            </h6>
+                            <h6 class="modal-title" id="staticBackdropLabel">Update Bot </h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">

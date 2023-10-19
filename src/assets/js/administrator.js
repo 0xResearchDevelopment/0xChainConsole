@@ -107,20 +107,24 @@ var createTableRowsProcessed = (reqId, reqType, reqStatus, reqDesc, botId, userE
     tbody.appendChild(row);
 }
 
+//<td style = 'font-size: 12px;'>${botSymbol}</td>
+//<td style = 'font-size: 12px;'>${botTimeframe}</td>
+//<td style = 'font-size: 12px;'>${botExchange}</td>
+    
+
 var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName, botSimulate, botStatus, botBaseIcon, botTokenIcon, createdOn, updatedOn) => {
     const row = document.createElement('tr');
     let botSimulateText = botSimulate == 1 ? 'Yes' : 'No';
-    let botStatusText = botStatus == 1 ? 'Active' : 'Inactive';
+    let botStatusText = botStatus == 1 ? '<span class="text-success"><i class="ri-checkbox-circle-fill fs-14"></i>  Active</span>' : '<span class="text-muted"><i class="ri-checkbox-circle-blank-fill fs-14"></i>  Inactive</span>';
     row.innerHTML = `<td style = 'font-size: 12px;'>${botId}</td>
                     <td style = 'font-size: 12px;'>
                         <div class="hstack gap-2 fs-15">
-                            <a href="javascript:loadUpdateBotModal('${botId}','${botSimulate}','${botStatus}','${botBaseIcon}','${botTokenIcon}');" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-edit-line"></i></a>
-                            <a href="javascript:updateBot('${botId}','${botSimulate}',0,'${botBaseIcon}','${botTokenIcon}',0);" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-delete-bin-line"></i></a>
+                            <a href="javascript:loadUpdateBotModal('${botId}', '${botName}','${botSimulate}','${botStatus}','${botBaseIcon}','${botTokenIcon}');" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-edit-line"></i></a>
+                            <a href="javascript:deleteBot('${botId}', '${botName}','${botSimulate}',0,'${botBaseIcon}','${botTokenIcon}',0);" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-delete-bin-line"></i></a>
                         </div>
                     </td>
-    <td style = 'font-size: 12px;'>${botSymbol}</td>
-    <td style = 'font-size: 12px;'>${botTimeframe}</td>
-    <td style = 'font-size: 12px;'>${botExchange}</td>
+
+
     <td style = 'font-size: 12px;'>${botName}</td>
     <td style = 'font-size: 12px;'>${botSimulateText}</td>
     <td style = 'font-size: 12px;'>${botStatusText}</td>
@@ -179,7 +183,7 @@ var applyResponsivenessBots = () => {
             sSearch: ''
         },
         order: [[0, 'desc']],   //Soring by BotID decensing order
-        "pageLength": 10,
+        "pageLength": 25,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ], dom: 'flirtBlp' //'Bfrtip'
@@ -225,20 +229,18 @@ var processRequest = (reqId, reqType, reqAction, botId, userEmailID) => {
                 } else if ( reqAction == 0) {
                     console.log(reqId + "  " + reqType + " REJECTED " + botId + " processed " + userEmailID);
                     reqActionValue = "REJECTED";
-                    showToastAlerts('process-stats-error', 'alert-error-msg', 'Rejected request# '+reqId);
+                    showToastAlerts('process-stats-success', 'alert-success-msg', 'Rejected request# '+reqId);
                 }
                 window.location.href = 'admin-workflow.html';
             }
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            showToastAlerts('process-stats-error', 'alert-error-msg', 'Rejected request# '+reqId);
+            showToastAlerts('process-stats-error','alert-error-msg',err.response.data.message);
             if (err.response.status == 401) {
-                showToastAlerts('process-stats-error', 'alert-error-msg', 'Token expired');
                 setTimeout(() => {
                   window.location.href = 'sign-in-cover.html';
-                }
-                  , delayInMS);
+                }, delayInMS);
               }
         });
 };
@@ -261,7 +263,7 @@ var loadAdminBots = () => {
 
     const authToken = localStorage.getItem('authToken');
     if (profile.ROLE_CODE == 99) {
-        showToastAlerts('admin-bots-success', 'alert-success-msg', 'You are eligible to access');
+        //showToastAlerts('admin-bots-success', 'alert-success-msg', 'You are eligible to access');
         axios
             .get(
                 targetEndPointUrlBase + '/api/botdata/getAllBots',
@@ -287,22 +289,20 @@ var loadAdminBots = () => {
                             bots[i].BOT_STATUS,
                             bots[i].BOT_BASE_ICON,
                             bots[i].BOT_TOKEN_ICON,
-                            bots[i].CREATED_TS,
-                            bots[i].UPDATED_YS
+                            bots[i].CREATED_ON,
+                            bots[i].UPDATED_ON
                         );
                     }
-
                     applyResponsivenessBots();
                 }
             }).catch(err => {
                 console.log("inside err");
                 console.log(err, err.response);
+                showToastAlerts('admin-bots-error','alert-error-msg',err.response.data.message);
                 if (err.response.status == 401) {
-                    showToastAlerts('admin-bots-error','alert-error-msg',err.response.data.message);
                     setTimeout(()=> {
                        window.location.href = 'sign-in-cover.html';
-                     }
-                     ,delayInMS);
+                     }, delayInMS);
                 }
             });
     } else {
@@ -394,22 +394,20 @@ var createBot = () => {
             )
             .then(res => {
                 console.log("res: " + JSON.stringify(res.data));
+                showToastAlerts('add-bot-success','alert-success-msg',res.data.message);
                 if (res.status == 201) {
-                    showToastAlerts('add-bot-success','alert-success-msg',res.data.message);
                     setTimeout(()=> {
                         window.location.href='admin-bots.html';
-                    }
-                    ,delayInMS);
+                    }, delayInMS);
                 }
             })
             .catch(err => {
                 console.log(err);
+                showToastAlerts('add-bot-error','alert-error-msg',err.response.data.message);
                 if (err.response.status == 401) {
-                    showToastAlerts('add-bot-error','alert-error-msg',err.response.data.message);
                     setTimeout(()=> {
                         location.href = "sign-in-cover.html";
-                     }
-                     ,delayInMS);
+                     }, delayInMS);
                 }
             });
     }
@@ -437,9 +435,7 @@ var updateBot = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage
                     botBaseIcon: botBaseIcon,
                     botTokenIcon: botTokenIcon
                 }
-
-    const authToken = localStorage.getItem('authToken');
-    //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
+const authToken = localStorage.getItem('authToken');
     axios
         .post(
             targetEndPointUrlBase +'/api/botdata/updateBot',
@@ -453,45 +449,64 @@ var updateBot = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage
         .then(res => {
             console.log("res: " + JSON.stringify(res.data));
             if (res.status == 200) {
-                if(parentPage == 0){
-                    showToastAlerts('admin-bots-success','alert-success-msg','Bot profile deleted successfully');
-                    setTimeout(()=> {
-                        window.location.href='admin-bots.html';
-                    }
-                    ,delayInMS);
-                }
-                else if(parentPage == 1){
                     showToastAlerts('admin-bots-success','alert-success-msg',res.data.message);
                     setTimeout(()=> {
                         window.location.href='admin-bots.html';
                     }
                     ,delayInMS);
-                }
             }
         })
         .catch(err => {
             console.log(err);
+            showToastAlerts('admin-bots-error','alert-success-msg',err.response.data.message);
             if (err.response.status == 401) {
-                if(parentPage == 0){
-                    showToastAlerts('admin-bots-error','alert-success-msg',err.response.data.message);
-                    setTimeout(()=> {
-                        window.location.href='sign-in-cover.html';
-                    }
-                    ,delayInMS);
-                }
-                else if(parentPage == 1){
-                    showToastAlerts('add-bot-error','alert-success-msg',err.response.data.message);
-                    setTimeout(()=> {
-                        window.location.href='sign-in-cover.html';
-                    }
-                    ,delayInMS);
-                }
+                setTimeout(()=> {
+                    window.location.href='sign-in-cover.html';
+                }, delayInMS);
             }
         });
 };
 
-var loadUpdateBotModal = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon) => {
-    $("#updateBotModal").modal('show');
+
+var deleteBot = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage) => { //TODO: need to implement modal before deleting the bot (its a physical delete)
+
+    const updatedBot = {
+        botId: botId
+    }
+    const authToken = localStorage.getItem('authToken');
+    axios
+        .post(
+            targetEndPointUrlBase +'/api/botdata/deleteBot',
+            updatedBot,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        )
+        .then(res => {
+            console.log("res: " + JSON.stringify(res.data));
+            if (res.status == 200) {
+                showToastAlerts('admin-bots-success','alert-success-msg',res.data.message);
+                setTimeout(()=> {
+                    window.location.href='admin-bots.html';
+                },delayInMS);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            showToastAlerts('admin-bots-error','alert-error-msg',"Error while deleting this bot"); // err.response.data.message); //FIXME: error message is getting undefined.
+            if (err.response.status == 401) {
+                setTimeout(()=> {
+                    window.location.href='sign-in-cover.html';
+                }, delayInMS);
+            }
+        });
+};
+
+var loadUpdateBotModal = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon) => {
+    $("#updateBotModal").modal('show'); 
+    document.getElementById("staticBackdropLabel").innerHTML = "Update Bot: " + botName;
     document.getElementById("bot-simulate").checked = botSimulate == 1 ? true : false;
     if(botStatus == 1){
         document.getElementById("bot-status-active").checked = true;
@@ -500,8 +515,8 @@ var loadUpdateBotModal = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon) 
         document.getElementById("bot-status-inactive").checked = true;
     }
 
-    console.log('botBaseIcon: '+ botBaseIcon);
-    console.log('botTokenIcon: '+ botBaseIcon);
+    //console.log('botBaseIcon: '+ botBaseIcon);
+    //console.log('botTokenIcon: '+ botBaseIcon);
 
     document.getElementById('bot-base-icon').value = botBaseIcon;
     document.getElementById('bot-token-icon').value = botTokenIcon;

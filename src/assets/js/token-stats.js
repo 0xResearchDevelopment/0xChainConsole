@@ -4,6 +4,7 @@ var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.
 const botId = localStorage.getItem('botId');
 const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
 const authToken = localStorage.getItem('authToken');
+let backToPreviousPage = "token-stats.html";
 
 function truncate (num, places) {
   return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
@@ -28,7 +29,7 @@ var formatGraphData = (rawInputArr) => {
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
     var tradeDate = rawInputArr[i].APP_TS;
     profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
-    //console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%"); //TODO: implement a table to show profit change below - profit summary graph
+    //console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%");
     xAxisData.push(tradeDate);
 
     if(i==0) {
@@ -56,15 +57,15 @@ var formatGraphData = (rawInputArr) => {
     rowDate.appendChild(tdDate);
 
     var tdNetProfit = document.createElement('td');
-    var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT);
-    var fontColorNetProfit = rawInputArr[i].NETPROFIT >= 0 ? "text-success" : "text-danger";
+    var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT+"%");
+    var fontColorNetProfit = rawInputArr[i].NETPROFIT >= 0 ? 'text-success' : 'text-danger';
     tdNetProfit.classList.add(fontColorNetProfit);
     tdNetProfit.appendChild(textNetProfit);
     rowNetProfit.appendChild(tdNetProfit);
 
     var tdProfitDiff= document.createElement('td');
-    var textProfitDiff = document.createTextNode(truncate(profitDifference, 2));
-    var fontColorProfitDiff = profitDifference >= 0 ? "text-success" : "text-danger";
+    var textProfitDiff = document.createTextNode(truncate(profitDifference, 2)+"%");
+    var fontColorProfitDiff = profitDifference >= 0 ? 'text-success' : 'text-danger';
     tdProfitDiff.classList.add(fontColorProfitDiff);
     tdProfitDiff.appendChild(textProfitDiff);
     rowProfitDiff.appendChild(tdProfitDiff);
@@ -156,6 +157,7 @@ var getTokenStats = (parentPage) => {
   var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
   if (parentPage == 1) {
     targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getBotStats';
+    backToPreviousPage = "bot-stats.html";
   }
   console.log("## targetEndPointUrl:", targetEndPointUrl);
 
@@ -183,6 +185,7 @@ var getTokenStats = (parentPage) => {
         baseCurrencyCode = botDetails.BASE_CURRENCY_CODE;
         const pendingWorkflowRequestsCount = res.data.pendingRequestsCounts.REQ_COUNT; //pendingRequestsCounts
         const requestSubmittedOn = res.data.pendingRequestsCounts.SUBMITTED_ON; //pendingRequests Submitted On
+        const requestSubmittedID = res.data.pendingRequestsCounts.REQ_ID; //pendingRequests Submitted On
 
         var formattedData = formatGraphData(netprofitDailyData);
         tokenNetProfitArr = formattedData.tokenNetProfit;
@@ -211,12 +214,13 @@ var getTokenStats = (parentPage) => {
         document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
         if(userSubscriptionStatusValue == 0) {
           document.getElementById("id-subscription-box-button").innerHTML = '';
-          document.getElementById("id-subscription-box-button").innerHTML = '<a href="javascript:proceedSubscriptionUpdate(\'' + parentPage + '\' , \'' + pendingWorkflowRequestsCount + '\' , \'' + requestSubmittedOn + '\');" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
+          document.getElementById("id-subscription-box-button").innerHTML = '<a href="javascript:proceedSubscriptionUpdate(\'' + parentPage + '\' , \'' + pendingWorkflowRequestsCount + '\' , \'' + requestSubmittedOn + '\' , \'' + requestSubmittedID + '\');" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
         else if(userSubscriptionStatusValue == 1){
           document.getElementById("id-subscription-box-button").innerHTML = '';
+          document.getElementById("staticBackdropLabel").innerHTML = 'Confirmation for Unsubscription of '+botDetails.BOT_NAME;
           document.getElementById("id-subscription-box-button").innerHTML = pendingWorkflowRequestsCount == 0 ? "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>"
-                                                                                                              : '<a href="javascript:showErrorToast(\'' + requestSubmittedOn + '\')" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
+                                                                                                              : '<a href="javascript:showErrorToast(\'' + requestSubmittedOn + '\' , \'' + requestSubmittedID + '\')" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
         
         document.getElementById("subscription-status-box-text-below").innerHTML = subscriptionStatusBoxTextBelow; 
@@ -343,6 +347,10 @@ var showToastAlerts = (divId, spanId, msg) => {
   toast.show();
 }
 
+var goBackToPreviousPage = () => {
+  window.location.href=backToPreviousPage;//'bots-list.html';
+};
+
 var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tokenCurrCode) => {
   const tradeActionFull = (tradeAction == 'B') ? 'Bought' : (tradeAction == 'S') ? 'Sold' : tradeAction;
   const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
@@ -361,7 +369,7 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   ulist.appendChild(list);
 }
 
-var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, requestSubmittedOn) => {
+var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, requestSubmittedOn, requestSubmittedID) => {
   //get submitted requests count from storage
   //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
   //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
@@ -387,15 +395,18 @@ var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, reque
       showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');
     }
   } else {
-    showToastAlerts('token-stats-error', 'alert-error-msg', `Already request was submitted on ${requestSubmittedOn} and it is under review process, please contact support team`);
+    showErrorToast(requestSubmittedOn, requestSubmittedID);
   } 
 };
 
 var unsubscribeBot = (requestDescribtion) => {
+  var botName = document.getElementById("time-frame").innerHTML;
+  var revisedReqDesc = botName + " - " + requestDescribtion;
   const requestBody = {
     reqType: 'UNSUBSCRIBE',
-    reqDesc: requestDescribtion,
+    reqDesc: revisedReqDesc,
     botId: botId,
+    botName : botName,
     agreeWhitelist: 1,
     agreeIpAdded: 1,
     agreeTerms: 1,
@@ -419,7 +430,7 @@ var unsubscribeBot = (requestDescribtion) => {
       if (res.status == 200) {
           showToastAlerts('token-stats-success','alert-success-msg',res.data.message);
           setTimeout(()=> {
-              window.location.href='bots-list.html';
+            goBackToPreviousPage();
           }
           ,delayInMS);
       }
@@ -436,9 +447,9 @@ var unsubscribeBot = (requestDescribtion) => {
   });
 }
 
-var showErrorToast = (requestSubmittedOn) => {
-  showToastAlerts('token-stats-error', 'alert-error-msg', `Already request was submitted on ${requestSubmittedOn} and it is under review process, please contact support team`);
-}
+var showErrorToast = (requestSubmittedOn, requestSubmittedID) => {
+   showToastAlerts('token-stats-error', 'alert-error-msg', `You have already submitted a <span class='text-black fs-16'>Request# ${requestSubmittedID} on ${requestSubmittedOn} </span>and it is under review process, please contact support team`);
+};
 
 /* column chart with negative values */
 // var options = {

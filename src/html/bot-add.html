@@ -19,7 +19,7 @@
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Subscription", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Submit Request'})
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Administrator - Bots", "dashbordsubtitle": 'Administrator', "dashbordsubtitle2": 'Create Bot'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -31,14 +31,14 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Add Bot
+                                    Create New Bot
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label" for="bot-symbol" style="font-weight: bold">Bot Symbol</label>
-                                        <input type="text" id="bot-symbol" class="form-control" placeholder="Enter Bot Symbol">
+                                        <input type="text" id="bot-symbol" class="form-control" placeholder="Enter Bot Symbol like MATICBTC">
                                         <div class="invalid-feedback" id="bot-symbol-empty" style="display:none;">
                                             Bot Symbol cannot be emtpty.
                                         </div>
@@ -46,7 +46,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label" for="bot-timeframe" style="font-weight: bold">Bot Timeframe</label>
                                         <select class="form-select" id="bot-timeframe">
-                                            <option selected="">Select
+                                            <option selected="">Select Timeframe
                                             </option>
                                             <option value="1H">1H</option>
                                             <option value="2H">2H</option>
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label" for="bot-exchange" style="font-weight: bold">Bot Exchange</label>
-                                        <input type="text" id="bot-exchange" class="form-control" placeholder="Enter Bot Exchange">
+                                        <input type="text" id="bot-exchange" class="form-control" placeholder="Enter Bot Exchange" value="BINANCE">
                                         <div class="invalid-feedback" id="bot-exchange-empty" style="display:none;">
                                             Bot Exchange cannot be emtpty.
                                         </div>
@@ -89,8 +89,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label" for="bot-base-icon" style="font-weight: bold">Bot Base Icon URL</label>
-                                        <input type="text" id="bot-base-icon" class="form-control" placeholder="Enter Bot Base Icon URL">
+                                        <label class="form-label" for="bot-base-icon" style="font-weight: bold">Base Icon URL</label>
+                                        <input type="text" id="bot-base-icon" class="form-control" placeholder="Enter Base Icon URL" value="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png">
                                         <div class="invalid-feedback" id="bot-base-icon-empty" style="display:none;">
                                             Bot Base Icon URL cannot be emtpty.
                                         </div>

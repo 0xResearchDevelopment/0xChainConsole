@@ -121,7 +121,8 @@ var goBackToPreviousPage = () => {
 };
 
 var submitRequest = () => {
-  let requestDescription = document.getElementById("workflow-bot-name").innerHTML + ":" + document.getElementById('workflow-remarks').value;
+  let botName = document.getElementById("workflow-bot-name").innerHTML;
+  let requestDescription = botName + " - " + document.getElementById('workflow-remarks').value;
     const requestBody = {
         reqType: document.getElementById("service-for").innerHTML,
         reqDesc: requestDescription,
@@ -131,6 +132,7 @@ var submitRequest = () => {
         agreeTerms: document.getElementById('workflow-terms').checked ? 1 : 0,
         agreeConsent: document.getElementById('workflow-consent').checked ? 1 : 0,
         agreeTermsDocPath: document.getElementById('workflow-file').value,
+        botName : botName
     }
     
     //authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
