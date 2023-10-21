@@ -187,6 +187,10 @@ var getTokenStats = (parentPage) => {
         const requestSubmittedOn = res.data.pendingRequestsCounts.SUBMITTED_ON; //pendingRequests Submitted On
         const requestSubmittedID = res.data.pendingRequestsCounts.REQ_ID; //pendingRequests Submitted On
 
+        const approvedWorkflowRequestsCount = res.data.approvedRequestsCounts.REQ_COUNT; //approvedRequestsCounts
+        const approvedRequestSubmittedOn = res.data.approvedRequestsCounts.SUBMITTED_ON; //approvedRequests Submitted On
+        const approvedRequestSubmittedID = res.data.approvedRequestsCounts.SUB_REQ_ID; //approvedRequests Submitted On
+
         var formattedData = formatGraphData(netprofitDailyData);
         tokenNetProfitArr = formattedData.tokenNetProfit;
         baseNetProfitArr = formattedData.baseNetProfit;
@@ -200,9 +204,9 @@ var getTokenStats = (parentPage) => {
           , 200);
 
         //userSubscriptionStatusValue - determine status
-        let usrBotSubscriptionStatus = userSubscriptionStatusValue == 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
-        let idSubscriptionBoxButtonText = userSubscriptionStatusValue == 1 ? "Unsubscribe" : "Proceed";
-        let subscriptionStatusBoxTextBelow = userSubscriptionStatusValue == 1 ? "Already subscribed" : "Review stats below & subscribe";
+        let usrBotSubscriptionStatus = userSubscriptionStatusValue >= 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
+        let idSubscriptionBoxButtonText = userSubscriptionStatusValue >= 1 ? "Unsubscribe" : "Proceed";
+        let subscriptionStatusBoxTextBelow = userSubscriptionStatusValue >= 1 ? "Already subscribed" : "Review stats below & subscribe";
         
         //document.getElementById("header-trade-symbol").innerHTML = "<span class='badge bg-info ms-0 d-offline-block fs-12 '>"+ botDetails.BOT_ID +"</span>  " + botDetails.TRADE_SYMBOL + " " +usrBotSubscriptionStatus;
         document.getElementById("header-trade-symbol").innerHTML = usrBotSubscriptionStatus + " " + botDetails.TRADE_SYMBOL;
@@ -214,9 +218,9 @@ var getTokenStats = (parentPage) => {
         document.getElementById("subscription-status-box-text-main").innerHTML = usrBotSubscriptionStatus;
         if(userSubscriptionStatusValue == 0) {
           document.getElementById("id-subscription-box-button").innerHTML = '';
-          document.getElementById("id-subscription-box-button").innerHTML = '<a href="javascript:proceedSubscriptionUpdate(\'' + parentPage + '\' , \'' + pendingWorkflowRequestsCount + '\' , \'' + requestSubmittedOn + '\' , \'' + requestSubmittedID + '\');" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
+          document.getElementById("id-subscription-box-button").innerHTML = '<a href="javascript:proceedSubscriptionUpdate(\'' + parentPage + '\' , \'' + pendingWorkflowRequestsCount + '\' , \'' + requestSubmittedOn + '\' , \'' + requestSubmittedID + '\' , \'' + approvedWorkflowRequestsCount + '\' , \'' + approvedRequestSubmittedOn + '\' , \'' + approvedRequestSubmittedID + '\');" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
-        else if(userSubscriptionStatusValue == 1){
+        else if(userSubscriptionStatusValue >= 1){
           document.getElementById("id-subscription-box-button").innerHTML = '';
           document.getElementById("staticBackdropLabel").innerHTML = 'Confirmation for Unsubscription of '+botDetails.BOT_NAME;
           document.getElementById("id-subscription-box-button").innerHTML = pendingWorkflowRequestsCount == 0 ? "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>"
@@ -369,27 +373,34 @@ var createTransHistoryElements = (lastTradedDate, tradeAction, lastTradeQty, tok
   ulist.appendChild(list);
 }
 
-var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, requestSubmittedOn, requestSubmittedID) => {
+var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, requestSubmittedOn, requestSubmittedID, approvedWorkflowRequestsCount, approvedRequestSubmittedOn, approvedRequestSubmittedID) => {
   //get submitted requests count from storage
   //when userSubscriptionStatusValue = 1 then REQ_TYPE should be UNSUBSCRIBE
   //when userSubscriptionStatusValue = 0 then REQ_TYPE should be SUBSCRIBE
   //validation : active_bots_latest+requests_subscribe_count should be <= roleCode
-  //TODO: add this validation while placing the request
 
   const requests_subscribe_count = localStorage.getItem('requests_subscribe_count');
   const requests_unsubscribe_count = localStorage.getItem('requests_unsubscribe_count');
-  const active_bots_latest = localStorage.getItem('active_bots_latest');
+  const active_bots_latest = localStorage.getItem('active_bots_count');
   const role_code = localStorage.getItem('role_code');
   console.log("## requests_subscribe_count: " + requests_subscribe_count + " requests_unsubscribe_count: " + requests_unsubscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
   let userTotalBots = active_bots_latest + requests_subscribe_count;
 
   if (pendingWorkflowRequestsCount <= 0) {
     if (userTotalBots < role_code) {
-      //allow request submission to redirect to request page
-      showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
-      setTimeout(() => {
-        window.location.href = 'workflow.html?code='+parentPage;
-      }, delayInMS);
+      //duplicate check - starts - make sure there is no earlier subscription for this combo
+      if (approvedWorkflowRequestsCount == 0) {
+        //allow request submission to redirect to request page
+        showToastAlerts('token-stats-success', 'alert-success-msg', 'You are eligible to place request');
+        setTimeout(() => {
+          window.location.href = 'workflow.html?code=' + parentPage;
+        }, delayInMS);
+      } else {
+        //do not allow, stay her and show error message
+        let errMsg = "You already subscribed for this Strategy on " + approvedRequestSubmittedOn + " associated request# " + approvedRequestSubmittedID;
+        showToastAlerts('token-stats-error', 'alert-error-msg', errMsg);
+      }
+      //duplicate check ends
     } else {
       //do not allow, stay her and show error message
       showToastAlerts('token-stats-error', 'alert-error-msg', 'You have reached maximum subscriptions of your tier, please upgrade your tier level');

@@ -33,22 +33,30 @@ var loadBotSummaryData = () => {
                 const userSubscribedBots = (res.data.susbcribedBots!=undefined && res.data.susbcribedBots!=null)?res.data.susbcribedBots:null;
 
                 let tierLimit = localStorage.getItem('role_code');
-                let activeBots = localStorage.getItem('active_bots_latest');
+                let activeBots = localStorage.getItem('active_bots_count');
+                let inactiveBots = localStorage.getItem('inactive_bots_count');
                 let subscribeRequests = localStorage.getItem('requests_subscribe_count');
+                let unsubscribeRequests = localStorage.getItem('requests_unsubscribe_count'); //TODO: this gives no.of unsubscribe requests in workflow
+                let totalPendingApprovalReqCount = subscribeRequests + unsubscribeRequests;
                 let remainingLimit = (tierLimit-activeBots-subscribeRequests);
 
                 //Fill top boxes
                 document.getElementById("field-tier-limit").innerHTML = tierLimit;
-                document.getElementById("field-active-bots").innerHTML = activeBots;
-                document.getElementById("field-pending-requests").innerHTML = subscribeRequests;
-                document.getElementById("field-remaining-limit").innerHTML = remainingLimit;
+                document.getElementById("field-active-bots").innerHTML = activeBots; 
+                document.getElementById("SubscribedLbl").innerHTML = "Subscribed [Inactive:" + inactiveBots+"]";
+                document.getElementById("pendingWorkflowLbl").innerHTML = "Pending Approval [Sub:"+ subscribeRequests + " Unsub:" +unsubscribeRequests +"]";
+                document.getElementById("field-pending-requests").innerHTML = Number(totalPendingApprovalReqCount);
+                document.getElementById("field-remaining-limit").innerHTML = Number(remainingLimit);
 
                 var userSubscriptionStatus = 0;
+                var userSubscriptionStatusActiveInactive = 0;
                 for (let i = 0; i < botsSummary.length; i++) {
                     userSubscriptionStatus  = findUserSubscriptionStatus(userSubscribedBots, botsSummary[i].BOT_ID);
+                    userSubscriptionStatusActiveInactive  = findUserSubscriptionStatusActiveOrInactive(userSubscribedBots, botsSummary[i].BOT_ID);
                     var avgTimePerTrade = botsSummary[i].AVG_TIME_PER_TRADE < 1 ? truncate(botsSummary[i].AVG_TIME_PER_TRADE*24,2) + " hours" : truncate(botsSummary[i].AVG_TIME_PER_TRADE,2) +  " days";        
                     createTableRows(
                         userSubscriptionStatus,
+                        userSubscriptionStatusActiveInactive,
                         botsSummary[i].BOT_TOKEN_ICON,
                         botsSummary[i].BOT_ID, 
                         botsSummary[i].TRADE_SYMBOL + "_" + botsSummary[i].TRADE_TIMEFRAME.toUpperCase(), //botsSummary[i].BOT_NAME,
@@ -80,14 +88,34 @@ var findUserSubscriptionStatus = (userSubscribedBots, botID) => {
     let userSubscriptionStatus = 0 ;
     for (let i = 0; i < userSubscribedBots.length; i++) {
         if (botID == userSubscribedBots[i].BOT_ID) {
-            console.log("### MATCH FOUND : userSubscribedBots:" + userSubscribedBots[i].BOT_ID + " botID:" +botID);
-             return 1;
+            //console.log("### MATCH FOUND : userSubscribedBots:" + userSubscribedBots[i].BOT_ID + " botID:" +botID);
+            return 1;
         }
     }
     return userSubscriptionStatus;
 };
 
-var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenNetProfit, baseNetprofit, successRate, noOfTrades, profitPerMonth, avgTimePerTrade, totalNoOfDays, appTS) => {
+
+// if the user's BOT ID matches then take BOT-STATUS : if 0 then show Inactive, otherwise Active
+var findUserSubscriptionStatusActiveOrInactive = (userSubscribedBots, botID) => {
+    let userSubscriptionStatusActiveInactive = -1; //means Subscribe 
+    for (let i = 0; i < userSubscribedBots.length; i++) {
+        if (botID == userSubscribedBots[i].BOT_ID) {
+            if(userSubscribedBots[i].SUBSCRIBE_STATUS == 0) {
+                //console.log("$$$ MATCH FOUND : " + userSubscribedBots[i].BOT_ID + " botID:" +botID + " [INACTIVE]");
+                return userSubscribedBots[i].SUBSCRIBE_STATUS;
+            }
+            else {
+                //console.log("$$$ MATCH FOUND : " + userSubscribedBots[i].BOT_ID + " botID:" +botID + " [ACTIVE]");
+                return userSubscribedBots[i].SUBSCRIBE_STATUS;
+            }
+        }
+    }
+    //console.log("$$$ MATCH NOT FOUND :  botID:" +botID + " [SUBSCRIBE]");
+    return userSubscriptionStatusActiveInactive;
+};
+
+var createTableRows = (userSubscriptionStatus, userSubscriptionStatusActiveInactive, tokenIcon, botId, botName, tokenNetProfit, baseNetprofit, successRate, noOfTrades, profitPerMonth, avgTimePerTrade, totalNoOfDays, appTS) => {
     //const tradeActionText = tradeAction == 'B' ? 'Bought' : tradeAction == 'S' ? 'Sold' : tradeAction;
     const tokenNetProfitColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
     const tokanNetprofitTrend = tokenNetProfit > 0 ? 'trending-up' : 'trending-down';
@@ -102,8 +130,10 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     const profitPerMonthColor  = profitPerMonth > 0 ? 'success' : 'danger';
     const profitPerMonthTrend  = profitPerMonth > 0 ? 'trending-up' : 'trending-down';
 
-    const userSubscriptionStatusDesign = userSubscriptionStatus == 1 ? 'Active' : 'Subscribe';
-    const userSubscriptionStatusColor = userSubscriptionStatus == 1 ? 'success' : 'primary';
+    //console.log("### userSubscriptionStatusActiveInactive::", userSubscriptionStatusActiveInactive);
+    const userSubscriptionStatusDesign = userSubscriptionStatusActiveInactive == -1 ? 'Subscribe' : userSubscriptionStatusActiveInactive >= 1 ? 'Active' : 'Inactive';
+    const userSubscriptionStatusColor = userSubscriptionStatusActiveInactive == -1 ? 'primary' : userSubscriptionStatusActiveInactive >= 1 ? 'secondary' : 'info';
+    const userSubscriptionStatusIcon = userSubscriptionStatusActiveInactive == -1 ? '<i class="ti ti-packge-import fs-18"></i>' : userSubscriptionStatusActiveInactive >= 1 ? '<i class="ti ti-rocket fs-18"></i>' : '<i class="ti ti-rocket fs-18"></i>';
 
     //const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
     const row = document.createElement('tr');
@@ -114,8 +144,8 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     //<span class='badge bg-primary ms-0 d-offline-block fs-12 '>5</span>
     //<span class='badge bg-${userSubscriptionStatusColor} ms-0 d-offline-block fs-12 '>${userSubscriptionStatusDesign}</span>
 
-    row.innerHTML = `<td style = 'font-size: 12px;'>${botId} <span class='badge bg-${userSubscriptionStatusColor}-transparent'>${userSubscriptionStatusDesign}</span></td>
-    <td style = 'font-size: 12px;'><div class='lh-1 d-flex align-items-center'><span class='avatar avatar-xs avatar-rounded'><img src='${tokenIcon}'></span><span>-  <a href='javascript:void(0);' onclick='navigateBotStats(${botId}, ${userSubscriptionStatus})' class='fs-12 ms-auto mt-auto'>${botName}</a></span></div></td>
+    row.innerHTML = `<td style = 'font-size: 12px;'><span class='badge bg-${userSubscriptionStatusColor}-transparent rounded-pill'>${userSubscriptionStatusIcon}<a href='javascript:navigateBotStats(${botId}, ${userSubscriptionStatusActiveInactive});' class='fs-12 ms-auto mt-auto'>${userSubscriptionStatusDesign}</a></span><span>${botId}</span></td>
+    <td style = 'font-size: 12px;'><div class='lh-1 d-flex align-items-center'><span class='avatar avatar-xs avatar-rounded'><img src='${tokenIcon}'></span><span>-  <a href='javascript:navigateBotStats(${botId}, ${userSubscriptionStatusActiveInactive})' class='fs-12 ms-auto mt-auto'>${botName}</a></span></div></td>
     <td style = 'font-size: 12px;'>${totalNoOfDays} days</td>
     <td style = 'font-size: 12px;'><span class='text-${tokenNetProfitColorCode}'><i class='ti ti-${tokanNetprofitTrend} me-1 align-middle'></i>${tokenNetProfit}%</span></td>    
     <td style = 'font-size: 12px;'><span class='text-${baseNetProfitColorCode}'><i class='ti ti-${baseNetprofitTrend} me-1 align-middle'></i>${baseNetprofit}%</span></td>
@@ -129,9 +159,14 @@ var createTableRows = (userSubscriptionStatus, tokenIcon, botId, botName, tokenN
     tbody.appendChild(row);
 }
 
-var navigateBotStats = (botId, userSubscriptionStatus) => {
+var navigateBotStats = (botId, userSubscriptionStatusActiveInactive) => {
     localStorage.setItem('botId', botId);
-    localStorage.setItem('userSubscriptionStatus', userSubscriptionStatus);
+    //console.log("==========> botId::" +botId + "  userSubscriptionStatusActiveInactive::" + userSubscriptionStatusActiveInactive);
+    if (userSubscriptionStatusActiveInactive == -1 || userSubscriptionStatusActiveInactive == 0) {  // when inactive or subscribe -- it will be PROCEED button to enable subscribe so 0
+        localStorage.setItem('userSubscriptionStatus', 0);
+    } else if (userSubscriptionStatusActiveInactive >= 1)  { // when active -- it will be UNSUBSCRIBE button to enable UNSUBSCRIBE so 1
+        localStorage.setItem('userSubscriptionStatus', 1);
+    }
     location.href = "bot-stats.html";
 };
 

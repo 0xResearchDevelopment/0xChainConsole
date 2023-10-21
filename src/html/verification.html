@@ -74,7 +74,7 @@
                                                             <div class="form-check mt-2 mb-0">
                                                                 <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                                                                 <label class="form-check-label" for="defaultCheck1">
-                                                                    Did not recieve a code ?<a href="javascript:void(0);" class="text-primary ms-2 d-inline-block">Resend</a>
+                                                                    Did not recieve a code ?<a href="javascript:resendVerifyOtp();" class="text-primary ms-2 d-inline-block">Resend</a>
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -115,23 +115,23 @@
         <!-- End::error-page -->
     </div>
 
-    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
         <div id="verification-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive"
             aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    <span id="alert-success-msg"></span>
+                    <span id="alert-success-msg" class="fs-18"></span>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
         <div id="verification-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive"
             aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    <span id="alert-error-msg"></span>
+                    <span id="alert-error-msg" class="fs-18"></span>
                 </div>
             </div>
         </div>

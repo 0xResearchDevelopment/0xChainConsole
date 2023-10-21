@@ -10,8 +10,9 @@ var signUp = async () => {
 
     if(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(email,"signUp")) {
         var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
-        console.log("### accountOtpGenerated:", accountOtpGenerated);
+        //console.log("### accountOtpGenerated:", accountOtpGenerated); //FIXME: cmment out before LIVE
         sessionStorage.setItem('otpCode', accountOtpGenerated);
+        sessionStorage.setItem('signUpEmail', email);
     
         const myBody = {
             "name_first": firstName,
@@ -60,7 +61,7 @@ var signUp = async () => {
 var verifyOtp = () => {
     var otpCode = sessionStorage.getItem('otpCode');
     var actionCode = sessionStorage.getItem('actionCode');
-    console.log("## inside verify - otpCode:", otpCode);
+    //console.log("## inside verify - otpCode:", otpCode);
 
     var digit1 = document.getElementById("one").value;
     var digit2 = document.getElementById("two").value;
@@ -71,7 +72,7 @@ var verifyOtp = () => {
     digit3 = digit3.length == 1 ? digit3 : 0;
     digit4 = digit4.length == 1 ? digit4 : 0;
     var userEnteredCode = digit1+digit2+digit3+digit4;
-    console.log("## inside verify - userEnteredCode:", userEnteredCode);
+    //console.log("## inside verify - userEnteredCode:", userEnteredCode);
     if(userEnteredCode == otpCode) {
         showToastAlerts('verification-success','alert-success-msg',"OTP validation successful");
         if(actionCode == 0) {
@@ -89,10 +90,44 @@ var verifyOtp = () => {
     }    
 };
 
+var resendVerifyOtp = async() => {
+    document.getElementById("defaultCheck1").checked = true;
+    var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
+    //console.log("### resendVerifyOtp-resend-otp:", accountOtpGenerated);
+    sessionStorage.setItem('otpCode', accountOtpGenerated);
+    var email = sessionStorage.getItem('signUpEmail');
+
+    const myBody = {
+        "email": email,
+        "accountOtpGenerated": accountOtpGenerated
+    };
+
+    await axios.post(
+        targetEndPointUrlBase +'/api/auth/verify/resendOtp',
+        myBody,
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }
+    )
+    .then(res => {
+        console.log(res);
+        if(res.status == 201){
+            showToastAlerts('verification-success','alert-success-msg',res.data.message);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        showToastAlerts('verification-error','alert-error-msg',err.response.data.errors.msg);
+    });
+};
+
 var verifyAccount = (actionCode) => {
-    console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
+    //console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
     var verifyAccountUrl = targetEndPointUrlBase +'/api/auth/verify/' + sessionStorage.getItem('verficationToken');
-    console.log("## verifyAccount-actionCode:", actionCode);
+    //console.log("## verifyAccount-actionCode:", actionCode);
 
     axios.get(verifyAccountUrl)
         .then(res => {
@@ -101,6 +136,8 @@ var verifyAccount = (actionCode) => {
                 showToastAlerts('verification-success','alert-success-msg',res.data.message);
                 sessionStorage.removeItem('verficationToken');
                 sessionStorage.removeItem('actionCode');
+                sessionStorage.removeItem('signUpEmail');
+                sessionStorage.removeItem('otpCode');
                 setTimeout(()=> {
                     window.location.href = "sign-in-cover.html";
                 },delayInMS);
@@ -112,6 +149,8 @@ var verifyAccount = (actionCode) => {
 };
 
 var signIn = () => {
+    localStorage.clear(); //TODO: clears all previous session and local values
+    sessionStorage.clear();
     var userName = document.getElementById('signin-username').value;
     var password = document.getElementById('signin-password').value;
     validateSignInInputs(userName, password);
@@ -139,9 +178,7 @@ var signIn = () => {
         })
         .catch(err => {
             console.log(err.response);
-            if (err.response.status == 422) {
-                showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
-            }
+            showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
         });
     }
 };
@@ -298,6 +335,7 @@ var getUserProfile = () => {
                 const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
+                const userInactiveBotsCountObj = (res.data.userInactiveBotsCount!=undefined && res.data.userInactiveBotsCount!=null)?res.data.userInactiveBotsCount:null;
                 const userSubmittedRequests = (res.data.userSubmittedRequestsCount!=undefined && res.data.userSubmittedRequestsCount!=null)?res.data.userSubmittedRequestsCount:null;
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
@@ -312,9 +350,11 @@ var getUserProfile = () => {
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
                 //localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
                 let userActiveBotsLatestCount = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
-                localStorage.setItem('active_bots_latest', userActiveBotsLatestCount);
-                localStorage.setItem('role_code', profile.ROLE_CODE);
-                console.log("## roleCode:" + profile.ROLE_CODE + " ACTIVE_BOTS_LATEST:"  + userActiveBotsLatestCount);
+                let userInactiveBotsLatestCount = (userInactiveBotsCountObj.INACTIVE_BOTS != null) ? userInactiveBotsCountObj.INACTIVE_BOTS : 0;
+                localStorage.setItem('active_bots_count', userActiveBotsLatestCount);
+                localStorage.setItem('inactive_bots_count', userInactiveBotsLatestCount); //TODO: for the first time page flow to bots-list, so setting this as 0
+                localStorage.setItem('role_code', profile.ROLE_CODE); 
+                console.log("## roleCode:" + profile.ROLE_CODE + " ACTIVE_BOTS_LATEST:"  + userActiveBotsLatestCount + " userInactiveBotsLatestCount:"+ userInactiveBotsLatestCount);
 
                 //get submitted requests count 
                 let userSubscribeSubmittedRequestsCount = 0;
@@ -330,7 +370,8 @@ var getUserProfile = () => {
                 localStorage.setItem('requests_unsubscribe_count', userUnsubscribeSubmittedRequestsCount);
                 console.log("## requests_subscribe_count:" + userSubscribeSubmittedRequestsCount + " requests_unsubscribe_count:"  + userUnsubscribeSubmittedRequestsCount);
 
-                if(userActiveBotsLatestCount == 0 && profile.ROLE_CODE >= 0){
+                if(userActiveBotsLatestCount == 0 && profile.ROLE_CODE >= 0 && userInactiveBotsLatestCount == 0){
+                    //localStorage.setItem('inactive_bots_count', userInactiveBotsLatestCount); //TODO: for the first time page flow to bots-list, and then it will set actual acount if its more than 0, so that user can navigate to dashboard
                     location.href = "bots-list.html";
                 }
 
@@ -367,10 +408,9 @@ var getUserProfile = () => {
                 }
             }
         }).catch(err => {
-            console.log("inside err");
             console.log(err, err.response);
+            showToastAlerts('index-error','alert-error-msg',err.response.data.message);
             if (err.response.status == 401) {
-                showToastAlerts('index-error','alert-error-msg',err.response.data.message);
                 setTimeout(()=> {
                     location.href = "sign-in-cover.html";
                  }
@@ -395,13 +435,18 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
         cardBodyDiv.style.backgroundColor = '#E0E0E0';
     }
 
+
+    let botIdLabelDesign  = "<span class='badge bg-info ms-0 d-offline-block'>" + botId + "</span>"; //<a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>";
+    if(subscribeStatus == 0)
+        botIdLabelDesign  = "<span class='badge bg-danger ms-0 d-offline-block'>"+ botId + "</span>";
+
     const flex1Div = document.createElement('div');
     flex1Div.id = 'flex1-div';
     flex1Div.setAttribute("class", "d-flex");
     
     const flex1Child1Div = document.createElement('div');
     flex1Child1Div.id = 'flex1-child1-div';
-    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted"> ${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
+    flex1Child1Div.innerHTML = `<p class="fw-medium mb-1 text-muted">${botIdLabelDesign}  ${tradeSymbol}_${tradeTimeframe}</p><h3 class="mb-0">${lastTradeQty}</h3>`;
 
     const flex1Child2Div = document.createElement('div');
     flex1Child2Div.id = 'flex1-child2-div';
@@ -416,7 +461,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     const flex5Div = document.createElement('div');
     flex5Div.id = 'flex5-div';
     flex5Div.setAttribute("class", "d-flex mt-2");
-    flex5Div.innerHTML = `<p class="fw-medium mb-0 fs-12 text-muted"><span>As of : ${lastTradedDate}</span></p>`
+    flex5Div.innerHTML = `<p class="fw-medium mb-0 fs-12 text-muted"><span>As Of:${lastTradedDate}</span></p>`
 
     const flex3Div = document.createElement('div');
     flex3Div.id = 'flex3-div';
@@ -427,17 +472,14 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     flex4Div.id = 'flex4-div';
     flex4Div.setAttribute("class", "d-flex mt-2");
 
-    let botIdLabelDesign  = "<span class='badge bg-info ms-2 d-offline-block'>" + botId + "</span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>";
-    if(subscribeStatus == 0)
-        botIdLabelDesign  = "<span class='badge bg-danger ms-2 d-offline-block'>"+ subscribeStatus + " - " + botId + "</span>";
 
     if(netProfit>0){
-        flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a><div>${botIdLabelDesign}</div>`
+        flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a>`
     }
     else{
-        flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span>
-        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a><div>${botIdLabelDesign}</div>`
+        flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>
+        <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a>`
     }
 
     const containerDiv = document.getElementById("dashboard-box-container");
@@ -483,7 +525,6 @@ var updateTier = (code) => {
             console.log("### Inside updateTier:res: " + res);
             if (res.status == 200) {
                 showToastAlerts('pricing-success','alert-success-msg',res.data.message);
-                console.log("### Inside updateTier:res.message:", res.data.message);
                 setTimeout(()=> {
                     window.location.href='index.html';
                  }
@@ -691,8 +732,8 @@ var updateProfile = () => {
         })
         .catch(err => {
             console.log(err);
+            showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
             if (err.response.status == 401) {
-                showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
                 setTimeout(()=> {
                     location.href = "sign-in-cover.html";
                  }
@@ -704,9 +745,9 @@ var updateProfile = () => {
 var loadPricingPage = () => {
     const profile = JSON.parse(localStorage.getItem('profileObj'));
     //const statsSummary = JSON.parse(localStorage.getItem('statsSummaryObj'));
-    let active_bots_latest = localStorage.getItem('active_bots_latest');
+    let active_bots_latest = localStorage.getItem('active_bots_count');
     console.log('## active_bots_latest:', active_bots_latest);
-    //localStorage.removeItem('active_bots_latest');
+    //localStorage.removeItem('active_bots_count');
 
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
@@ -761,6 +802,13 @@ var signout = () => {
             window.location.href='sign-in-cover.html';
         }).catch(err => {
             console.log(err);
+            if (err.response.status == 401) {
+                localStorage.clear();
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,0);
+            }
         });
 };
 
@@ -792,8 +840,9 @@ var forgetPassword = () => {
 
     if(userName.length > 0 && validateEmail(userName,"signIn")){
         var forgetPwdOtpCode = Math.floor(1000 + Math.random() * 9000).toString();
-        console.log("### forgetPwdOtpCode:", forgetPwdOtpCode);
+        //console.log("### forgetPwdOtpCode:", forgetPwdOtpCode);
         sessionStorage.setItem('otpCode', forgetPwdOtpCode);
+        sessionStorage.setItem('signUpEmail', userName);
     
         const myBody = {
             "email": userName,
@@ -813,8 +862,8 @@ var forgetPassword = () => {
         )
         .then(res => {
             console.log("res: " + JSON.stringify(res.data));
+            showToastAlerts('signin-success','alert-success-msg',res.data.message);
             if (res.status == 201) {
-                showToastAlerts('signin-success','alert-success-msg',res.data.message);
                 sessionStorage.setItem('verficationToken', res.data.results.verification.token);
                 sessionStorage.setItem('actionCode', 1);
                 setTimeout(()=> {
@@ -825,9 +874,17 @@ var forgetPassword = () => {
         })
         .catch(err => {
             console.log(err);
-            if (err.response.status == 422) {
-                showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
-            } 
+            if (err.response.status == 404) {
+                showToastAlerts('signin-error', 'alert-error-msg', "Account does not exists for the given email. Please use Signup");
+            } else {
+                showToastAlerts('signin-error', 'alert-error-msg', err.response.data.errors);
+                if (err.response.status == 401) {
+                    setTimeout(() => {
+                        location.href = "sign-in-cover.html";
+                    }
+                        , delayInMS);
+                }
+            }
         });
     }
 };
@@ -851,10 +908,12 @@ var updatePassword = () => {
         )
         .then(res => {
             console.log(res);
+            showToastAlerts('create-password-success','alert-success-msg',res.data.message);
             if (res.status == 200) {
-                showToastAlerts('create-password-success','alert-success-msg',res.data.message);
                 sessionStorage.removeItem('verficationToken');
                 sessionStorage.removeItem('actionCode');
+                sessionStorage.removeItem('otpCode');
+                sessionStorage.removeItem('signUpEmail');
                 setTimeout(()=> {
                     window.location.href = "sign-in-cover.html";
                 },delayInMS);
@@ -862,7 +921,7 @@ var updatePassword = () => {
         })
         .catch(err => {
             console.log(err, err.response);
-            alert(err);
+            showToastAlerts('create-password-error','alert-error-msg',res.data.message);
         });
     }   
 };
