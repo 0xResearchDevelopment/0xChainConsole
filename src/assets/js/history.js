@@ -27,7 +27,7 @@ var loadHistoryData = () => {
                 const userTransHistory = (res.data.userTransHistory!=undefined && res.data.userTransHistory!=null)?res.data.userTransHistory:null;
         
                 for (let i = 0; i < userTransHistory.length; i++) {
-                    createTableRows(userTransHistory[i].EVENT_ID, new Date(userTransHistory[i].APP_TS).toLocaleString(), userTransHistory[i].LAST_TRADE_QTY, 
+                    createTableRows(userTransHistory[i].EVENT_ID, userTransHistory[i].APP_TS, userTransHistory[i].LAST_TRADE_QTY, 
                                     userTransHistory[i].TOKEN_CURRENCY_CODE, userTransHistory[i].TRADE_ACTION, userTransHistory[i].TRADE_SYMBOL,
                                     userTransHistory[i].TRADE_TIMEFRAME, userTransHistory[i].TOTAL_NUMOF_TRADES, userTransHistory[i].TOKEN_NETPROFIT);                      
                 } 

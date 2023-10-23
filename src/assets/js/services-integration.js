@@ -8,7 +8,7 @@ var signUp = async () => {
     var password = document.getElementById('signup-password').value;
     validateSignUpInputs(firstName,lastName,email,password);
 
-    if(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(email,"signUp")) {
+    if(firstName.length > 0 && lastName.length > 0 && email.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 15 && validateEmail(email,"signUp")) {
         var accountOtpGenerated = Math.floor(1000 + Math.random() * 9000).toString();
         //console.log("### accountOtpGenerated:", accountOtpGenerated); //FIXME: cmment out before LIVE
         sessionStorage.setItem('otpCode', accountOtpGenerated);
@@ -155,7 +155,7 @@ var signIn = () => {
     var password = document.getElementById('signin-password').value;
     validateSignInInputs(userName, password);
 
-    if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 12 && validateEmail(userName,"signIn")) {
+    if(userName.length > 0 && password.length > 0 && password.length >= 6 && password.length <= 15 && validateEmail(userName,"signIn")) {
         axios
         .post(
             targetEndPointUrlBase +'/api/auth/login',
@@ -233,7 +233,7 @@ var validateSignInInputs = (userName, password) => {
         document.getElementById('signin-password').classList.add("is-invalid");
         document.getElementById('signin-password-empty').style.display = 'block';
     }
-    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+    if(password.length > 15 || (password.length < 6 && password.length > 0)){
         document.getElementById('signin-password').classList.add("is-invalid");
         document.getElementById('signin-password-length').style.display = 'block';
     }
@@ -270,7 +270,7 @@ var validateSignUpInputs = (fname, lname, email, password) => {
         document.getElementById('signup-password').classList.add("is-invalid");
         document.getElementById('signup-password-empty').style.display = 'block';
     }
-    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+    if(password.length > 15 || (password.length < 6 && password.length > 0)){
         document.getElementById('signup-password').classList.add("is-invalid");
         document.getElementById('signup-password-length').style.display = 'block';
     }
@@ -289,7 +289,7 @@ var validateCreatePwdInputs = (password, confirmPassword) => {
         document.getElementById('create-password').classList.add("is-invalid");
         document.getElementById('create-password-empty').style.display = 'block';
     }
-    if(password.length > 12 || (password.length < 6 && password.length > 0)){
+    if(password.length > 15 || (password.length < 6 && password.length > 0)){
         document.getElementById('create-password').classList.add("is-invalid");
         document.getElementById('create-password-length').style.display = 'block';
     }
@@ -297,7 +297,7 @@ var validateCreatePwdInputs = (password, confirmPassword) => {
         document.getElementById('create-confirmpassword').classList.add("is-invalid");
         document.getElementById('create-confirmpassword-empty').style.display = 'block';
     }
-    if(confirmPassword.length > 12 || (confirmPassword.length < 6 && confirmPassword.length > 0)){
+    if(confirmPassword.length > 15 || (confirmPassword.length < 6 && confirmPassword.length > 0)){
         document.getElementById('create-confirmpassword').classList.add("is-invalid");
         document.getElementById('create-confirmpassword-length').style.display = 'block';
     }
@@ -894,8 +894,8 @@ var updatePassword = () => {
     var confirmPassword = document.getElementById('create-confirmpassword').value;
     validateCreatePwdInputs(password,confirmPassword);
 
-    if(password.length > 0 && password.length >= 6 && password.length <= 12 && confirmPassword.length > 0 
-    && confirmPassword.length >= 6 && confirmPassword.length <= 12 && isPwdConfirmPwdMatches(password,confirmPassword)){
+    if(password.length > 0 && password.length >= 6 && password.length <= 15 && confirmPassword.length > 0 
+    && confirmPassword.length >= 6 && confirmPassword.length <= 15 && isPwdConfirmPwdMatches(password,confirmPassword)){
         console.log("## verifyAccount-token:", sessionStorage.getItem('verficationToken'));
         const requestBody = {
             "token": sessionStorage.getItem('verficationToken'),

@@ -11,7 +11,7 @@
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/page-header.html", {"title": "Full Calendar", "subtitle": 'Apps'})
+        @SPK@include("partials/page-header.html", {"title": "Calendar Events", "subtitle": 'Apps'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -23,7 +23,7 @@
                   <div class="col-xl-9">
                       <div class="card custom-card">
                           <div class="card-header">
-                              <div class="card-title">Full Calendar</div>
+                              <div class="card-title">Calendar</div>
                           </div>
                           <div class="card-body">
                               <div id='calendar2'></div>
@@ -39,33 +39,33 @@
                                 <div id="external-events" class="border-bottom p-3">
                                     <div
                                       class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-primary border border-primary">
-                                      <div class="fc-event-main">Calendar Events</div>
+                                      <div class="fc-event-main">Chainview Events</div>
                                     </div>
                                     <div
                                       class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-secondary border border-secondary"
                                       data-class="bg-secondary">
-                                      <div class="fc-event-main">Birthday EVents</div>
+                                      <div class="fc-event-main">Birthdays</div>
                                     </div>
                                     <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-success border border-success"
                                       data-class="bg-success">
-                                      <div class="fc-event-main">Holiday Calendar</div>
+                                      <div class="fc-event-main">Launch Events</div>
                                     </div>
-                                    <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-info border border-info"
-                                      data-class="bg-info">
-                                      <div class="fc-event-main">Office Events</div>
+                                    <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-danger border border-danger"
+                                      data-class="bg-danger">
+                                      <div class="fc-event-main">Maintenance</div>
                                     </div>
                                     <div
                                       class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-warning border border-warning"
                                       data-class="bg-warning">
                                       <div class="fc-event-main">Other Events</div>
                                     </div>
-                                    <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-danger border border-danger"
-                                      data-class="bg-danger">
-                                      <div class="fc-event-main">Festival Events</div>
+                                    <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-purple border border-purple"
+                                      data-class="bg-purple">
+                                      <div class="fc-event-main">Festivals</div>
                                     </div>
                                     <div class="fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event bg-teal border border-teal"
                                       data-class="bg-danger">
-                                      <div class="fc-event-main">Timeline Events</div>
+                                      <div class="fc-event-main">Payment Day</div>
                                     </div>
                                 </div>
                             </div>
@@ -76,82 +76,68 @@
                           </h5>
                           <button class="btn btn-primary-light btn-sm btn-wave">View All</button>
                         </div>
+
+
+
                         <div class="card custom-card">
                         <div class="card-body">
                           <div class="d-flex justify-conent-between">
-                            <span class="fs-14 text-muted"><i class="text-primary  bx bxs-circle me-1"></i>10:00-30:00</span>
+                            <span class="fs-14 text-muted"><i class="text-primary  bx bxs-circle me-1"></i>10:00am - 10:00pm</span>
                             <div class="dropdown ms-auto">
                               <a href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
                                   <i class="fe fe-more-horizontal"></i>
                               </a>
                               <ul class="dropdown-menu">
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
+                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Complete</a></li>
+                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Cancel</a></li>
+                                  <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
                               </ul>
                           </div>
                           </div>
-                          <h6 class="mb-1 mt-2">Monday, Jan 1,2023</h6>
-                          <p class="text-muted mb-0">Meeting with a client About new project</p>
+                          <h6 class="mb-1 mt-2">Monday, Oct 23,2023</h6>
+                          <p class="text-muted mb-0">Product Launch</p>
                         </div>
                         </div>
                         <div class="card custom-card">
                         <div class="card-body">
                           <div class="d-flex justify-conent-between">
-                            <span class="fs-14 text-muted"><i class="text-success  bx bxs-circle me-1"></i>11:00-01:00</span>
+                            <span class="fs-14 text-muted"><i class="text-success  bx bxs-circle me-1"></i>09:00pm onwards</span>
                             <div class="dropdown ms-auto">
                               <a href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
                                   <i class="fe fe-more-horizontal"></i>
                               </a>
                               <ul class="dropdown-menu">
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
-                              </ul>
+                                <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Complete</a></li>
+                                <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Cancel</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                            </ul>
                           </div>
                           </div>
-                          <h6 class="mb-1 mt-2">Friday, Jan 20,2023</h6>
-                          <p class="text-muted mb-0">Check about the new design styles</p>
+                          <h6 class="mb-1 mt-2">Monday, Oct 23,2023</h6>
+                          <p class="text-muted mb-0">Onboarding and account setup</p>
                         </div>
                         </div>
                         <div class="card custom-card">
                         <div class="card-body">
                           <div class="d-flex justify-conent-between">
-                            <span class="fs-14 text-muted"><i class="text-info  bx bxs-circle me-1"></i>08:00-12:00</span>
+                            <span class="fs-14 text-muted"><i class="text-danger  bx bxs-circle me-1"></i>09:00am - 09:00pm</span>
                             <div class="dropdown ms-auto">
                               <a href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
                                   <i class="fe fe-more-horizontal"></i>
                               </a>
                               <ul class="dropdown-menu">
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
-                              </ul>
+                                <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Complete</a></li>
+                                <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Cancel</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                            </ul>
                           </div>
                           </div>
-                          <h6 class="mb-1 mt-2">Saturday, Jan 23,2023</h6>
-                          <p class="text-muted mb-0">Trip with School friends</p>
+                          <h6 class="mb-1 mt-2">Sunday, Oct 29,2023</h6>
+                          <p class="text-muted mb-0">Maintenance window</p>
                         </div>
                         </div>
-                        <div class="card custom-card">
-                        <div class="card-body">
-                          <div class="d-flex justify-conent-between">
-                            <span class="fs-14 text-muted"><i class="text-pink  bx bxs-circle me-1"></i>06:00-19:00</span>
-                            <div class="dropdown ms-auto">
-                              <a href="javascript:void(0);" class="p-2 fs-16 text-muted" data-bs-toggle="dropdown">
-                                  <i class="fe fe-more-horizontal"></i>
-                              </a>
-                              <ul class="dropdown-menu">
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Action</a></li>
-                                  <li class="border-bottom"><a class="dropdown-item" href="javascript:void(0);">Another action</a></li>
-                                  <li><a class="dropdown-item" href="javascript:void(0);">Something else here</a></li>
-                              </ul>
-                          </div>
-                          </div>
-                          <h6 class="mb-1 mt-2">Sunday, Jan 24,2023</h6>
-                          <p class="text-muted mb-0">Birthday Party of Alizajohn</p>
-                        </div>
-                        </div>
+
+                        
                     </div>
                 </div>
                 <!--End::row-1 -->

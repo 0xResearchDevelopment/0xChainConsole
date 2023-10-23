@@ -1,4 +1,4 @@
-# 0xChainConsole
+# 0xChainview
 
 Installation: npm install 
 
