@@ -114,9 +114,7 @@ var resendVerifyOtp = async() => {
     )
     .then(res => {
         console.log(res);
-        if(res.status == 201){
-            showToastAlerts('verification-success','alert-success-msg',res.data.message);
-        }
+        showToastAlerts('verification-success','alert-success-msg',res.data.message);
     })
     .catch(err => {
         console.log(err);
@@ -385,7 +383,7 @@ var getUserProfile = () => {
 
                 for (let i = 0; i < subscribedBots.length; i++) {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
-                                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].LAST_TRADED_DATE,
+                                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
                 }
 
