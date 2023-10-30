@@ -176,7 +176,7 @@ var signIn = () => {
         })
         .catch(err => {
             console.log(err.response);
-            showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
+            showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
         });
     }
 };
@@ -412,7 +412,7 @@ var getUserProfile = () => {
                 setTimeout(()=> {
                     location.href = "sign-in-cover.html";
                  }
-                 ,delayInMS);
+                 ,0);
             }
         })
 }

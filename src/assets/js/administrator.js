@@ -137,7 +137,7 @@ var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName,
     tbody.appendChild(row);
 }
 
-var createTableRowsUsers = (userId, emailId, clientId, lastName, address, city, state, country, pin, phone, role, status, createdOn, updatedOn) => {
+var createTableRowsUsers = (userId, emailId, clientId, firstName, lastName, country, phone, role, status, createdOn, updatedOn) => {
     const row = document.createElement('tr');
     let roleText = role == 99 ? 'Admin' : 'User';
     let statusText = status == 1 ? 'Active' : 'Inactive';
@@ -148,8 +148,9 @@ var createTableRowsUsers = (userId, emailId, clientId, lastName, address, city, 
                     <td style = 'font-size: 12px;'>${buttonElement}</td>
                     <td style = 'font-size: 12px;'>${emailId}</td>
                     <td style = 'font-size: 12px;'>${clientId}</td>
+                    <td style = 'font-size: 12px;'>${firstName}</td>
                     <td style = 'font-size: 12px;'>${lastName}</td>
-                    <td style = 'font-size: 12px;'>${address}, ${city}, ${state}, ${country}, ${pin}</td>
+                    <td style = 'font-size: 12px;'>${country}</td>
                     <td style = 'font-size: 12px;'>${phone}</td>
                     <td style = 'font-size: 12px;'>${roleText}</td>
                     <td style = 'font-size: 12px;'>${statusText}</td>
@@ -355,8 +356,7 @@ var loadAdminUsers = () => {
         //showToastAlerts('admin-bots-success', 'alert-success-msg', 'You are eligible to access');
         axios
             .get(
-                //targetEndPointUrlBase + '/api/auth/getAllUsers',
-                'http://localhost:3000/api/auth/getAllUsers',
+                targetEndPointUrlBase + '/api/auth/getAllUsers',
                 {
                     headers: {
                         Authorization: `Bearer ${authToken}`
@@ -373,12 +373,9 @@ var loadAdminUsers = () => {
                             users[i].USER_ID,
                             users[i].EMAIL_ID,
                             users[i].NAME_CLIENT_ID,
+                            users[i].NAME_FIRST,
                             users[i].NAME_LAST,
-                            users[i].ADDRESS,
-                            users[i].CITY,
-                            users[i].STATE,
                             users[i].COUNTRY,
-                            users[i].PINCODE,
                             users[i].PHONE_PRIMARY,
                             users[i].ROLE_CODE,
                             users[i].STATUS,
@@ -395,7 +392,7 @@ var loadAdminUsers = () => {
                 if (err.response.status == 401) {
                     setTimeout(()=> {
                        window.location.href = 'sign-in-cover.html';
-                     }, delayInMS);
+                     }, 0);
                 }
             });
     } else {

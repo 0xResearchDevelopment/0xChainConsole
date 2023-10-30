@@ -105,6 +105,7 @@ var formatGraphData = (rawNetProfitArr) => {
     const rowUserSubBaseNetProfit = document.createElement('tr');
 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
+    //for (let i = rawNetProfitArr.length - 1; i >=0; i--) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         baseNetProfit.push(rawNetProfitArr[i].BASE_NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
@@ -112,6 +113,7 @@ var formatGraphData = (rawNetProfitArr) => {
         //console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); 
 
         if (i == 0) {
+        //if (i == rawNetProfitArr.length - 1) {
             var tdDateLabel = document.createElement('td');
             tdDateLabel.style.fontWeight = 'bold';
             var textDateLabel = document.createTextNode("Date");
@@ -119,7 +121,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowDate.appendChild(tdDateLabel);
 
             var tdNetProfitLabel = document.createElement('td');
-            var textNetProfitLabel = document.createTextNode("Profit %");
+            var textNetProfitLabel = document.createTextNode("Token-Profit %");
             tdNetProfitLabel.appendChild(textNetProfitLabel);
             rowNetProfit.appendChild(tdNetProfitLabel);
 
@@ -129,7 +131,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 
             var tdActiveBotsLabel = document.createElement('td');
-            var textActiveBotsLabel = document.createTextNode("Strategies");
+            var textActiveBotsLabel = document.createTextNode("# of Strategies");
             tdActiveBotsLabel.appendChild(textActiveBotsLabel);
             rowActiveBots.appendChild(tdActiveBotsLabel);
 
@@ -139,12 +141,12 @@ var formatGraphData = (rawNetProfitArr) => {
             rowSubNetProfit.appendChild(tdSubNetProfitLabel);
 
             var tdBaseNetProfitLabel = document.createElement('td');
-            var textBaseNetProfitLabel = document.createTextNode("Base NetProfit");
+            var textBaseNetProfitLabel = document.createTextNode("Base-Profit");
             tdBaseNetProfitLabel.appendChild(textBaseNetProfitLabel);
             rowBaseNetProfit.appendChild(tdBaseNetProfitLabel);
 
             var tdUserSubBaseNetProfitLabel = document.createElement('td');
-            var textUserSubBaseNetProfitLabel = document.createTextNode("User Sub Base NetProfit");
+            var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
             tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
             rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
         }
@@ -209,12 +211,12 @@ var updateChartData = (netProfit, baseNetProfit, XAxisInput) => {
         chart.updateOptions({
             series: [
                 {
-                    name: 'Token Netprofit',
+                    name: 'Token',
                     data: netProfit,
                     type: 'line',
                 },
                 {
-                    name: 'Token Base Netprofit',
+                    name: 'Base',
                     data: baseNetProfit,
                     type: 'line',
                 }
@@ -269,7 +271,7 @@ var chartData = {
             show: false
         },
         dropShadow: {
-            enabled: true,
+            enabled: false,
             enabledOnSeries: undefined,
             top: 5,
             left: 0,
