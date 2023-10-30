@@ -223,7 +223,7 @@ var getTokenStats = (parentPage) => {
         else if(userSubscriptionStatusValue >= 1){
           document.getElementById("id-subscription-box-button").innerHTML = '';
           document.getElementById("staticBackdropLabel").innerHTML = 'Confirmation for Unsubscription of '+botDetails.BOT_NAME;
-          document.getElementById("id-subscription-box-button").innerHTML = pendingWorkflowRequestsCount == 0 ? "<a data-bs-toggle='modal' data-bs-target='#botUnsubscribeModal' class='btn btn-primary'>"+ idSubscriptionBoxButtonText + "</a>"
+          document.getElementById("id-subscription-box-button").innerHTML = pendingWorkflowRequestsCount == 0 ? '<a href="javascript:validateUnsubscribtionTimeframe(\'' + botDetails.SUBSCRIBED_ON + '\')" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>"
                                                                                                               : '<a href="javascript:showErrorToast(\'' + requestSubmittedOn + '\' , \'' + requestSubmittedID + '\')" class="btn btn-primary">'+ idSubscriptionBoxButtonText + "</a>";
         }
         
@@ -832,4 +832,22 @@ var validateModalInputs = () => {
     document.getElementById('unsubscription-submit').disabled = true;
   }
 }
+
+var validateUnsubscribtionTimeframe = (subscribedOn) => {
+
+  var subscribedDate = new Date(subscribedOn.substring(0, 9));
+  var currentDate = new Date();
+
+  subscribedDate.setDate(subscribedDate.getDate() + 30); //adding 30 days to subscribed date
+  console.log("subscribedOn +30 days : "+ subscribedDate);
+  console.log("current date: "+ currentDate);
+
+  if(currentDate > subscribedDate){
+    $("#botUnsubscribeModal").modal('show'); 
+  }
+  else{
+    showToastAlerts('token-stats-error','alert-error-msg',"Unable to Unsubscribe. Your subscription is under 30 days lock-in period. Please contact support team");
+  }
+}
+
 //**************************************************** */

@@ -111,7 +111,6 @@ var createTableRowsProcessed = (reqId, reqType, reqStatus, reqDesc, botId, userE
 //<td style = 'font-size: 12px;'>${botTimeframe}</td>
 //<td style = 'font-size: 12px;'>${botExchange}</td>
     
-
 var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName, botSimulate, botStatus, botBaseIcon, botTokenIcon, createdOn, updatedOn) => {
     const row = document.createElement('tr');
     let botSimulateText = botSimulate == 1 ? 'Yes' : 'No';
@@ -135,6 +134,30 @@ var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName,
 
 
     const tbody = document.getElementById("admin-bots-list-tbody");
+    tbody.appendChild(row);
+}
+
+var createTableRowsUsers = (userId, emailId, clientId, lastName, address, city, state, country, pin, phone, role, status, createdOn, updatedOn) => {
+    const row = document.createElement('tr');
+    let roleText = role == 99 ? 'Admin' : 'User';
+    let statusText = status == 1 ? 'Active' : 'Inactive';
+    let editIconElement = '<a href="javascript:loadUpdateUserModal(\'' + emailId + '\' ,\'' + status + '\', \'' + role + '\',  \'' + clientId + '\');" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-edit-line"></i></a>';
+    let buttonElement = status == 0 ? '<a href="javascript:updateUserData(\'' + emailId + '\' ,1, \'' + role + '\',  \'' + clientId + '\');" class="btn btn-sm btn-info-light">Activate</a>' 
+                            : '<a href="javascript:updateUserData(\'' + emailId + '\' ,0, \'' + role + '\',  \'' + clientId + '\');" class="btn btn-sm btn-danger-light">Deactivate</a>';
+    row.innerHTML = `<td style = 'font-size: 12px;'>${userId} ${editIconElement}</td>
+                    <td style = 'font-size: 12px;'>${buttonElement}</td>
+                    <td style = 'font-size: 12px;'>${emailId}</td>
+                    <td style = 'font-size: 12px;'>${clientId}</td>
+                    <td style = 'font-size: 12px;'>${lastName}</td>
+                    <td style = 'font-size: 12px;'>${address}, ${city}, ${state}, ${country}, ${pin}</td>
+                    <td style = 'font-size: 12px;'>${phone}</td>
+                    <td style = 'font-size: 12px;'>${roleText}</td>
+                    <td style = 'font-size: 12px;'>${statusText}</td>
+                    <td style = 'font-size: 12px;'>${createdOn}</td>
+                    <td style = 'font-size: 12px;'>${updatedOn}</td>`;
+
+
+    const tbody = document.getElementById("admin-users-list-tbody");
     tbody.appendChild(row);
 }
 
@@ -177,6 +200,21 @@ var applyResponsivenessProcessed = () => {
 
 var applyResponsivenessBots = () => {
     $('#adminBotsListDataTable').DataTable({
+        responsive: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: ''
+        },
+        order: [[0, 'desc']],   //Soring by BotID decensing order
+        "pageLength": 25,
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ], dom: 'flirtBlp' //'Bfrtip'
+    });
+};
+
+var applyResponsivenessUsers = () => {
+    $('#adminUsersListDataTable').DataTable({
         responsive: true,
         language: {
             searchPlaceholder: 'Search...',
@@ -253,14 +291,9 @@ var showToastAlerts = (divId, spanId, msg) => {
 };
 
 var loadAdminBots = () => {
-    const profile = JSON.parse(localStorage.getItem('profileObj'));
-    const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
-    document.getElementById("header-user-name").innerHTML = username;
-    document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
-    if(profile.ROLE_CODE == 99){
-        document.getElementById('admin-menu').style.display = 'block';
-    }
+    loadHeaderData();
 
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
     const authToken = localStorage.getItem('authToken');
     if (profile.ROLE_CODE == 99) {
         //showToastAlerts('admin-bots-success', 'alert-success-msg', 'You are eligible to access');
@@ -315,6 +348,62 @@ var loadAdminBots = () => {
 
 var loadAdminUsers = () => {
     loadHeaderData();
+
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
+    const authToken = localStorage.getItem('authToken');
+    if (profile.ROLE_CODE == 99) {
+        //showToastAlerts('admin-bots-success', 'alert-success-msg', 'You are eligible to access');
+        axios
+            .get(
+                //targetEndPointUrlBase + '/api/auth/getAllUsers',
+                'http://localhost:3000/api/auth/getAllUsers',
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                }
+            )
+            .then(res => {
+                if (res.status == 200) {
+                    console.log(res.data);
+                    const users = (res.data.users != undefined && res.data.users != null) ? res.data.users : null;
+
+                    for (let i = 0; i < users.length; i++) {
+                        createTableRowsUsers(
+                            users[i].USER_ID,
+                            users[i].EMAIL_ID,
+                            users[i].NAME_CLIENT_ID,
+                            users[i].NAME_LAST,
+                            users[i].ADDRESS,
+                            users[i].CITY,
+                            users[i].STATE,
+                            users[i].COUNTRY,
+                            users[i].PINCODE,
+                            users[i].PHONE_PRIMARY,
+                            users[i].ROLE_CODE,
+                            users[i].STATUS,
+                            users[i].CREATED_TS,
+                            users[i].UPDATED_TS
+                        );
+                    }
+                    applyResponsivenessUsers();
+                }
+            }).catch(err => {
+                console.log("inside err");
+                console.log(err, err.response);
+                showToastAlerts('admin-users-error','alert-error-msg',err.response.data.message);
+                if (err.response.status == 401) {
+                    setTimeout(()=> {
+                       window.location.href = 'sign-in-cover.html';
+                     }, delayInMS);
+                }
+            });
+    } else {
+        showToastAlerts('admin-users-error', 'alert-error-msg', 'Unauthorized access');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+          }, delayInMS);
+    }
 }
 
 var addBotClicked = () => {
@@ -428,13 +517,14 @@ var resetAddBotInputFields = () => {
 
 var updateBot = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage) => { //parentPage = 0 -> delete request, parentPage = 1 -> update request
 
-    const updatedBot = {
-                    botId: botId,
-                    botSimulate: botSimulate,
-                    botStatus: botStatus,
-                    botBaseIcon: botBaseIcon,
-                    botTokenIcon: botTokenIcon
-                }
+const updatedBot = {
+                botId: botId,
+                botSimulate: botSimulate,
+                botStatus: botStatus,
+                botBaseIcon: botBaseIcon,
+                botTokenIcon: botTokenIcon
+            }
+
 const authToken = localStorage.getItem('authToken');
     axios
         .post(
@@ -527,6 +617,24 @@ var loadUpdateBotModal = (botId,botName,botSimulate,botStatus,botBaseIcon,botTok
     }
 }
 
+var loadUpdateUserModal = (email, userStatus, roleCode, clientId) => {
+    $("#updateUserModal").modal('show'); 
+    if(userStatus == 1){
+        document.getElementById("user-status-active").checked = true;
+    }
+    else if(userStatus == 0){
+        document.getElementById("user-status-inactive").checked = true;
+    }
+
+    document.getElementById('role-code').value = roleCode;
+    document.getElementById('client-id').value = clientId;
+
+    var updateBotButton = document.getElementById("update-user-modal-submit");
+    updateBotButton.onclick = function callValidateUpdateUserInput() {
+        validateUpdateUserInput(email);
+    }
+}
+
 var validateUpdateBotInput = (botId) => {
     document.getElementById('bot-base-icon-empty').style.display = 'none';
     document.getElementById('bot-base-icon').classList.remove("is-invalid");
@@ -552,4 +660,64 @@ var validateUpdateBotInput = (botId) => {
         $("#updateBotModal").modal('hide');
     }
 } 
+
+var validateUpdateUserInput = (email) => {
+    document.getElementById('client-id-empty').style.display = 'none';
+    document.getElementById('client-id').classList.remove("is-invalid");
+    
+    //var botSimulate = document.getElementById("bot-simulate").checked ? 1 : 0;
+    var userStatus = document.querySelector('input[name="user-status-radio"]:checked').value == 'active' ? 1 : 0;
+    var roleCode = document.getElementById('role-code').options[document.getElementById('role-code').selectedIndex].text;
+    var clientId = document.getElementById('client-id').value;
+
+    if(clientId.length == 0){
+        document.getElementById('client-id').classList.add("is-invalid");
+        document.getElementById('client-id-empty').style.display = 'block';
+    }
+
+    if(clientId.length > 0) {
+        updateUserData(email,userStatus,roleCode,clientId);
+        $("#updateUserModal").modal('hide');
+    }
+} 
+
+var updateUserData = (email,status,role,clientId) => {
+    const updatedUserData = {
+                    email: email,
+                    status: status,
+                    role_code: role,
+                    name_client_id: clientId
+                }
+                
+    const authToken = localStorage.getItem('authToken');
+        axios
+            .post(
+                targetEndPointUrlBase +'/api/auth/updateUserData',
+                updatedUserData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
+                }
+            )
+            .then(res => {
+                console.log("res: " + JSON.stringify(res.data));
+                if (res.status == 200) {
+                        showToastAlerts('admin-users-success','alert-success-msg',res.data.message);
+                        setTimeout(()=> {
+                            window.location.href='admin-users.html';
+                        }
+                        ,delayInMS);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                showToastAlerts('admin-users-error','alert-success-msg',err.response.data.message);
+                if (err.response.status == 401) {
+                    setTimeout(()=> {
+                        window.location.href='sign-in-cover.html';
+                    }, delayInMS);
+                }
+            });
+}
 //******************************************* */
