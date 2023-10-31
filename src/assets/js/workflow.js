@@ -88,14 +88,14 @@ var validateInputs = () => {
         document.getElementById('workflow-submit-request').disabled = true;
     }
     if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
-        && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked)
+        && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked
+        && document.getElementById('workflow-lockin').checked)
         {
             document.getElementById('workflow-generate-pdf').disabled = false;
         }
     else{
     document.getElementById('workflow-generate-pdf').disabled = true;
     }
-
 }
 
 var htmlToPdf = () => {
@@ -131,6 +131,7 @@ var submitRequest = () => {
         agreeIpAdded: document.getElementById('workflow-ip-address').checked ? 1 : 0,
         agreeTerms: document.getElementById('workflow-terms').checked ? 1 : 0,
         agreeConsent: document.getElementById('workflow-consent').checked ? 1 : 0,
+        agreeLockInDays: document.getElementById('workflow-lockin').checked ? 1 : 0,
         agreeTermsDocPath: document.getElementById('workflow-file').value,
         botName : botName
     }

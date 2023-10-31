@@ -554,7 +554,6 @@ const authToken = localStorage.getItem('authToken');
         });
 };
 
-
 var deleteBot = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage) => { //TODO: need to implement modal before deleting the bot (its a physical delete)
 
     const updatedBot = {
@@ -659,20 +658,27 @@ var validateUpdateBotInput = (botId) => {
 } 
 
 var validateUpdateUserInput = (email) => {
+    document.getElementById('role-code-empty').style.display = 'none';
+    document.getElementById('role-code').classList.remove("is-invalid");
     document.getElementById('client-id-empty').style.display = 'none';
     document.getElementById('client-id').classList.remove("is-invalid");
     
     //var botSimulate = document.getElementById("bot-simulate").checked ? 1 : 0;
     var userStatus = document.querySelector('input[name="user-status-radio"]:checked').value == 'active' ? 1 : 0;
-    var roleCode = document.getElementById('role-code').options[document.getElementById('role-code').selectedIndex].text;
+    var roleCode = document.getElementById('role-code').value;
     var clientId = document.getElementById('client-id').value;
+
+    if(roleCode.length == 0){
+        document.getElementById('role-code').classList.add("is-invalid");
+        document.getElementById('role-code-empty').style.display = 'block';
+    }
 
     if(clientId.length == 0){
         document.getElementById('client-id').classList.add("is-invalid");
         document.getElementById('client-id-empty').style.display = 'block';
     }
 
-    if(clientId.length > 0) {
+    if(roleCode.length > 0 && clientId.length > 0) {
         updateUserData(email,userStatus,roleCode,clientId);
         $("#updateUserModal").modal('hide');
     }

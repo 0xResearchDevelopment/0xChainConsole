@@ -107,23 +107,16 @@
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label" for="role-code" style="font-weight: bold">Role Code</label>
-                                        <select class="form-select" id="role-code">
-                                            <option value="99">99</option>
-                                            <option value="5">5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                            <option value="0">0</option>
-                                            <option value="-1">-1</option>
-                                            <option value="-2">-2</option>
-                                        </select>
+                                    <input type="number" id="role-code" class="form-control" placeholder="Enter Role code">
+                                    <div class="invalid-feedback" id="role-code-empty" style="display:none;">
+                                        Role code cannot be empty.
+                                    </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
                                     <label class="form-label" for="client-id" style="font-weight: bold">Client Id</label>
                                     <input type="text" id="client-id" class="form-control" placeholder="Enter Client Id">
                                     <div class="invalid-feedback" id="client-id-empty" style="display:none;">
-                                        Client Id cannot be emtpty.
+                                        Client Id cannot be empty.
                                     </div>
                                 </div>
 
@@ -143,10 +136,10 @@
         @SPK@include("partials/side-bar.html")
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     @SPK@include("partials/commonjs.html")
     @SPK@include("partials/custom_switcherjs.html")
     <!-- Jquery Cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
     <!-- Datatables Cdn -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

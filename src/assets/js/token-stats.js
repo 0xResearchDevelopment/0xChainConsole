@@ -1,6 +1,6 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
-
+var rating = 0;
 const botId = localStorage.getItem('botId');
 const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
 const authToken = localStorage.getItem('authToken');
@@ -22,6 +22,7 @@ var formatGraphData = (rawInputArr) => {
   const rowDate = document.createElement('tr');
   const rowNetProfit = document.createElement('tr');
   const rowProfitDiff = document.createElement('tr');
+  const rowBaseProfit = document.createElement('tr');
 
   for (let i = 0; i < rawInputArr.length; i++) {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
@@ -48,6 +49,11 @@ var formatGraphData = (rawInputArr) => {
       var textProfitDiffLabel = document.createTextNode("Change %");
       tdProfitDiffLabel.appendChild(textProfitDiffLabel);
       rowProfitDiff.appendChild(tdProfitDiffLabel);
+
+      var tdBaseProfitLabel= document.createElement('td');
+      var textBaseProfitLabel = document.createTextNode("Base-Profit");
+      tdBaseProfitLabel.appendChild(textBaseProfitLabel);
+      rowBaseProfit.appendChild(tdBaseProfitLabel);
     }
 
     var tdDate = document.createElement('td');
@@ -58,22 +64,27 @@ var formatGraphData = (rawInputArr) => {
 
     var tdNetProfit = document.createElement('td');
     var textNetProfit = document.createTextNode(rawInputArr[i].TOKEN_NETPROFIT+"%");
-    var fontColorNetProfit = rawInputArr[i].NETPROFIT >= 0 ? 'text-success' : 'text-danger';
-    tdNetProfit.classList.add(fontColorNetProfit);
+    tdNetProfit.setAttribute('style',  rawInputArr[i].TOKEN_NETPROFIT >= 0 ? 'color:green !important' : 'color:red !important');
     tdNetProfit.appendChild(textNetProfit);
     rowNetProfit.appendChild(tdNetProfit);
 
     var tdProfitDiff= document.createElement('td');
     var textProfitDiff = document.createTextNode(truncate(profitDifference, 2)+"%");
-    var fontColorProfitDiff = profitDifference >= 0 ? 'text-success' : 'text-danger';
-    tdProfitDiff.classList.add(fontColorProfitDiff);
+    tdProfitDiff.setAttribute('style', profitDifference >= 0 ? 'color:green !important' : 'color:red !important');
     tdProfitDiff.appendChild(textProfitDiff);
     rowProfitDiff.appendChild(tdProfitDiff);
+
+    var tdBaseProfit = document.createElement('td');
+    var textBaseProfit = document.createTextNode(rawInputArr[i].BASE_NETPROFIT+"%");
+    tdBaseProfit.setAttribute('style',  rawInputArr[i].BASE_NETPROFIT >= 0 ? 'color:green !important' : 'color:red !important');
+    tdBaseProfit.appendChild(textBaseProfit);
+    rowBaseProfit.appendChild(tdBaseProfit);
   }
 
   tbody.appendChild(rowDate);
   tbody.appendChild(rowNetProfit);
   tbody.appendChild(rowProfitDiff);
+  tbody.appendChild(rowBaseProfit);
 
   return {
     tokenNetProfit: input1,
@@ -152,6 +163,7 @@ var getTokenStats = (parentPage) => {
     document.getElementById('admin-menu').style.display = 'block';
   }
 
+  loadRateScore();
   console.log("## botId: " + botId + " userSubscriptionStatusValue: " +userSubscriptionStatusValue);
   //const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJuYW1lX2ZpcnN0IjoiU2FkaXNoIiwibmFtZV9sYXN0IjoiViIsImVtYWlsIjoic2FkaXNoLnZAZ21haWwuY29tIn0sImlhdCI6MTY5NTgwODc1MSwiZXhwIjoxNjk1ODEyMzUxfQ.pAhMCZx9hehFfrioJEBaHQ3GvsQ2VXPduKN7QkRtAiE';
   var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
@@ -850,4 +862,367 @@ var validateUnsubscribtionTimeframe = (subscribedOn) => {
   }
 }
 
+var loadRateScore = () => {
+  var targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getRateScore';
+  //var targetEndPointUrl = 'http://localhost:3000/api/subscription/getRateScore';
+  axios.post(
+    //'@API_URL@/api/tradingdata/getTokenStats',
+    targetEndPointUrl,
+    {
+      botId: botId
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    })
+    .then(res => {
+      console.log("### Inside loadAvgRating:res.data: " + res.data);
+      if (res.status == 200) {
+        const rateScore = (res.data.rateScore != undefined && res.data.rateScore != null) ? res.data.rateScore : null;
+
+        document.getElementById("avg-rate-score").innerHTML = rateScore.average;
+        document.getElementById("total-ratings").innerHTML = rateScore.count + ' reviews';
+
+        var star1 = document.getElementById("star1");
+        var star2 = document.getElementById("star2");
+        var star3 = document.getElementById("star3");
+        var star4 = document.getElementById("star4");
+        var star5 = document.getElementById("star5");
+
+        if(rateScore.average > 0 && rateScore.average < 1){
+          star1.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-half-fill");
+        }
+        else if(rateScore.average == 1){
+          star1.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+        }
+        else if(rateScore.average > 1 && rateScore.average < 2){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-half-fill");
+        }
+        else if(rateScore.average == 2){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+        }
+        else if(rateScore.average > 2 && rateScore.average < 3){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-half-fill");
+        }
+        else if(rateScore.average == 3){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-fill");
+        }
+        else if(rateScore.average > 3 && rateScore.average < 4){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star4.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-fill");
+          star4.classList.add("ri-star-half-fill");
+        }
+        else if(rateScore.average == 4){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star4.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-fill");
+          star4.classList.add("ri-star-fill");
+        }
+        else if(rateScore.average > 4 && rateScore.average < 5){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star4.classList.remove("ri-star-line");
+          star5.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-fill");
+          star4.classList.add("ri-star-fill");
+          star5.classList.add("ri-star-half-fill");
+        }
+        else if(rateScore.average == 5){
+          star1.classList.remove("ri-star-line");
+          star2.classList.remove("ri-star-line");
+          star3.classList.remove("ri-star-line");
+          star4.classList.remove("ri-star-line");
+          star5.classList.remove("ri-star-line");
+          star1.classList.add("ri-star-fill");
+          star2.classList.add("ri-star-fill");
+          star3.classList.add("ri-star-fill");
+          star4.classList.add("ri-star-fill");
+          star5.classList.add("ri-star-fill");
+        }
+      }
+    })
+    .catch(err => {
+      console.log("### Inside getTokenStats:err.response", err);
+      showToastAlerts('token-stats-error', 'alert-error-msg', err.response.data.message);
+      if (err.response.status == 401) {
+        setTimeout(() => {
+          window.location.href = 'sign-in-cover.html';
+        }
+          , delayInMS);
+      }
+    });
+};
+
+var loadRatingData = () => {
+  $("#viewRatingsModal").modal('show'); 
+  var targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getRatingData';
+  //var targetEndPointUrl = 'http://localhost:3000/api/subscription/getRatingData';
+  console.log("##loadRatingData##");
+  axios.post(
+    //'@API_URL@/api/tradingdata/getTokenStats',
+    targetEndPointUrl,
+    {
+      botId: botId
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    })
+    .then(res => {
+      console.log("### Inside loadAvgRating:res.data: " + res.data);
+      if (res.status == 200) {
+        const ratingData = (res.data.ratingData != undefined && res.data.ratingData != null) ? res.data.ratingData : null;
+
+        for (let i = 0; i < ratingData.length ; i++) {
+          const divElement = document.createElement("div");
+          divElement.innerHTML = `<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <div class="card custom-card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="avatar avatar-md avatar-rounded me-3">
+                                                    <img src="../assets/images/faces/10.jpg" alt="">
+                                                </span>
+                                                <div>
+                                                    <p class="mb-0 fw-semibold fs-14 text-primary">${ratingData[i].EMAIL_ID}</p>
+                                                    <p class="mb-0 fs-10 fw-semibold text-muted">CHIEF SECRETARY MBIO</p>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <span class="text-muted">- ${ratingData[i].RATE_FEEDBACK} </span>
+                                            </div>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="text-muted">Rating : </span>
+                                                    <span class="text-warning d-block ms-1">
+                                                        <i id="mstar1${i}" class="ri-star-line"></i>
+                                                        <i id="mstar2${i}" class="ri-star-line"></i>
+                                                        <i id="mstar3${i}" class="ri-star-line"></i>
+                                                        <i id="mstar4${i}" class="ri-star-line"></i>
+                                                        <i id="mstar5${i}" class="ri-star-line"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="float-end fs-12 fw-semibold text-muted text-end">
+                                                    <span>${ratingData[i].RATE_TS}</span>
+                                                    <span class="d-block fw-normal fs-12 text-success"><i>${ratingData[i].EMAIL_ID}</i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>`
+        
+          const parentDiv = document.getElementById("reviews-list");
+          parentDiv.appendChild(divElement);
+
+          var star1 = document.getElementById(`mstar1${i}`);
+          var star2 = document.getElementById(`mstar2${i}`);
+          var star3 = document.getElementById(`mstar3${i}`);
+          var star4 = document.getElementById(`mstar4${i}`);
+          var star5 = document.getElementById(`mstar5${i}`);
+
+          if(ratingData[i].RATE_SCORE  == 1){
+            star1.classList.remove("ri-star-line");
+            star1.classList.add("ri-star-fill");
+          }
+          else if(ratingData[i].RATE_SCORE == 2){
+            star1.classList.remove("ri-star-line");
+            star2.classList.remove("ri-star-line");
+            star1.classList.add("ri-star-fill");
+            star2.classList.add("ri-star-fill");
+          }
+          else if(ratingData[i].RATE_SCORE == 3){
+            star1.classList.remove("ri-star-line");
+            star2.classList.remove("ri-star-line");
+            star3.classList.remove("ri-star-line");
+            star1.classList.add("ri-star-fill");
+            star2.classList.add("ri-star-fill");
+            star3.classList.add("ri-star-fill");
+          }
+          else if(ratingData[i].RATE_SCORE == 4){
+            star1.classList.remove("ri-star-line");
+            star2.classList.remove("ri-star-line");
+            star3.classList.remove("ri-star-line");
+            star4.classList.remove("ri-star-line");
+            star1.classList.add("ri-star-fill");
+            star2.classList.add("ri-star-fill");
+            star3.classList.add("ri-star-fill");
+            star4.classList.add("ri-star-fill");
+          }
+          else if(ratingData[i].RATE_SCORE == 5){
+            star1.classList.remove("ri-star-line");
+            star2.classList.remove("ri-star-line");
+            star3.classList.remove("ri-star-line");
+            star4.classList.remove("ri-star-line");
+            star5.classList.remove("ri-star-line");
+            star1.classList.add("ri-star-fill");
+            star2.classList.add("ri-star-fill");
+            star3.classList.add("ri-star-fill");
+            star4.classList.add("ri-star-fill");
+            star5.classList.add("ri-star-fill");
+          }
+        }
+
+      }
+    })
+    .catch(err => {
+      console.log("### Inside getTokenStats:err.response", err);
+      showToastAlerts('token-stats-error', 'alert-error-msg', err.response.data.message);
+      if (err.response.status == 401) {
+        setTimeout(() => {
+          window.location.href = 'sign-in-cover.html';
+        }
+          , delayInMS);
+      }
+    });
+};
+
+var rateStarClicked = (starNo) => {
+  var star1 = document.getElementById('mstar1');
+  var star2 = document.getElementById('mstar2');
+  var star3 = document.getElementById('mstar3');
+  var star4 = document.getElementById('mstar4');
+  var star5 = document.getElementById('mstar5');
+
+  star1.classList.add("ri-star-line");
+  star2.classList.add("ri-star-line");
+  star3.classList.add("ri-star-line");
+  star4.classList.add("ri-star-line");
+  star5.classList.add("ri-star-line");
+
+  if(starNo == 1){
+    star1.classList.remove("ri-star-line");
+    star1.classList.add("ri-star-fill");
+    rating = 1;
+  }
+  else if(starNo == 2){
+    star1.classList.remove("ri-star-line");
+    star2.classList.remove("ri-star-line");
+    star1.classList.add("ri-star-fill");
+    star2.classList.add("ri-star-fill");
+    rating = 2;
+  }
+  else if(starNo == 3){
+    star1.classList.remove("ri-star-line");
+    star2.classList.remove("ri-star-line");
+    star3.classList.remove("ri-star-line");
+    star1.classList.add("ri-star-fill");
+    star2.classList.add("ri-star-fill");
+    star3.classList.add("ri-star-fill");
+    rating = 3;
+  }
+  else if(starNo == 4){
+    star1.classList.remove("ri-star-line");
+    star2.classList.remove("ri-star-line");
+    star3.classList.remove("ri-star-line");
+    star4.classList.remove("ri-star-line");
+    star1.classList.add("ri-star-fill");
+    star2.classList.add("ri-star-fill");
+    star3.classList.add("ri-star-fill");
+    star4.classList.add("ri-star-fill");
+    rating = 4;
+  }
+  else if(starNo == 5){
+    star1.classList.remove("ri-star-line");
+    star2.classList.remove("ri-star-line");
+    star3.classList.remove("ri-star-line");
+    star4.classList.remove("ri-star-line");
+    star5.classList.remove("ri-star-line");
+    star1.classList.add("ri-star-fill");
+    star2.classList.add("ri-star-fill");
+    star3.classList.add("ri-star-fill");
+    star4.classList.add("ri-star-fill");
+    star5.classList.add("ri-star-fill");
+    rating = 5;
+  }
+}
+
+var validateRatingModalInput = () => {
+  document.getElementById('rating-empty').style.display = 'none';
+  document.getElementById('review-empty').style.display = 'none';
+  document.getElementById('review').classList.remove("is-invalid");
+
+  var review = document.getElementById('review').value;
+
+  if(rating == 0){
+    document.getElementById('rating-empty').style.display = 'block';
+  }
+
+  if(review.length == 0){
+      document.getElementById('review').classList.add("is-invalid");
+      document.getElementById('review-empty').style.display = 'block';
+  }
+
+  if(review.length > 0 && rating > 0) {
+    addRatingData(rating, review);
+    $("#giveRatingModal").modal('hide');
+  }
+}
+
+var addRatingData = (rating, review) => {
+
+  const ratingData = {
+    botId: parseInt(botId),
+    rateScore: rating,
+    rateFeeback: review
+  }
+
+  axios
+  .post(
+      targetEndPointUrlBase +'/api/subscription/addRatingData',
+      //'http://localhost:3000/api/subscription/addRatingData',
+      ratingData,
+      {
+          headers: {
+              Authorization: `Bearer ${authToken}`
+          }
+      }
+  )
+  .then(res => {
+      console.log("res: " + JSON.stringify(res.data));
+      if (res.status == 200) {
+              showToastAlerts('token-stats-success','alert-success-msg',res.data.message);
+      }
+      //loadRatingData();
+  })
+  .catch(err => {
+      console.log(err);
+      showToastAlerts('token-stats-error','alert-success-msg',err.response.data.message);
+      if (err.response.status == 401) {
+          setTimeout(()=> {
+              window.location.href='sign-in-cover.html';
+          }, delayInMS);
+      }
+  });
+}
 //**************************************************** */

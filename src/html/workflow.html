@@ -146,6 +146,15 @@
                                     </div>
                                 </div>
 
+                                <!-- Lockin Days -->
+                                <div class="col-xl-12">
+                                    <span><h6>Are you aware of the lock-in days?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="workflow-lockin" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-lockin" class="label-success"></label><span class="ms-3 fs-16 text-danger"> I Agree for 30 days lock-in period</span>
+                                    </div>
+                                </div>
+
                                 <!-- Generate PDF -->
                                 <div class="text-center mt-3 mb-3">
                                     <button class="btn btn-primary btn-wave waves-effect waves-light" id="workflow-generate-pdf" onclick="htmlToPdf()" disabled>Generate PDF</button>

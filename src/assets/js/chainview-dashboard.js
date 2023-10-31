@@ -181,6 +181,7 @@ var formatGraphData = (rawNetProfitArr) => {
 
         var tdBaseNetProfit = document.createElement('td');
         var textBaseNetProfit = document.createTextNode(rawNetProfitArr[i].BASE_NETPROFIT + "%");
+        tdBaseNetProfit.setAttribute('style', rawNetProfitArr[i].BASE_NETPROFIT >= 0 ? 'color:green !important' : 'color:red !important');
         tdBaseNetProfit.appendChild(textBaseNetProfit);
         rowBaseNetProfit.appendChild(tdBaseNetProfit);
 
