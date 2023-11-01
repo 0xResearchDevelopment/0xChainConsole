@@ -314,6 +314,7 @@ var getTodayDate = () => {
 }
 
 var getUserProfile = () => {
+    getAllNotifications();
     const authToken = localStorage.getItem('authToken');
     
     axios
@@ -923,5 +924,111 @@ var updatePassword = () => {
         });
     }   
 };
+
+var getAllNotifications = () => {
+    const authToken = localStorage.getItem('authToken');
+    console.log('##Auth Token##: '+ authToken);
+    var targetEndPointUrl = targetEndPointUrlBase+'/api/auth/getNotifications';
+    //var targetEndPointUrl = 'http://localhost:3000/api/auth/getNotifications';
+    axios
+       .get(
+            targetEndPointUrl,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        )
+       .then(res => {
+            console.log("### Inside getAllNotifications:res.data: " + res.data);
+            if (res.status == 200) {
+                const notifications = (res.data.notifications != undefined && res.data.notifications != null) ? res.data.notifications : null;
+
+                document.getElementById('notification-icon-badge').innerHTML = res.data.notificationCount;
+                document.getElementById('notifiation-data').innerHTML = res.data.notificationCount + ' Unread';
+
+                const listContainer = document.getElementById("header-notification-scroll");
+                listContainer.innerHTML = ''
+
+                for (let i = 0; i < notifications.length ; i++) {
+                //const name = ratingData[i].NAME_DISPLAY != null ? ratingData[i].NAME_DISPLAY != '' ? ratingData[i].NAME_DISPLAY : 'Private User' : 'Private User';
+                const listElement = document.createElement("li");
+                listElement.classList.add("dropdown-item");
+                listElement.innerHTML = `<div class="d-flex align-items-start">
+                                            <div class="pe-2">
+                                                <span class="avatar avatar-md bg-pink-transparent rounded-2"><i class="bx bx-badge-check"></i></span>
+                                            </div>
+                                            <div class="flex-grow-1 d-flex  justify-content-between">
+                                                <div>
+                                                    <p class="mb-0 fw-semibold"><a href="notifications.html">${notifications[i].MODULE}</a></p>
+                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].DESC}</span>
+                                                </div>
+                                                <div class="min-w-fit-content ms-2 text-end">
+                                                    <a aria-label="anchor" href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-14"></i></a>
+                                                    <p class="mb-0 text-muted fs-11"></p>
+                                                </div>
+                                            </div>
+                                        </div>`
+
+                    listContainer.appendChild(listElement);
+                }
+            }
+       })
+       .catch(err => {
+        console.log("### Inside getAllNotifications:err.response", err);
+        showToastAlerts('header-error', 'alert-error-msg', err.response.data.message);
+        if (err.response.status == 401) {
+          setTimeout(() => {
+            window.location.href = 'sign-in-cover.html';
+          }
+            , delayInMS);
+        }
+       });
+};
+
+var readAllNotifications = () => {
+    const authToken = localStorage.getItem('authToken');
+
+    axios
+    .post(
+        targetEndPointUrlBase +'/api/auth/readAllNotifications',
+        //'http://localhost:3000/api/auth/readAllNotifications',
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        }
+    )
+    .then(res => {
+        console.log("##readAllNotifications## - res: " + JSON.stringify(res.data));
+        if (res.status == 200) {
+                //showToastAlerts('index-success','alert-success-msg',res.data.message);
+                console.log('##readAllNotifications## ' + res.data.message);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        showToastAlerts('index-error','alert-success-msg',err.response.data.message);
+        if (err.response.status == 401) {
+            setTimeout(()=> {
+                window.location.href='sign-in-cover.html';
+            }, delayInMS);
+        }
+    });
+};
+
+//for testing upload functionality purpose
+var uploadFile = () => {
+    var formData = new FormData();
+    var imagefile = document.querySelector('#file');
+    formData.append("image", imagefile.files[0]);
+    console.log('formData: '+ formData);
+    axios.post('http://localhost:3000/api/auth/ftp', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    })
+}
 
 //****************************************************************** */

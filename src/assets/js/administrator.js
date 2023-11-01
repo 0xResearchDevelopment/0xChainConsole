@@ -153,6 +153,7 @@ var createTableRowsUsers = (userId, emailId, clientId, firstName, lastName, coun
                     <td style = 'font-size: 12px;'>${country}</td>
                     <td style = 'font-size: 12px;'>${phone}</td>
                     <td style = 'font-size: 12px;'>${roleText}</td>
+                    <td style = 'font-size: 12px;'>${role}</td>
                     <td style = 'font-size: 12px;'>${statusText}</td>
                     <td style = 'font-size: 12px;'>${createdOn}</td>
                     <td style = 'font-size: 12px;'>${updatedOn}</td>`;

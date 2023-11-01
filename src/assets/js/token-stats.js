@@ -881,77 +881,88 @@ var loadRateScore = () => {
       if (res.status == 200) {
         const rateScore = (res.data.rateScore != undefined && res.data.rateScore != null) ? res.data.rateScore : null;
 
-        document.getElementById("avg-rate-score").innerHTML = rateScore.average;
+        document.getElementById("avg-rate-score").innerHTML = rateScore.average == null ? '<i class="fe fe-award"></i>' : rateScore.average;
         document.getElementById("total-ratings").innerHTML = rateScore.count + ' reviews';
-
+        
+        //Resetting all stars to empty starts
         var star1 = document.getElementById("star1");
         var star2 = document.getElementById("star2");
         var star3 = document.getElementById("star3");
         var star4 = document.getElementById("star4");
         var star5 = document.getElementById("star5");
+        star1.className = '';
+        star2.className = '';
+        star3.className = '';
+        star4.className = '';
+        star5.className = '';
+        star1.classList.add("ri-star-line");
+        star2.classList.add("ri-star-line");
+        star3.classList.add("ri-star-line");
+        star4.classList.add("ri-star-line");
+        star5.classList.add("ri-star-line");
 
         if(rateScore.average > 0 && rateScore.average < 1){
-          star1.classList.remove("ri-star-line");
+          star1.className = '';
           star1.classList.add("ri-star-half-fill");
         }
         else if(rateScore.average == 1){
-          star1.classList.remove("ri-star-line");
+          star1.className = '';
           star1.classList.add("ri-star-fill");
         }
         else if(rateScore.average > 1 && rateScore.average < 2){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-half-fill");
         }
         else if(rateScore.average == 2){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
         }
         else if(rateScore.average > 2 && rateScore.average < 3){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-half-fill");
         }
         else if(rateScore.average == 3){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-fill");
         }
         else if(rateScore.average > 3 && rateScore.average < 4){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
-          star4.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
+          star4.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-fill");
           star4.classList.add("ri-star-half-fill");
         }
         else if(rateScore.average == 4){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
-          star4.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
+          star4.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-fill");
           star4.classList.add("ri-star-fill");
         }
         else if(rateScore.average > 4 && rateScore.average < 5){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
-          star4.classList.remove("ri-star-line");
-          star5.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
+          star4.className = '';
+          star5.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-fill");
@@ -959,11 +970,11 @@ var loadRateScore = () => {
           star5.classList.add("ri-star-half-fill");
         }
         else if(rateScore.average == 5){
-          star1.classList.remove("ri-star-line");
-          star2.classList.remove("ri-star-line");
-          star3.classList.remove("ri-star-line");
-          star4.classList.remove("ri-star-line");
-          star5.classList.remove("ri-star-line");
+          star1.className = '';
+          star2.className = '';
+          star3.className = '';
+          star4.className = '';
+          star5.className = '';
           star1.classList.add("ri-star-fill");
           star2.classList.add("ri-star-fill");
           star3.classList.add("ri-star-fill");
@@ -985,10 +996,8 @@ var loadRateScore = () => {
 };
 
 var loadRatingData = () => {
-  $("#viewRatingsModal").modal('show'); 
   var targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getRatingData';
   //var targetEndPointUrl = 'http://localhost:3000/api/subscription/getRatingData';
-  console.log("##loadRatingData##");
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
     targetEndPointUrl,
@@ -1004,19 +1013,22 @@ var loadRatingData = () => {
       console.log("### Inside loadAvgRating:res.data: " + res.data);
       if (res.status == 200) {
         const ratingData = (res.data.ratingData != undefined && res.data.ratingData != null) ? res.data.ratingData : null;
+        
+        const parentDiv = document.getElementById("reviews-list");
+        parentDiv.innerHTML = ''
 
         for (let i = 0; i < ratingData.length ; i++) {
+          const name = ratingData[i].NAME_DISPLAY != null ? ratingData[i].NAME_DISPLAY != '' ? ratingData[i].NAME_DISPLAY : 'Private User' : 'Private User';
           const divElement = document.createElement("div");
           divElement.innerHTML = `<div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12">
                                     <div class="card custom-card">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center mb-3">
                                                 <span class="avatar avatar-md avatar-rounded me-3">
-                                                    <img src="../assets/images/faces/10.jpg" alt="">
+                                                    <img alt="avatar" class="rounded-circle" src="../assets/images/faces/1.jpg">
                                                 </span>
                                                 <div>
-                                                    <p class="mb-0 fw-semibold fs-14 text-primary">${ratingData[i].EMAIL_ID}</p>
-                                                    <p class="mb-0 fs-10 fw-semibold text-muted">CHIEF SECRETARY MBIO</p>
+                                                    <p class="mb-0 fw-semibold fs-14 text-primary">${name}</p>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
@@ -1034,15 +1046,13 @@ var loadRatingData = () => {
                                                     </span>
                                                 </div>
                                                 <div class="float-end fs-12 fw-semibold text-muted text-end">
-                                                    <span>${ratingData[i].RATE_TS}</span>
-                                                    <span class="d-block fw-normal fs-12 text-success"><i>${ratingData[i].EMAIL_ID}</i></span>
+                                                    <span class="d-block fw-normal fs-12 text-success"><i>${ratingData[i].RATE_TS}</i></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                   </div>`
-        
-          const parentDiv = document.getElementById("reviews-list");
+      
           parentDiv.appendChild(divElement);
 
           var star1 = document.getElementById(`mstar1${i}`);
@@ -1191,11 +1201,45 @@ var validateRatingModalInput = () => {
 
 var addRatingData = (rating, review) => {
 
+  //Resetting all stars to empty starts
+  var star1 = document.getElementById('mstar1');
+  var star2 = document.getElementById('mstar2');
+  var star3 = document.getElementById('mstar3');
+  var star4 = document.getElementById('mstar4');
+  var star5 = document.getElementById('mstar5');
+  star1.className = '';
+  star2.className = '';
+  star3.className = '';
+  star4.className = '';
+  star5.className = '';
+  star1.classList.add("ri-star-line");
+  star2.classList.add("ri-star-line");
+  star3.classList.add("ri-star-line");
+  star4.classList.add("ri-star-line");
+  star5.classList.add("ri-star-line");
+
+  //Resetting review value
+  document.getElementById('review').value = '';
+
+  const profileObj = JSON.parse(localStorage.getItem('profileObj'));
+  var displayName = document.querySelector('input[name="display-name-radio"]:checked').value;
+
+  //Choose display name based on provided option
+  if(displayName == 'fullname'){
+    displayName = profileObj.NAME_FIRST + ' ' + profileObj.NAME_LAST;
+  }
+  else if(displayName == 'shortname'){
+    displayName = profileObj.NAME_DISPLAY;
+  }
+
   const ratingData = {
     botId: parseInt(botId),
     rateScore: rating,
-    rateFeeback: review
+    rateFeeback: review,
+    displayName: displayName
   }
+
+  console.log('ratingData: ' + JSON.stringify(ratingData));
 
   axios
   .post(
@@ -1213,7 +1257,7 @@ var addRatingData = (rating, review) => {
       if (res.status == 200) {
               showToastAlerts('token-stats-success','alert-success-msg',res.data.message);
       }
-      //loadRatingData();
+      loadRateScore();
   })
   .catch(err => {
       console.log(err);
