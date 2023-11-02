@@ -1,5 +1,6 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
+var subscribedBots = [];
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -331,7 +332,7 @@ var getUserProfile = () => {
                 console.log(res.data);
                 
                 const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:null;
-                const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
+                subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
                 const userInactiveBotsCountObj = (res.data.userInactiveBotsCount!=undefined && res.data.userInactiveBotsCount!=null)?res.data.userInactiveBotsCount:null;
@@ -1031,4 +1032,33 @@ var uploadFile = () => {
     })
 }
 
+var autocompleteMatch = (input) => {
+    if (input == '') {
+      return [];
+    }
+    var reg = new RegExp(input)
+    return subscribedBots.filter(function(bot) {
+        if (bot.BOT_NAME.match(reg)) {
+          return bot;
+        }
+    });
+}
+
+//Show search box results
+var showSearchResults = (value) => {
+    let bots = autocompleteMatch(value.toUpperCase());
+    const ulist = document.getElementById("search-results-ul");
+    ulist.innerHTML = '';
+    for (i=0; i<bots.length; i++) {
+        const list = document.createElement('li');
+        list.classList.add('p-2','d-flex','align-items-center','text-muted','mb-2','search-app');
+        list.innerHTML = `<a href="javascript:navigateTokenStats(${bots[i].BOT_ID}, ${bots[i].SUBSCRIBE_STATUS})">
+                            <span>
+                                <i class="bx bx-dice-1 me-2 fs-14 bg-primary-transparent p-2 rounded-circle"></i>${bots[i].BOT_NAME}
+                            </span>
+                          </a>`
+        
+        ulist.appendChild(list);
+    }
+}
 //****************************************************************** */
