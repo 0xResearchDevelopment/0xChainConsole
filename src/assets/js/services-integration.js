@@ -20,7 +20,8 @@ var signUp = async () => {
             "name_last": lastName,
             "email": email,
             "password": password,
-            "accountOtpGenerated" : accountOtpGenerated
+            "accountOtpGenerated" : accountOtpGenerated,
+            "endPointUrl" : targetEndPointUrlBase
         };
 
         await axios
