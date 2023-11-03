@@ -1113,7 +1113,7 @@ var uploadProfilePhoto = () => {
               setTimeout(()=> {
                   location.href = "sign-in-cover.html";
                   }
-                  ,delayInMS);
+                  ,0);
           }
       });
   };
