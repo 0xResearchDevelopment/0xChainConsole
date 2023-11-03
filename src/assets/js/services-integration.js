@@ -405,7 +405,8 @@ var getUserProfile = () => {
                   ]);
 
                 const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
-                for (let i = 0; i < recentActivities.length; i++) {
+                let arrSize = recentActivities.length >= 6 ? 6 : recentActivities.length;  //TODO: need to implement to show all activities with more link to a new page
+                for (let i = 0; i < arrSize; i++) {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
@@ -971,7 +972,7 @@ var getAllNotifications = () => {
                                             <div class="flex-grow-1 d-flex  justify-content-between">
                                                 <div>
                                                     <p class="mb-0 fw-semibold"><a href="notifications.html">${notifications[i].DESC}</a></p>
-                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].CREATED_TS}</span>
+                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].CREATED_TS_FMT}</span>
                                                 </div>
                                                 <div class="min-w-fit-content ms-2 text-end">
                                                     <a aria-label="anchor" href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-14"></i></a>

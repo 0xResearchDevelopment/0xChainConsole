@@ -860,13 +860,12 @@ var validateUnsubscribtionTimeframe = (subscribedOn) => {
     $("#botUnsubscribeModal").modal('show'); 
   }
   else{
-    showToastAlerts('token-stats-error','alert-error-msg',"Unable to Unsubscribe. Your subscription is under 30 days lock-in period. Please contact support team");
+    showToastAlerts('token-stats-error','alert-error-msg',"Unable to process your request as this subscription is under 30 days lock-in period. Please contact support team");
   }
 }
 
 var loadRateScore = () => {
   var targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getRateScore';
-  //var targetEndPointUrl = 'http://localhost:3000/api/subscription/getRateScore';
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
     targetEndPointUrl,
@@ -999,7 +998,6 @@ var loadRateScore = () => {
 
 var loadRatingData = () => {
   var targetEndPointUrl = targetEndPointUrlBase+'/api/subscription/getRatingData';
-  //var targetEndPointUrl = 'http://localhost:3000/api/subscription/getRatingData';
   axios.post(
     //'@API_URL@/api/tradingdata/getTokenStats',
     targetEndPointUrl,
@@ -1246,7 +1244,6 @@ var addRatingData = (rating, review) => {
   axios
   .post(
       targetEndPointUrlBase +'/api/subscription/addRatingData',
-      //'http://localhost:3000/api/subscription/addRatingData',
       ratingData,
       {
           headers: {
