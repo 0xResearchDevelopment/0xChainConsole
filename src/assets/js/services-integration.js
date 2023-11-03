@@ -1061,16 +1061,13 @@ var showSearchResults = (value) => {
     ulist.innerHTML = '';
     for (i=0; i<bots.length; i++) {
         const list = document.createElement('li');
-        list.classList.add('p-2','d-flex','align-items-center','text-muted','mb-2','search-app');
+        list.classList.add('p-1','d-flex','align-items-center','text-muted','mb-1','search-app');
         list.innerHTML = `<a href="javascript:navigateTokenStats(${bots[i].BOT_ID}, ${bots[i].SUBSCRIBE_STATUS})">
-                            <span>
-                                <i class="bx bx-dice-1 me-2 fs-14 bg-primary-transparent p-2 rounded-circle"></i>${bots[i].BOT_NAME}
-                            </span>
-                          </a>`
-        
+                                <i><div class='avatar avatar-xs br-0 ms-auto'><span class='fs-12 text-primary'><img src='${bots[i].BOT_TOKEN_ICON}'/></span></div>${bots[i].BOT_NAME}</i>
+                          </a>`;
         ulist.appendChild(list);
     }
-}
+};
 
 var profilePhotoChoosen = (value) => {
     var input = document.getElementById("profile-photo");
@@ -1081,7 +1078,7 @@ var profilePhotoChoosen = (value) => {
       else {
         document.getElementById('profile-upload').disabled = true;
     }
-}
+};
 
 var uploadProfilePhoto = () => {
     var formData = new FormData();
@@ -1112,8 +1109,7 @@ var uploadProfilePhoto = () => {
               showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
               setTimeout(()=> {
                   location.href = "sign-in-cover.html";
-                  }
-                  ,0);
+                  },0);
           }
       });
   };
