@@ -940,7 +940,6 @@ var getAllNotifications = () => {
     const authToken = localStorage.getItem('authToken');
     console.log('##Auth Token##: '+ authToken);
     var targetEndPointUrl = targetEndPointUrlBase+'/api/auth/getNotifications';
-    //var targetEndPointUrl = 'http://localhost:3000/api/auth/getNotifications';
     axios
        .get(
             targetEndPointUrl,
@@ -1003,7 +1002,6 @@ var readAllNotifications = () => {
     axios
     .post(
         targetEndPointUrlBase +'/api/auth/readAllNotifications',
-        //'http://localhost:3000/api/auth/readAllNotifications',
         {},
         {
             headers: {
@@ -1030,17 +1028,17 @@ var readAllNotifications = () => {
 };
 
 //for testing upload functionality purpose
-var uploadFile = () => {
-    var formData = new FormData();
-    var imagefile = document.querySelector('#file');
-    formData.append("image", imagefile.files[0]);
-    console.log('formData: '+ formData);
-    axios.post('http://localhost:3000/api/auth/ftp', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-    })
-}
+// var uploadFile = () => {
+//     var formData = new FormData();
+//     var imagefile = document.querySelector('#file');
+//     formData.append("image", imagefile.files[0]);
+//     console.log('formData: '+ formData);
+//     axios.post(targetEndPointUrlBase+'/api/auth/ftp', formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data'
+//         }
+//     })
+// }
 
 var autocompleteMatch = (input) => {
     if (input == '') {
@@ -1092,7 +1090,6 @@ var uploadProfilePhoto = () => {
      axios
       .post(
           targetEndPointUrlBase +'/api/auth/uploadProfileDoc',
-          //'http://localhost:3000/api/auth/uploadProfileDoc',
           formData,
           {
             headers: {
@@ -1118,5 +1115,6 @@ var uploadProfilePhoto = () => {
                   ,delayInMS);
           }
       });
-  }
+  };
+  
 //****************************************************************** */
