@@ -5,7 +5,7 @@ document.getElementById("personal-details-trigger").onclick= ()=>{
     var firstName = document.getElementById('firstname-add').value;
     var lastName = document.getElementById('lastname-add').value;
     var displayName = document.getElementById('displayname-add').value; //optional
-    var photoUrl = document.getElementById('photourl-add').value;
+    //var photoUrl = document.getElementById('photourl-add').value;
     var primaryPhone = document.getElementById('primary-phoneno-add').value;
     var secondaryPhone = document.getElementById('secondary-phoneno-add').value; //optional
     var clientId = document.getElementById('clientid-add').value; //optional
@@ -23,10 +23,10 @@ document.getElementById("personal-details-trigger").onclick= ()=>{
         document.getElementById('lastname-add').classList.add("is-invalid");
         document.getElementById('lastname-empty').style.display = 'block';
     }
-    if(photoUrl.length == 0){
+  /*   if(photoUrl.length == 0){
         document.getElementById('photourl-add').classList.add("is-invalid");
         document.getElementById('photourl-empty').style.display = 'block';
-    }
+    } */
     if(primaryPhone.length == 0){
         document.getElementById('primary-phoneno-add').classList.add("is-invalid");
         document.getElementById('primary-phoneno-empty').style.display = 'block';
@@ -52,7 +52,7 @@ document.getElementById("personal-details-trigger").onclick= ()=>{
         document.getElementById('country-empty').style.display = 'block';
     }
 
-    if(firstName.length > 0 && lastName.length > 0 && photoUrl.length > 0 && primaryPhone.length > 0 && 
+    if(firstName.length > 0 && lastName.length > 0 && primaryPhone.length > 0 && 
         address.length > 0 && pincode.length > 0 && city.length > 0 && state.length > 0 && country.length > 0) {
         resetInputFields();
         document.getElementById("confirmed-tab").click()
@@ -80,7 +80,7 @@ var resetInputFields = () => {
     document.getElementById('firstname-add').classList.remove("is-invalid");
     document.getElementById('lastname-empty').style.display = 'none';
     document.getElementById('lastname-add').classList.remove("is-invalid");
-    document.getElementById('photourl-empty').style.display = 'none';
+    //document.getElementById('photourl-empty').style.display = 'none';
     document.getElementById('photourl-add').classList.remove("is-invalid");
     document.getElementById('primary-phoneno-empty').style.display = 'none';
     document.getElementById('primary-phoneno-add').classList.remove("is-invalid");

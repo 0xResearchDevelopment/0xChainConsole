@@ -1,5 +1,6 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
+var subscribedBots = [];
 var rating = 0;
 const botId = localStorage.getItem('botId');
 const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
@@ -156,6 +157,7 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
 
 var getTokenStats = (parentPage) => {
   const profileObj = JSON.parse(localStorage.getItem('profileObj'));
+  subscribedBots = (JSON.parse(localStorage.getItem('subscribedBots'))!=undefined && JSON.parse(localStorage.getItem('subscribedBots'))!=null)?JSON.parse(localStorage.getItem('subscribedBots')):[];
   var username = profileObj.NAME_FIRST + " " + profileObj.NAME_LAST;
   document.getElementById("header-user-name").innerHTML = username;
   document.getElementById("header-profile-photo").src = profileObj.PROFILE_PHOTO;
@@ -1269,6 +1271,5 @@ var addRatingData = (rating, review) => {
       }
   });
 };
-
 
 //**************************************************** */

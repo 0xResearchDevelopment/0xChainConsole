@@ -215,12 +215,29 @@
                                                             <label for="displayname-add">Display Name</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xl-12">
+                                                    <div class="col-xl-2">
                                                         <div class="form-floating">
-                                                            <input type="text" class="form-control" id="photourl-add" placeholder="photourl" required>
+                                                            <p class="avatar avatar-xxl avatar-rounded me-3 my-auto"> <!-- set user profile photo here-->
+                                                                <img id="profile-display-photo" src="../assets/images/faces/1.jpg" alt="">
+                                                            </p>
+                                                        </div>   
+                                                    </div>
+                                                    <div class="col-xl-7">
+                                                        <div class="form-floating">
+                                                            <input type="text" class="form-control" id="photourl-add" placeholder="photourl" disabled>
                                                             <label for="photourl-add">Profile Photo</label>
-                                                            <div class="invalid-feedback" id="photourl-empty" style="display:none;">
-                                                                Profile photo URL cannot be emtpty.
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3">
+                                                        <div class="form-floating">
+                                                            <input type="file" class="form-control fs-16" id="profile-photo" style="display: none;" onchange="profilePhotoChoosen()">
+                                                            <div class="row col-xl-12">
+                                                                <div class="col-xl-6">
+                                                                    <label class="btn btn-primary" for="profile-photo">Choose</label>
+                                                                </div>
+                                                                <div class="col-xl-6">
+                                                                    <button class="btn btn-primary" type="button" id="profile-upload" onclick="uploadProfilePhoto()" disabled>Upload</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

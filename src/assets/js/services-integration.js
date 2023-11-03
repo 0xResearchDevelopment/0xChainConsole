@@ -1,6 +1,7 @@
 var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 var subscribedBots = [];
+var profileFilePath = '';
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -355,6 +356,7 @@ var getUserProfile = () => {
                 localStorage.setItem('active_bots_count', userActiveBotsLatestCount);
                 localStorage.setItem('inactive_bots_count', userInactiveBotsLatestCount); //TODO: for the first time page flow to bots-list, so setting this as 0
                 localStorage.setItem('role_code', profile.ROLE_CODE); 
+                localStorage.setItem('subscribedBots', JSON.stringify(subscribedBots));
                 console.log("## roleCode:" + profile.ROLE_CODE + " ACTIVE_BOTS_LATEST:"  + userActiveBotsLatestCount + " userInactiveBotsLatestCount:"+ userInactiveBotsLatestCount);
 
                 //get submitted requests count 
@@ -638,7 +640,8 @@ var loadProfilePage = () => {
                 document.getElementById("lastname-add").value = profile.NAME_LAST;
                 document.getElementById("email-add").value = profile.EMAIL_ID;
                 document.getElementById("displayname-add").value = profile.NAME_DISPLAY;
-                document.getElementById("photourl-add").value = profile.PROFILE_PHOTO;
+                document.getElementById("profile-display-photo").src = profile.PROFILE_PHOTO;
+                //document.getElementById("photourl-add").value = profile.PROFILE_PHOTO;
                 document.getElementById("primary-phoneno-add").value = profile.PHONE_PRIMARY;
                 document.getElementById("secondary-phoneno-add").value = profile.PHONE_SECONDARY;
                 document.getElementById("clientid-add").value = profile.NAME_CLIENT_ID;
@@ -666,7 +669,12 @@ var loadProfilePage = () => {
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            location.href = "sign-in-cover.html";
+            if (err.response.status == 401) {
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+            }
         })
 }
 
@@ -680,13 +688,14 @@ var createBotNameBoxes = (botName) => {
 }
 
 var updateProfile = () => {
+    console.log('profileFilePath: '+ profileFilePath);
     let userRoleCode = document.getElementById("profile-rolecode").innerHTML;
      const userDetails = {
                         name_first: document.getElementById("firstname-add").value,
                         name_last: document.getElementById("lastname-add").value,
                         name_display: document.getElementById("displayname-add").value,
                         name_client_id: document.getElementById("clientid-add").value,
-                        profile_photo: document.getElementById("photourl-add").value,
+                        profile_photo: profileFilePath,
                         address: document.getElementById("address-add").value,
                         city: document.getElementById("city-add").value,
                         state: document.getElementById("state-add").value,
@@ -962,8 +971,8 @@ var getAllNotifications = () => {
                                             </div>
                                             <div class="flex-grow-1 d-flex  justify-content-between">
                                                 <div>
-                                                    <p class="mb-0 fw-semibold"><a href="notifications.html">${notifications[i].MODULE}</a></p>
-                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].DESC}</span>
+                                                    <p class="mb-0 fw-semibold"><a href="notifications.html">${notifications[i].DESC}</a></p>
+                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].CREATED_TS}</span>
                                                 </div>
                                                 <div class="min-w-fit-content ms-2 text-end">
                                                     <a aria-label="anchor" href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-14"></i></a>
@@ -1047,6 +1056,7 @@ var autocompleteMatch = (input) => {
 
 //Show search box results
 var showSearchResults = (value) => {
+    console.log('value: '+ value);
     let bots = autocompleteMatch(value.toUpperCase());
     const ulist = document.getElementById("search-results-ul");
     ulist.innerHTML = '';
@@ -1062,4 +1072,51 @@ var showSearchResults = (value) => {
         ulist.appendChild(list);
     }
 }
+
+var profilePhotoChoosen = (value) => {
+    var input = document.getElementById("profile-photo");
+    document.getElementById("photourl-add").value = input.files[0].name;
+    if(document.getElementById('profile-photo').value.length > 0){
+        document.getElementById('profile-upload').disabled = false;
+      }
+      else {
+        document.getElementById('profile-upload').disabled = true;
+    }
+}
+
+var uploadProfilePhoto = () => {
+    var formData = new FormData();
+    var profilePhoto = document.getElementById('profile-photo');
+    formData.append("file", profilePhoto.files[0]);
+      
+     axios
+      .post(
+          targetEndPointUrlBase +'/api/auth/uploadProfileDoc',
+          //'http://localhost:3000/api/auth/uploadProfileDoc',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+      )
+      .then(res => {
+          console.log("##uploadProfilePhoto## - res: " + JSON.stringify(res.data));
+          profileFilePath = res.data.filepath;
+          document.getElementById('profile-display-photo').src = profileFilePath;
+          if (res.status == 200) {
+              showToastAlerts('update-profile-success','alert-success-msg',res.data.message);
+          }
+      })
+      .catch(err => {
+          console.log(err);
+              if (err.response.status == 401) {
+              showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
+              setTimeout(()=> {
+                  location.href = "sign-in-cover.html";
+                  }
+                  ,delayInMS);
+          }
+      });
+  }
 //****************************************************************** */
