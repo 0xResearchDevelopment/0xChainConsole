@@ -1,7 +1,6 @@
 @SPK@include("partials/mainhead.html")
 
 <link rel="stylesheet" href="../assets/libs/jsvectormap/css/jsvectormap.min.css">
-
 <link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
 
 </head>
@@ -130,6 +129,42 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6">
+                                <div class="card custom-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                <div class="avatar avatar-lg bg-primary-transparent text-primary">
+                                                    <span id="avg-rate-score"><i class="fe fe-award"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="">
+                                                    <p class="mb-0  text-muted">Ratings & Feeback</p>
+                                                </div>
+                                                <div class="flex-between">
+                                                    <h3 class="fs-20 mb-0 font-weight-normal" id="investment">
+                                                        <span class="text-warning d-block ms-1">
+                                                            <i id="star1" class="ri-star-line"></i>
+                                                            <i id="star2" class="ri-star-line"></i>
+                                                            <i id="star3" class="ri-star-line"></i>
+                                                            <i id="star4" class="ri-star-line"></i>
+                                                            <i id="star5" class="ri-star-line"></i>
+                                                        </span>
+                                                    </h3>
+                                                    <span class="text-primary fs-16"
+                                                        id="total-ratings"></span>
+                                                </div>
+                                                <span class="badge bg-blue-transparent" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#giveRatingModal">Leave your rating</span>
+                                                <span class="badge bg-blue-transparent" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#viewRatingsModal" onclick="loadRatingData()">View all ratings</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-xl-6 col-lg-6 col-md-6">
+
                             </div>
                             <div class="col-xl-6">
                                 <div class="card custom-card">
@@ -646,6 +681,84 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade" id="viewRatingsModal" data-bs-backdrop="static"
+                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Customer Reviews</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row reviews-container" id="reviews-list">
+                                <!-- Dynamic elements will be created in runtime-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="giveRatingModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Rating & Feedback</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 mb-1 row">
+                                    <h6 class="text-muted">Please provide your Rating.</h6>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <span class="text-warning d-block ms-1" style="font-size: 25px;">
+                                        <i id="mstar1" class="ri-star-line" onclick="rateStarClicked(1)" style="cursor: pointer;"></i>
+                                        <i id="mstar2" class="ri-star-line" onclick="rateStarClicked(2)" style="cursor: pointer;"></i>
+                                        <i id="mstar3" class="ri-star-line" onclick="rateStarClicked(3)" style="cursor: pointer;"></i>
+                                        <i id="mstar4" class="ri-star-line" onclick="rateStarClicked(4)" style="cursor: pointer;"></i>
+                                        <i id="mstar5" class="ri-star-line" onclick="rateStarClicked(5)" style="cursor: pointer;"></i>
+                                    </span>
+                                    <div class="invalid-feedback" id="rating-empty" style="display:none;">
+                                        1 star rating is minimum.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <textarea type="text" id="review" class="form-control" placeholder="Please provide your review"></textarea>
+                                    <div class="invalid-feedback" id="review-empty" style="display:none;">
+                                        Review code cannot be empty.
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-3 mb-3">
+                                    <label class="form-label">Display your name as:</label>
+                                </div>
+                                <div class="col-md-8 mt-3 mb-3 row">
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="display-name-radio" value="fullname" id="display-name-fullname" checked="">
+                                        <label class="form-check-label text-muted" for="display-name-fullname">
+                                            Full Name
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="display-name-radio"  value="shortname" id="display-name-shortname">
+                                        <label class="form-check-label text-muted" for="display-name-shortname">
+                                            Short Name
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-outline-primary" onclick="validateRatingModalInput()">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- End::app-content -->
 
@@ -681,6 +794,9 @@
     <!-- API Integration & functionalities-->
     <script src="../assets/js/token-stats.js"></script>
     <!--<script src="../assets/js/services-integration.js"></script>-->
+    
+    <!-- Jquery Cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
 </body>
 

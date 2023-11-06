@@ -1,5 +1,7 @@
 var delayInMS = 3000;
-var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
+var targetEndPointUrlBase = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live';
+var subscribedBots = [];
+var profileFilePath = '';
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -19,7 +21,8 @@ var signUp = async () => {
             "name_last": lastName,
             "email": email,
             "password": password,
-            "accountOtpGenerated" : accountOtpGenerated
+            "accountOtpGenerated" : accountOtpGenerated,
+            "endPointUrl" : targetEndPointUrlBase
         };
 
         await axios
@@ -176,7 +179,7 @@ var signIn = () => {
         })
         .catch(err => {
             console.log(err.response);
-            showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
+            showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
         });
     }
 };
@@ -314,6 +317,7 @@ var getTodayDate = () => {
 }
 
 var getUserProfile = () => {
+    getAllNotifications();
     const authToken = localStorage.getItem('authToken');
     
     axios
@@ -330,7 +334,7 @@ var getUserProfile = () => {
                 console.log(res.data);
                 
                 const profile = (res.data.profile!=undefined && res.data.profile!=null)?res.data.profile:null;
-                const subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
+                subscribedBots = (res.data.subscribedBots!=undefined && res.data.subscribedBots!=null)?res.data.subscribedBots:null;
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
                 const userInactiveBotsCountObj = (res.data.userInactiveBotsCount!=undefined && res.data.userInactiveBotsCount!=null)?res.data.userInactiveBotsCount:null;
@@ -352,6 +356,7 @@ var getUserProfile = () => {
                 localStorage.setItem('active_bots_count', userActiveBotsLatestCount);
                 localStorage.setItem('inactive_bots_count', userInactiveBotsLatestCount); //TODO: for the first time page flow to bots-list, so setting this as 0
                 localStorage.setItem('role_code', profile.ROLE_CODE); 
+                localStorage.setItem('subscribedBots', JSON.stringify(subscribedBots));
                 console.log("## roleCode:" + profile.ROLE_CODE + " ACTIVE_BOTS_LATEST:"  + userActiveBotsLatestCount + " userInactiveBotsLatestCount:"+ userInactiveBotsLatestCount);
 
                 //get submitted requests count 
@@ -400,7 +405,8 @@ var getUserProfile = () => {
                   ]);
 
                 const recentActivities = (res.data.userRecentActivities!=undefined)?res.data.userRecentActivities:[];
-                for (let i = 0; i < recentActivities.length; i++) {
+                let arrSize = recentActivities.length >= 6 ? 6 : recentActivities.length;  //TODO: need to implement to show all activities with more link to a new page
+                for (let i = 0; i < arrSize; i++) {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
@@ -412,7 +418,7 @@ var getUserProfile = () => {
                 setTimeout(()=> {
                     location.href = "sign-in-cover.html";
                  }
-                 ,delayInMS);
+                 ,0);
             }
         })
 }
@@ -635,7 +641,8 @@ var loadProfilePage = () => {
                 document.getElementById("lastname-add").value = profile.NAME_LAST;
                 document.getElementById("email-add").value = profile.EMAIL_ID;
                 document.getElementById("displayname-add").value = profile.NAME_DISPLAY;
-                document.getElementById("photourl-add").value = profile.PROFILE_PHOTO;
+                document.getElementById("profile-display-photo").src = profile.PROFILE_PHOTO;
+                //document.getElementById("photourl-add").value = profile.PROFILE_PHOTO;
                 document.getElementById("primary-phoneno-add").value = profile.PHONE_PRIMARY;
                 document.getElementById("secondary-phoneno-add").value = profile.PHONE_SECONDARY;
                 document.getElementById("clientid-add").value = profile.NAME_CLIENT_ID;
@@ -663,7 +670,12 @@ var loadProfilePage = () => {
         }).catch(err => {
             console.log("inside err");
             console.log(err, err.response);
-            location.href = "sign-in-cover.html";
+            if (err.response.status == 401) {
+                setTimeout(()=> {
+                    location.href = "sign-in-cover.html";
+                 }
+                 ,delayInMS);
+            }
         })
 }
 
@@ -677,13 +689,14 @@ var createBotNameBoxes = (botName) => {
 }
 
 var updateProfile = () => {
+    console.log('profileFilePath: '+ profileFilePath);
     let userRoleCode = document.getElementById("profile-rolecode").innerHTML;
      const userDetails = {
                         name_first: document.getElementById("firstname-add").value,
                         name_last: document.getElementById("lastname-add").value,
                         name_display: document.getElementById("displayname-add").value,
                         name_client_id: document.getElementById("clientid-add").value,
-                        profile_photo: document.getElementById("photourl-add").value,
+                        profile_photo: profileFilePath,
                         address: document.getElementById("address-add").value,
                         city: document.getElementById("city-add").value,
                         state: document.getElementById("state-add").value,
@@ -924,4 +937,181 @@ var updatePassword = () => {
     }   
 };
 
+var getAllNotifications = () => {
+    const authToken = localStorage.getItem('authToken');
+    console.log('##Auth Token##: '+ authToken);
+    var targetEndPointUrl = targetEndPointUrlBase+'/api/auth/getNotifications';
+    axios
+       .get(
+            targetEndPointUrl,
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        )
+       .then(res => {
+            console.log("### Inside getAllNotifications:res.data: " + res.data);
+            if (res.status == 200) {
+                const notifications = (res.data.notifications != undefined && res.data.notifications != null) ? res.data.notifications : null;
+
+                document.getElementById('notification-icon-badge').innerHTML = res.data.notificationCount;
+                document.getElementById('notifiation-data').innerHTML = res.data.notificationCount + ' Unread';
+
+                const listContainer = document.getElementById("header-notification-scroll");
+                listContainer.innerHTML = ''
+
+                for (let i = 0; i < notifications.length ; i++) {
+                //const name = ratingData[i].NAME_DISPLAY != null ? ratingData[i].NAME_DISPLAY != '' ? ratingData[i].NAME_DISPLAY : 'Private User' : 'Private User';
+                const listElement = document.createElement("li");
+                listElement.classList.add("dropdown-item");
+                listElement.innerHTML = `<div class="d-flex align-items-start">
+                                            <div class="pe-2">
+                                                <span class="avatar avatar-md bg-pink-transparent rounded-2"><i class="bx bx-badge-check"></i></span>
+                                            </div>
+                                            <div class="flex-grow-1 d-flex  justify-content-between">
+                                                <div>
+                                                    <p class="mb-0 fw-semibold"><a href="notifications.html">${notifications[i].DESC}</a></p>
+                                                    <span class="fs-12 text-muted fw-normal  header-notification-text">${notifications[i].CREATED_TS_FMT}</span>
+                                                </div>
+                                                <div class="min-w-fit-content ms-2 text-end">
+                                                    <a aria-label="anchor" href="javascript:void(0);" class="min-w-fit-content text-muted me-1 dropdown-item-close1"><i class="ti ti-x fs-14"></i></a>
+                                                    <p class="mb-0 text-muted fs-11"></p>
+                                                </div>
+                                            </div>
+                                        </div>`
+
+                    listContainer.appendChild(listElement);
+                }
+            }
+       })
+       .catch(err => {
+        console.log("### Inside getAllNotifications:err.response", err);
+        showToastAlerts('header-error', 'alert-error-msg', err.response.data.message);
+        if (err.response.status == 401) {
+          setTimeout(() => {
+            window.location.href = 'sign-in-cover.html';
+          }
+            , delayInMS);
+        }
+       });
+};
+
+var readAllNotifications = () => {
+    const authToken = localStorage.getItem('authToken');
+
+    axios
+    .post(
+        targetEndPointUrlBase +'/api/auth/readAllNotifications',
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        }
+    )
+    .then(res => {
+        console.log("##readAllNotifications## - res: " + JSON.stringify(res.data));
+        if (res.status == 200) {
+                //showToastAlerts('index-success','alert-success-msg',res.data.message);
+                console.log('##readAllNotifications## ' + res.data.message);
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        showToastAlerts('index-error','alert-success-msg',err.response.data.message);
+        if (err.response.status == 401) {
+            setTimeout(()=> {
+                window.location.href='sign-in-cover.html';
+            }, delayInMS);
+        }
+    });
+};
+
+//for testing upload functionality purpose
+// var uploadFile = () => {
+//     var formData = new FormData();
+//     var imagefile = document.querySelector('#file');
+//     formData.append("image", imagefile.files[0]);
+//     console.log('formData: '+ formData);
+//     axios.post(targetEndPointUrlBase+'/api/auth/ftp', formData, {
+//         headers: {
+//           'Content-Type': 'multipart/form-data'
+//         }
+//     })
+// }
+
+var autocompleteMatch = (input) => {
+    if (input == '') {
+      return [];
+    }
+    var reg = new RegExp(input)
+    return subscribedBots.filter(function(bot) {
+        if (bot.BOT_NAME.match(reg)) {
+          return bot;
+        }
+    });
+}
+
+//Show search box results
+var showSearchResults = (value) => {
+    console.log('value: '+ value);
+    let bots = autocompleteMatch(value.toUpperCase());
+    const ulist = document.getElementById("search-results-ul");
+    ulist.innerHTML = '';
+    for (i=0; i<bots.length; i++) {
+        const list = document.createElement('li');
+        list.classList.add('p-1','d-flex','align-items-center','text-muted','mb-1','search-app');
+        list.innerHTML = `<a href="javascript:navigateTokenStats(${bots[i].BOT_ID}, ${bots[i].SUBSCRIBE_STATUS})">
+                                <i><div class='avatar avatar-xs br-0 ms-auto'><span class='fs-12 text-primary'><img src='${bots[i].BOT_TOKEN_ICON}'/></span></div>${bots[i].BOT_NAME}</i>
+                          </a>`;
+        ulist.appendChild(list);
+    }
+};
+
+var profilePhotoChoosen = (value) => {
+    var input = document.getElementById("profile-photo");
+    document.getElementById("photourl-add").value = input.files[0].name;
+    if(document.getElementById('profile-photo').value.length > 0){
+        document.getElementById('profile-upload').disabled = false;
+      }
+      else {
+        document.getElementById('profile-upload').disabled = true;
+    }
+};
+
+var uploadProfilePhoto = () => {
+    var formData = new FormData();
+    var profilePhoto = document.getElementById('profile-photo');
+    formData.append("file", profilePhoto.files[0]);
+      
+     axios
+      .post(
+          targetEndPointUrlBase +'/api/auth/uploadProfileDoc',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+      )
+      .then(res => {
+          console.log("##uploadProfilePhoto## - res: " + JSON.stringify(res.data));
+          profileFilePath = res.data.filepath;
+          document.getElementById('profile-display-photo').src = profileFilePath;
+          if (res.status == 200) {
+              showToastAlerts('update-profile-success','alert-success-msg',res.data.message);
+          }
+      })
+      .catch(err => {
+          console.log(err);
+              if (err.response.status == 401) {
+              showToastAlerts('update-profile-error','alert-error-msg',err.response.data.message);
+              setTimeout(()=> {
+                  location.href = "sign-in-cover.html";
+                  },0);
+          }
+      });
+  };
+  
 //****************************************************************** */

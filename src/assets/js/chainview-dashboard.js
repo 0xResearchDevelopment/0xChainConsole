@@ -1,4 +1,4 @@
-var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
+var targetEndPointUrlBase = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live';
 //API call : Get User Profile
 var loadChartData = () => {
     const authToken = localStorage.getItem('authToken');
@@ -27,8 +27,9 @@ var loadChartData = () => {
 
                 var graphData = formatGraphData(netProfitHourly);
                 inputNetprofit = graphData.netProfitArray;
+                inputBaseNetprofit = graphData.baseNetProfitArray;
                 inputXAxisData = graphData.xAxisDataArray;
-                updateChartData(inputNetprofit, inputXAxisData);
+                updateChartData(inputNetprofit, inputBaseNetprofit, inputXAxisData);
             }
         }).catch(err => {
             console.log("inside err");
@@ -89,6 +90,7 @@ function truncate (num, places) {
 
 var formatGraphData = (rawNetProfitArr) => {
     var netProfit = [];
+    var baseNetProfit = [];
     var xAxisData = [];
     var profitDifference = 0; 
 
@@ -99,14 +101,19 @@ var formatGraphData = (rawNetProfitArr) => {
     const rowProfitDiff = document.createElement('tr');
     const rowActiveBots = document.createElement('tr');
     const rowSubNetProfit = document.createElement('tr');
+    const rowBaseNetProfit = document.createElement('tr');
+    const rowUserSubBaseNetProfit = document.createElement('tr');
 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
+    //for (let i = rawNetProfitArr.length - 1; i >=0; i--) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
+        baseNetProfit.push(rawNetProfitArr[i].BASE_NETPROFIT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
         profitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
         //console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); 
 
         if (i == 0) {
+        //if (i == rawNetProfitArr.length - 1) {
             var tdDateLabel = document.createElement('td');
             tdDateLabel.style.fontWeight = 'bold';
             var textDateLabel = document.createTextNode("Date");
@@ -114,7 +121,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowDate.appendChild(tdDateLabel);
 
             var tdNetProfitLabel = document.createElement('td');
-            var textNetProfitLabel = document.createTextNode("Profit %");
+            var textNetProfitLabel = document.createTextNode("Token-Profit %");
             tdNetProfitLabel.appendChild(textNetProfitLabel);
             rowNetProfit.appendChild(tdNetProfitLabel);
 
@@ -124,7 +131,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 
             var tdActiveBotsLabel = document.createElement('td');
-            var textActiveBotsLabel = document.createTextNode("Strategies");
+            var textActiveBotsLabel = document.createTextNode("# of Strategies");
             tdActiveBotsLabel.appendChild(textActiveBotsLabel);
             rowActiveBots.appendChild(tdActiveBotsLabel);
 
@@ -132,6 +139,16 @@ var formatGraphData = (rawNetProfitArr) => {
             var textSubNetProfitLabel = document.createTextNode("Total Profit");
             tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
             rowSubNetProfit.appendChild(tdSubNetProfitLabel);
+
+            var tdBaseNetProfitLabel = document.createElement('td');
+            var textBaseNetProfitLabel = document.createTextNode("Base-Profit");
+            tdBaseNetProfitLabel.appendChild(textBaseNetProfitLabel);
+            rowBaseNetProfit.appendChild(tdBaseNetProfitLabel);
+
+            var tdUserSubBaseNetProfitLabel = document.createElement('td');
+            var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
+            tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
+            rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
         }
 
         var tdDate = document.createElement('td');
@@ -141,16 +158,14 @@ var formatGraphData = (rawNetProfitArr) => {
         rowDate.appendChild(tdDate);
 
         var tdNetProfit = document.createElement('td');
-        var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT+ "%");
-        var fontColorNetProfit = rawNetProfitArr[i].NETPROFIT >= 0 ? "text-success" : "text-danger";
-        tdNetProfit.classList.add(fontColorNetProfit);
+        var textNetProfit = document.createTextNode(rawNetProfitArr[i].NETPROFIT+ "%");;
+        tdNetProfit.setAttribute('style', rawNetProfitArr[i].NETPROFIT >= 0 ? 'color:green !important' : 'color:red !important');
         tdNetProfit.appendChild(textNetProfit);
         rowNetProfit.appendChild(tdNetProfit);
 
         var tdProfitDiff = document.createElement('td');
         var textProfitDiff = document.createTextNode(truncate(profitDifference, 2)+ "%");
-        var fontColorProfitDiff = profitDifference >= 0 ? "text-success" : "text-danger";
-        tdProfitDiff.classList.add(fontColorProfitDiff);
+        tdProfitDiff.setAttribute('style', profitDifference >= 0 ? 'color:green !important' : 'color:red !important');
         tdProfitDiff.appendChild(textProfitDiff);
         rowProfitDiff.appendChild(tdProfitDiff);
 
@@ -163,6 +178,17 @@ var formatGraphData = (rawNetProfitArr) => {
         var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
         tdSubNetProfit.appendChild(textSubNetProfit);
         rowSubNetProfit.appendChild(tdSubNetProfit);
+
+        var tdBaseNetProfit = document.createElement('td');
+        var textBaseNetProfit = document.createTextNode(rawNetProfitArr[i].BASE_NETPROFIT + "%");
+        tdBaseNetProfit.setAttribute('style', rawNetProfitArr[i].BASE_NETPROFIT >= 0 ? 'color:green !important' : 'color:red !important');
+        tdBaseNetProfit.appendChild(textBaseNetProfit);
+        rowBaseNetProfit.appendChild(tdBaseNetProfit);
+
+        var tdUserSubBaseNetProfit = document.createElement('td');
+        var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
+        tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
+        rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
     }
 
     tbody.appendChild(rowDate);
@@ -170,21 +196,29 @@ var formatGraphData = (rawNetProfitArr) => {
     tbody.appendChild(rowProfitDiff);
     tbody.appendChild(rowActiveBots);
     tbody.appendChild(rowSubNetProfit);
+    tbody.appendChild(rowBaseNetProfit);
+    tbody.appendChild(rowUserSubBaseNetProfit);
 
     return {
         netProfitArray: netProfit,
+        baseNetProfitArray: baseNetProfit,
         xAxisDataArray: xAxisData
     };
 };
 
-var updateChartData = (dataInput, XAxisInput) => {
+var updateChartData = (netProfit, baseNetProfit, XAxisInput) => {
     var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
         chart.render();
         chart.updateOptions({
             series: [
                 {
-                    name: 'Token Netprofit',
-                    data: dataInput,
+                    name: 'Token',
+                    data: netProfit,
+                    type: 'line',
+                },
+                {
+                    name: 'Base',
+                    data: baseNetProfit,
                     type: 'line',
                 }
             ],
@@ -224,10 +258,12 @@ var netProfitDaily = [];
 var netProfitMonthly = [];
 
 var inputNetprofit = [];
+var inputBaseNetprofit = [];
 var inputXAxisData = [];
 
 console.log("1: ",inputNetprofit);
-console.log("2: ",inputXAxisData);
+console.log("2: ",inputBaseNetprofit);
+console.log("3: ",inputXAxisData);
 
 var chartData = {
     chart: {
@@ -236,7 +272,7 @@ var chartData = {
             show: false
         },
         dropShadow: {
-            enabled: true,
+            enabled: false,
             enabledOnSeries: undefined,
             top: 5,
             left: 0,
@@ -283,12 +319,17 @@ var chartData = {
             name: 'Token Netprofit',
             data: inputNetprofit,
             type: 'line',
+        },
+        {
+            name: 'Token Base Netprofit',
+            data: inputBaseNetprofit,
+            type: 'line',
         }],
-    colors: ["rgba(15, 75, 160, 0.95)",], //setting line color here
+    colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)"], //setting line color here
     fill: {
-        type: ['gradient'],
+        type: ['gradient','gradient'],
         gradient: {
-            gradientToColors: ['#4776E6']
+            gradientToColors: ['#4776E6','#F5B849']
         },
     },
     yaxis: {
@@ -347,7 +388,7 @@ document.getElementById("earnings").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
 chart.render();
 
-updateChartData(inputNetprofit,inputXAxisData);
+updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
 
 function earnings() {
     chart.updateOptions({
@@ -361,25 +402,28 @@ var changeLayout = (layout) => {
     if(layout == 2){
         var graphData = formatGraphData(netProfitMonthly);
         inputNetprofit = graphData.netProfitArray;
+        inputBaseNetprofit = graphData.baseNetProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Monthly";
     }
     else if(layout == 1){
         var graphData = formatGraphData(netProfitDaily);
         inputNetprofit = graphData.netProfitArray;
+        inputBaseNetprofit = graphData.baseNetProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Daily";
     }
     else {
         var graphData = formatGraphData(netProfitHourly);
         inputNetprofit = graphData.netProfitArray;
+        inputBaseNetprofit = graphData.baseNetProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Hourly";
     }
 };

@@ -39,19 +39,21 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th> 
-                                            <th scope="col">Photo</th> 
+                                            <th scope="col">Action</th> 
                                             <th scope="col">Email ID</th> 
-                                            <th scope="col">Clinet ID</th> 
+                                            <th scope="col">Client ID</th> 
+                                            <th scope="col">First Name</th> 
                                             <th scope="col">Last Name</th> 
-                                            <th scope="col">Address</th> <!-- Address, City, Stats, County, pin -->
+                                            <th scope="col">Country</th> <!-- Address, City, Stats, County, pin -->
                                             <th scope="col">Phone</th> 
                                             <th scope="col">Role</th> <!-- 99 - admin, otherwsie as user-->
+                                            <th scope="col">Role Code</th>
                                             <th scope="col">Status</th> <!-- Active or Inactive : 1 - Active-->
                                             <th scope="col">Created On</th> 
                                             <th scope="col">Updated On</th>
                                         </tr>
                                     </thead>
-                                   <tbody id="workflow-users-list-tbody"></tbody>
+                                   <tbody id="admin-users-list-tbody"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -60,7 +62,7 @@
                 <!-- End:: row-2 -->
             </div>
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
-                <div id="process-stats-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="admin-users-error" class="toast colored-toast text-bg-secondary" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
                             <span id="alert-error-msg" class='fs-18'></span>
@@ -70,10 +72,60 @@
             </div>
         
             <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
-                <div id="process-stats-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="admin-users-success" class="toast colored-toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body">
                             <span id="alert-success-msg" class='fs-18'></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="updateUserModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="staticBackdropLabel">Update User</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 mb-3 row">
+                                    <label class="form-label" style="font-weight: bold">User Status</label>
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="user-status-radio" value="active" id="user-status-active">
+                                        <label class="form-check-label text-muted" for="user-status-active">
+                                            Active
+                                        </label>
+                                    </div>
+                                    <div class="form-check col-md-5" style="margin-left: 1rem;">
+                                        <input class="form-check-input" type="radio" name="user-status-radio"  value="inactive" id="user-status-inactive">
+                                        <label class="form-check-label text-muted" for="user-status-inactive">
+                                            Inactive
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="role-code" style="font-weight: bold">Role Code</label>
+                                    <input type="number" id="role-code" class="form-control" placeholder="Enter Role code">
+                                    <div class="invalid-feedback" id="role-code-empty" style="display:none;">
+                                        Role code cannot be empty.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="client-id" style="font-weight: bold">Client Id</label>
+                                    <input type="text" id="client-id" class="form-control" placeholder="Enter Client Id">
+                                    <div class="invalid-feedback" id="client-id-empty" style="display:none;">
+                                        Client Id cannot be empty.
+                                    </div>
+                                </div>
+
+                            </div>  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                            <button type="button" class="btn btn-outline-primary" id="update-user-modal-submit">Submit</button>
                         </div>
                     </div>
                 </div>
@@ -85,10 +137,10 @@
         @SPK@include("partials/side-bar.html")
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     @SPK@include("partials/commonjs.html")
     @SPK@include("partials/custom_switcherjs.html")
     <!-- Jquery Cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
     <!-- Datatables Cdn -->
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>

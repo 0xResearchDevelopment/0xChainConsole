@@ -146,6 +146,15 @@
                                     </div>
                                 </div>
 
+                                <!-- Lockin Days -->
+                                <div class="col-xl-12">
+                                    <span><h6>Are you aware of the lock-in days?</h6></span>
+                                    <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
+                                        <input id="workflow-lockin" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
+                                        <label for="workflow-lockin" class="label-success"></label><span class="ms-3 fs-16 text-danger" id="workflow-lockin-text"> I Agree for 30 days lock-in period</span>
+                                    </div>
+                                </div>
+
                                 <!-- Generate PDF -->
                                 <div class="text-center mt-3 mb-3">
                                     <button class="btn btn-primary btn-wave waves-effect waves-light" id="workflow-generate-pdf" onclick="htmlToPdf()" disabled>Generate PDF</button>
@@ -155,8 +164,8 @@
                                 <div class="col-xl-12">
                                     <span><h6>Download, Sign and upload your consent document (PDF only)</h6></span>
                                     <div class="input-group mb-3">
-                                        <input type="file" class="form-control  fs-16" id="workflow-file" oninput="validateInputs()">
-                                        <label class="input-group-text fs-16 text-danger" for="workflow-file">Upload</label>
+                                        <input type="file" class="form-control fs-16" id="workflow-file" oninput="validateInputs()">
+                                        <button class="btn btn-primary" type="button" id="workflow-upload" onclick="uploadSubscriptionDoc()" disabled>Upload</button>
                                     </div>
                                 </div>
 

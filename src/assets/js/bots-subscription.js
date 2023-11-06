@@ -1,5 +1,6 @@
 var delayInMS = 3000;
-var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
+var targetEndPointUrlBase = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live';
+var subscribedBots = [];
 
 function truncate (num, places) {
   return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
@@ -7,6 +8,7 @@ function truncate (num, places) {
 
 var loadBotSummaryData = () => {
     const profile = JSON.parse(localStorage.getItem('profileObj'));
+    subscribedBots = (JSON.parse(localStorage.getItem('subscribedBots'))!=undefined && JSON.parse(localStorage.getItem('subscribedBots'))!=null)?JSON.parse(localStorage.getItem('subscribedBots')):[];
     const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
     document.getElementById("header-user-name").innerHTML = username;
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
@@ -169,7 +171,6 @@ var navigateBotStats = (botId, userSubscriptionStatusActiveInactive) => {
     }
     location.href = "bot-stats.html";
 };
-
 
 var applyResponsiveness = (arrSize) => {
     $('#botsListResponsiveDataTable').DataTable({
