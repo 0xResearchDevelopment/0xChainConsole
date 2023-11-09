@@ -1081,9 +1081,14 @@ var profilePhotoChoosen = (value) => {
 };
 
 var uploadProfilePhoto = () => {
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
     var formData = new FormData();
-    var profilePhoto = document.getElementById('profile-photo');
-    formData.append("file", profilePhoto.files[0]);
+    var profilePhoto = document.getElementById('profile-photo').files[0];
+    var fileName = profile.USER_ID + '_' + profile.NAME_FIRST + '_' + profile.NAME_LAST;
+    var profilePhotoNamed = new File([profilePhoto], fileName , {
+      type: fileName.type,
+    });
+    formData.append("file", profilePhotoNamed);
       
      axios
       .post(
