@@ -573,18 +573,13 @@
                                 <div class="card-header  justify-content-between">
                                     <div class="card-title">Profit Summary</div>
                                     <div class="dropdown">
-                                        <a aria-label="anchor" href="javascript:void(0);"
-                                            class="btn btn-outline-light btn-icons btn-sm text-muted"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fe fe-more-vertical"></i>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li class="border-bottom"><a class="dropdown-item"
-                                                    href="javascript:void(0);" onclick="changeLayout(0)">Hourly</a></li>
-                                            <li class="border-bottom"><a class="dropdown-item"
-                                                    href="javascript:void(0);" onclick="changeLayout(1)">Daily</a></li>
-                                            <li><a class="dropdown-item" href="javascript:void(0);"
-                                                    onclick="changeLayout(2)">Monthly</a></li>
+                                        <!-- <a aria-label="anchor" href="javascript:void(0);" class="btn btn-outline-light btn-icons btn-sm text-muted" data-bs-toggle="dropdown" aria-expanded="false"><i class="fe fe-more-vertical"></i></a> -->
+                                        <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm btn-wave waves-effect waves-light btn-primary d-flex align-items-center" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="ri-calendar-2-line me-1"></i><span id="chart-view">Daily</span></a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" role="menu">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(0)">Hourly</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(1)">Daily</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(2)">Monthly</a></li>
                                         </ul>
                                     </div>
                                 </div>

@@ -25,7 +25,7 @@ var loadChartData = () => {
                 avgNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT : 0;
                 updatePieChartData();
 
-                var graphData = formatGraphData(netProfitHourly);
+                var graphData = formatGraphData(netProfitDaily);
                 inputNetprofit = graphData.netProfitArray;
                 inputBaseNetprofit = graphData.baseNetProfitArray;
                 inputXAxisData = graphData.xAxisDataArray;

@@ -2,6 +2,7 @@ var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 var subscribedBots = [];
 var rating = 0;
+var takeUsdFromFLAG = "TOKEN";
 const botId = localStorage.getItem('botId');
 const userSubscriptionStatusValue = localStorage.getItem('userSubscriptionStatus'); 
 const authToken = localStorage.getItem('authToken');
@@ -15,6 +16,7 @@ var formatGraphData = (rawInputArr) => {
   var input1 = [];
   var input2 = [];
   var input3 = [];
+  var input4 = []; //USD profit percent
   var xAxisData = [];
   var profitDifference = 0; 
 
@@ -29,6 +31,14 @@ var formatGraphData = (rawInputArr) => {
     input1.push(rawInputArr[i].TOKEN_NETPROFIT);
     input2.push(rawInputArr[i].BASE_NETPROFIT);
     input3.push(rawInputArr[i].OVERALL_PROFITABLE);
+    if(takeUsdFromFLAG == "TOKEN") {
+      console.log("~~~ formatGraphData: USD profit Percent from :", takeUsdFromFLAG);
+      input4.push(rawInputArr[i].TOKEN_USD_PROFIT_PERCENT);
+    } else {
+      console.log("~~~ formatGraphData: USD profit Percent from :", takeUsdFromFLAG);
+      input4.push(rawInputArr[i].BASE_USD_PROFIT_PERCENT); 
+    }  
+
     var tradeDate = rawInputArr[i].APP_TS;
     profitDifference = i+1 < rawInputArr.length ? (rawInputArr[i+1].TOKEN_NETPROFIT - rawInputArr[i].TOKEN_NETPROFIT) : 0;
     //console.log("###token-stats-profirSummary: i:" + i + " profitDifference:" + truncate(profitDifference, 2) +"%");
@@ -91,14 +101,16 @@ var formatGraphData = (rawInputArr) => {
     tokenNetProfit: input1,
     baseNetProfit: input2,
     overallProfitable: input3,
+    usdProfit : input4,
     lastTradedDate: xAxisData
   };
 }
 
-var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitableInput, lastTradedDateInput, tokenCode, baseCode) => {
+var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitableInput, usdProfitInput, lastTradedDateInput, tokenCode, baseCode) => {
   console.log("tokenNetProfitInput: " + tokenNetProfitInput);
   console.log("baseNetProfitInput: " + baseNetProfitInput);
-  console.log("overallProfitableInput: " + overallProfitableInput);
+  console.log("overallProfitableInput: " + overallProfitableInput); 
+  console.log("usdProfitInput: " + usdProfitInput);
   console.log("lastTradedDateInput: " + lastTradedDateInput);
   console.log("baseCode: " + baseCode);
   console.log("tokenCode: " + tokenCode);
@@ -107,13 +119,13 @@ var updateChartData = (tokenNetProfitInput, baseNetProfitInput, overallProfitabl
   chart.render();
   chart.updateOptions({
     colors: [
-      "rgba(" + myVarVal + ", 0.075)",
-      "rgba(" + myVarVal + ", 0.95)",
-      "rgba(245 ,187 ,116)",
+      "rgba(38, 191, 148, 0.4)", // bar
+      "rgba(" + myVarVal + ", 0.95)", // line - token
+      "rgba(245 ,187 ,116)", // line - bar
     ],
     series: [{
-      name: tokenCode,
-      data: tokenNetProfitInput,
+      name: "USD",
+      data: usdProfitInput,
       type: 'bar',
     }, {
       name: tokenCode,
@@ -191,6 +203,11 @@ var getTokenStats = (parentPage) => {
       if (res.status == 200) {
         console.log("### Inside getTokenStats:res.data.tradeTransHistoryOneRow:", res.data.tradeTransHistoryOneRow);
         const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
+        if( botDetails.TOKEN_USD_PROFIT_PERCENT >= botDetails.BASE_USD_PROFIT_PERCENT ) {
+          takeUsdFromFLAG = "TOKEN";
+        } else {
+          takeUsdFromFLAG = "BASE";
+        }
         const tradeTransHistory = res.data.tradeTransHistory; //history
         netprofitHourlyData = res.data.netprofitHourlyData; //hourly data
         netprofitDailyData = res.data.netprofitDailyData; //daily data
@@ -209,13 +226,13 @@ var getTokenStats = (parentPage) => {
         tokenNetProfitArr = formattedData.tokenNetProfit;
         baseNetProfitArr = formattedData.baseNetProfit;
         overallProfitableArr = formattedData.overallProfitable;
+        usdProfitArr = formattedData.usdProfit;
         lastTradedDateArr = formattedData.lastTradedDate;
 
         //updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
        setTimeout(() => {
-          updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
-        }
-          , 200);
+          updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, usdProfitArr, lastTradedDateArr, botDetails.TOKEN_CURRENCY_CODE, botDetails.BASE_CURRENCY_CODE);
+        }, 200);
 
         //userSubscriptionStatusValue - determine status
         let usrBotSubscriptionStatus = userSubscriptionStatusValue >= 1 ? "<span class='badge bg-success ms-0 d-offline-block fs-14 '>ACTIVE</span>" : "<span class='badge bg-danger ms-0 d-offline-block fs-14 '>SUBSCRIBE</span>"; // ACTIVE refers USER already scubscribed; SUBSCRIBE refers USER yet to subscribe
@@ -685,6 +702,7 @@ var baseCurrencyCode = '';
 var tokenNetProfitArr = [];
 var baseNetProfitArr = [];
 var overallProfitableArr = [];
+var usdProfitArr = [];
 var lastTradedDateArr = [];
 
 var options = {
@@ -824,7 +842,7 @@ document.getElementById("profit-statistics").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#profit-statistics"), options);
 chart.render();
 
-updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, "Token Currency Code", "Base Currency Code");
+updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, usdProfitArr, lastTradedDateArr, "Token Currency Code", "Base Currency Code");
 
 var changeLayout = (layout) => {
   if(layout == 2){
@@ -832,24 +850,30 @@ var changeLayout = (layout) => {
       tokenNetProfitArr = formattedData.tokenNetProfit;
       baseNetProfitArr = formattedData.baseNetProfit;
       overallProfitableArr = formattedData.overallProfitable;
+      usdProfitArr = formattedData.usdProfit;
       lastTradedDateArr = formattedData.lastTradedDate;
-      updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+      document.getElementById("chart-view").innerHTML = "Monthly";
+      updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, usdProfitArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
   }
   else if(layout == 1){
     var formattedData = formatGraphData(netprofitDailyData);
     tokenNetProfitArr = formattedData.tokenNetProfit;
     baseNetProfitArr = formattedData.baseNetProfit;
     overallProfitableArr = formattedData.overallProfitable;
+    usdProfitArr = formattedData.usdProfit;
     lastTradedDateArr = formattedData.lastTradedDate;
-    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+    document.getElementById("chart-view").innerHTML = "Daily";
+    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, usdProfitArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
   }
   else {
     var formattedData = formatGraphData(netprofitHourlyData);
     tokenNetProfitArr = formattedData.tokenNetProfit;
     baseNetProfitArr = formattedData.baseNetProfit;
     overallProfitableArr = formattedData.overallProfitable;
+    usdProfitArr = formattedData.usdProfit;
     lastTradedDateArr = formattedData.lastTradedDate;
-    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
+    document.getElementById("chart-view").innerHTML = "Hourly";
+    updateChartData(tokenNetProfitArr, baseNetProfitArr, overallProfitableArr, usdProfitArr, lastTradedDateArr, tokenCurrencyCode, baseCurrencyCode);
   }
 };
 
