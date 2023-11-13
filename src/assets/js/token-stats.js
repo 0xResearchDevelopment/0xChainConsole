@@ -335,6 +335,21 @@ var getTokenStats = (parentPage) => {
         const successRateTrend = overallSuccessRate > 40 ? 'caret-up-fill' : 'caret-down-fill';
         let overallSuccessRateDesign = "<div class='progress progress-xs progress-custom progress-animate' role='progressbar' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100'><div class='progress-bar bg-primary' style='width:"+ overallSuccessRate + "%'></div></div><span class='fs-14'>"+ overallSuccessRate + "%<i class='bi bi-"+ successRateTrend + " ms-1 " + successRateColorCode + "'></i></span>";
 
+        //USD value stats
+        var currentUsdProfitValue;
+
+        if( botDetails.TOKEN_USD_PROFIT_PERCENT >= botDetails.BASE_USD_PROFIT_PERCENT ) {
+          currentUsdProfitValue = botDetails.TOKEN_USD_PROFIT_PERCENT >= 0 ? "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-down ms-1'></i></span>";
+          document.getElementById("current-usd-value").innerHTML = "$ "+botDetails.TOKEN_USD_CURRENT;
+          document.getElementById("current-usd-profit").innerHTML = currentUsdProfitValue;
+          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.TOKEN_USD_INVESTED;
+        } else {
+          currentUsdProfitValue = botDetails.BASE_USD_PROFIT_PERCENT >= 0 ? "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.BASE_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.BASE_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-down ms-1'></i></span>";
+          document.getElementById("current-usd-value").innerHTML = "$ "+botDetails.BASE_USD_CURRENT;
+          document.getElementById("current-usd-profit").innerHTML = currentUsdProfitValue;
+          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.BASE_USD_INVESTED;
+        }
+
         document.getElementById("profit-per-month").innerHTML = profitPerMonthDesign;
         document.getElementById("profit-per-trade").innerHTML = profitPerTradeDesign;
         document.getElementById("overall-profitable").innerHTML = overallSuccessRateDesign;
