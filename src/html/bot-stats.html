@@ -163,8 +163,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row col-xl-6 col-lg-6 col-md-6">
-
+                            <div class="col-xl-6 col-lg-6 col-md-6">
+                                <div class="card custom-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-2">
+                                                <div class="avatar avatar-lg bg-primary-transparent text-primary">
+                                                    <i class="fe fe-target"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex-1">
+                                                <div class="">
+                                                    <p class="mb-0 text-muted">Current Value (USD)</p>
+                                                </div>
+                                                <div class="flex-between">
+                                                    <h3 class="fs-20 mb-0 font-weight-normal" id="current-usd-value"></h3>
+                                                    <span class="text-purple fs-16" id="current-usd-profit">TBD</span>
+                                                </div>
+                                                <span class="badge bg-info-transparent fs-14" id="invested-usd-value"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card custom-card">
@@ -686,8 +706,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="staticBackdropLabel">Reviews
-                        </h6>
+                            <h6 class="modal-title" id="staticBackdropLabel">Customer Reviews</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -721,7 +740,7 @@
                                         <i id="mstar5" class="ri-star-line" onclick="rateStarClicked(5)" style="cursor: pointer;"></i>
                                     </span>
                                     <div class="invalid-feedback" id="rating-empty" style="display:none;">
-                                        1 star rating is minimum.
+                                        Please add rating.
                                     </div>
                                 </div>
                                 <div class="col-md-12 mb-3">
