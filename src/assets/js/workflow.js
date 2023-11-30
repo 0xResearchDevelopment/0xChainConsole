@@ -99,7 +99,7 @@ var loadWorkflowPage = () => {
 var validateInputs = () => {
     if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
         && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked
-        && document.getElementById('workflow-file').value.length > 0 && document.getElementById('workflow-remarks').value.length > 0)
+        && document.getElementById('workflow-file').value.length > 0 && document.getElementById('workflow-remarks').value.length > 0 && subscriptionFilePath.length > 0)
         {
             document.getElementById('workflow-submit-request').disabled = false;
         }
@@ -219,6 +219,7 @@ var uploadSubscriptionDoc = () => {
         subscriptionFilePath = res.data.filepath;
         if (res.status == 200) {
             showToastAlerts('workflow-success','alert-success-msg',res.data.message);
+            validateInputs();
         }
     })
     .catch(err => {

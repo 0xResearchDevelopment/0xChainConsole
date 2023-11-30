@@ -47,7 +47,7 @@
                                         <div class="card custom-card">
                                             <div class="card-header justify-content-between">
                                                 <div class="card-title">
-                                                    Summary
+                                                    Token Summary
                                                 </div>
                                                 <!-- <div class="dropdown">
                                                     <a href="javascript:void(0);"
@@ -64,18 +64,18 @@
                                                     </ul>
                                                 </div> -->
                                                 <div>
-                                                    <i class="fa fa-refresh" aria-hidden="true" onclick="changeLayout(0)" style="font-size: x-large;cursor:pointer"></i>
+                                                    <i class="fa fa-refresh" aria-hidden="true" onclick="" style="font-size: x-large;cursor:pointer"></i>
                                                 </div>
                                             </div>
                                             <div class="card-body p-0">
                                                 <div class="">
                                                     <div class=" border-bottom">
-                                                        <div id="avgNetProfit"></div>
+                                                        <div id="tokenSummary"></div>
 
                                                         <div class="d-flex justify-content-center mb-3">
                                                             <div class="text-center text-muted">
                                                                 <!-- <p>As of: 03-10-2023</p>   -->
-                                                                <h6 class="text-muted">As of: <span id="as-of-summary" class="text-primary"></span></h6> 
+                                                                <h6 class="text-muted">As of: <span id="as-of-token-summary" class="text-primary"></span></h6> 
                                                             </div>    
                                                         </div>
                                                     </div>
@@ -131,15 +131,61 @@
                     </div> 
                     <div class="col-xxl-3 cols-xl-3 cols-lg-3 cols-md-3 cols-sm-3">
                         <div class="col-xxl-12">
-                            <div class="col-xxl-12 col-xl-6">
-                                <div class="card custom-card">
-                                    <div class="card-header">
-                                        <div class="card-title">Your Recent Activities</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="task-list mb-0" id="activities-ul">
-                                            <!--lists are created dynamically on run time-->
-                                        </ul>
+                            <div class="row">
+                                <div class="col-xxl-12 col-xl-6">
+                                    <div class="card custom-card">
+                                        <div class="card-header justify-content-between">
+                                            <div class="card-title">
+                                                Investment Summary
+                                            </div>
+                                            <!-- <div class="dropdown">
+                                                <a href="javascript:void(0);"
+                                                    class="btn-outline-light btn btn-sm text-muted"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">Overall<i
+                                                        class="ri-arrow-down-s-line align-middle ms-1"></i></a>
+                                                <ul class="dropdown-menu mb-0" role="menu">
+                                                    <li class="border-bottom"><a class="dropdown-item"
+                                                            href="javascript:void(0);">Today</a></li>
+                                                    <li class="border-bottom"><a class="dropdown-item"
+                                                            href="javascript:void(0);">Last Week</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                                                    </li>
+                                                </ul>
+                                            </div> -->
+                                            <div>
+                                                <i class="fa fa-refresh" aria-hidden="true" onclick="" style="font-size: x-large;cursor:pointer"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="">
+                                                <div class="border-bottom">
+                                                    <div id="investmentSummary"></div>
+
+                                                    <div class="d-flex justify-content-center mb-3">
+                                                        <div class="text-center text-muted">
+                                                            <!-- <p>As of: 03-10-2023</p>   -->
+                                                            <h6 class="text-muted">As of: <span id="as-of-investment-summary" class="text-primary"></span></h6> 
+                                                        </div>    
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="d-flex p-4 border-end">
+                                                        <div class="text-center">
+                                                            <p class="mb-1 text-muted">Invested USD $</p>
+                                                            <h5 class="mb-0 text-primary" id="invested-usd"> </h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex p-4">
+                                                        <div class="text-center">
+                                                            <p class="mb-1 text-muted">Current USD $</p>
+                                                            <h5 class="mb-0 text-primary" id="current-usd"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -156,6 +202,23 @@
                                     <!-- Table contents will be generated at Run time-->
                                 </tbody>
                             </table>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="row">
+                    <div class="col-xxl-12">
+                        <div class="col-xxl-3 col-xl-3">
+                            <div class="card custom-card">
+                                <div class="card-header">
+                                    <div class="card-title">Your Recent Activities</div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="task-list mb-0" id="activities-ul">
+                                        <!--lists are created dynamically on run time-->
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div> 
                 </div>

@@ -49,6 +49,7 @@
                                             <th scope="col">Status</th> <!-- Active or Inactive : 1 - Active-->
                                             <th scope="col">Base Icon</th> <!-- img to show icon -->
                                             <th scope="col">Token Icon</th> <!-- img to show icon -->
+                                            <th scope="col">Currency ID</th>
                                             <th scope="col">Created On</th> 
                                             <th scope="col">Updated On</th>
                                         </tr>
@@ -91,6 +92,34 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="bot-symbol" style="font-weight: bold">Bot Symbol</label>
+                                    <input type="text" id="bot-symbol" class="form-control" placeholder="Enter Bot Symbol">
+                                    <div class="invalid-feedback" id="bot-symbol-empty" style="display:none;">
+                                        Bot Symbol cannot be emtpty.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="bot-timeframe" style="font-weight: bold">Bot Timeframe</label>
+                                        <select class="form-select" id="bot-timeframe">
+                                            <option value="1H">1H</option>
+                                            <option value="2H">2H</option>
+                                            <option value="4H">4H</option>
+                                            <option value="8H">8H</option>
+                                            <option value="12H">12H</option>
+                                            <option value="1D">1D</option>
+                                        </select>
+                                        <div class="invalid-feedback" id="bot-timeframe-empty" style="display:none;">
+                                            Bot Timeframe cannot be emtpty.
+                                        </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label" for="bot-exchange" style="font-weight: bold">Bot Exchange</label>
+                                    <input type="text" id="bot-exchange" class="form-control" placeholder="Enter Bot Symbol">
+                                    <div class="invalid-feedback" id="bot-exchange-empty" style="display:none;">
+                                        Bot Exchange cannot be emtpty.
+                                    </div>
+                                </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" style="font-weight: bold">Bot Simulate</label>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4" style="margin-top: .85rem; margin-left: .5rem;"> 

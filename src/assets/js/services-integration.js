@@ -392,9 +392,18 @@ var getUserProfile = () => {
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
                 }
 
-                document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
+                document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
                 document.getElementById("active-bots").innerHTML = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
+                
+                document.getElementById("as-of-investment-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
+                document.getElementById("invested-usd").innerHTML = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
+                document.getElementById("current-usd").innerHTML = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
+
+                console.log('##TOTAL_TOKEN_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED);
+                console.log('##TOTAL_BASE_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED);
+                console.log('##TOTAL_TOKEN_USD_CURRENT: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT);
+                console.log('##TOTAL_BASE_USD_CURRENT: '+ subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT);
 
                 const theme = new Map([
                     ["PROFILE", 'success'],
