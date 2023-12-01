@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -163,9 +164,14 @@
                                 <!-- Upload signed consent document here-->
                                 <div class="col-xl-12">
                                     <span><h6>Download, Sign and upload your consent document (PDF only)</h6></span>
-                                    <div class="input-group mb-3">
+                                    <div class="input-group">
                                         <input type="file" class="form-control fs-16" id="workflow-file" oninput="validateInputs()">
                                         <button class="btn btn-primary" type="button" id="workflow-upload" onclick="uploadSubscriptionDoc()" disabled>Upload</button>
+                                    </div>
+                                    <div class="mb-3" style="font-weight:500;font-size: 0.875rem;">
+                                        <div class="valid-feedback mb-3" id="workflow-file-uploaded" style="display:none;"><!--style="font-weight:500;font-size: 0.875rem;"-->
+                                            <i class="fa fa-check" aria-hidden="true"></i> File uploaded successfully.
+                                        </div>
                                     </div>
                                 </div>
 

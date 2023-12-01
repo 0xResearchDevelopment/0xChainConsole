@@ -220,6 +220,7 @@ var uploadSubscriptionDoc = () => {
         if (res.status == 200) {
             showToastAlerts('workflow-success','alert-success-msg',res.data.message);
             validateInputs();
+            document.getElementById('workflow-file-uploaded').style.display = 'block';
         }
     })
     .catch(err => {

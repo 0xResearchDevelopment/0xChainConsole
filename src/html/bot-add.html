@@ -56,7 +56,7 @@
                                             <option value="1D">1D</option>
                                         </select>
                                         <div class="invalid-feedback" id="bot-timeframe-empty" style="display:none;">
-                                            Bot Timeframe cannot be emtpty.
+                                            A Timeframe must be selected.
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-3">
@@ -103,8 +103,23 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="currency-id" style="font-weight: bold">Currency Id</label>
+                                        <input type="number" id="currency-id" class="form-control" placeholder="Enter Currency Id" value="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png">
+                                        <div class="invalid-feedback" id="currency-id-empty" style="display:none;">
+                                            Currency Id cannot be emtpty.
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label" for="bot-remarks" style="font-weight: bold">Remarks</label>
+                                        <input type="text" id="bot-remarks" class="form-control" placeholder="Enter Remarks if any">
+                                        <!-- <div class="invalid-feedback" id="bot-remarks-empty" style="display:none;">
+                                            Remarks cannot be emtpty.
+                                        </div> -->
+                                    </div>
+
                                     <div class="col-md-12 text-center">
-                                        <button type="submit" class="btn btn-primary" onclick="createBot()">Create Bot</button>
+                                        <button type="submit" class="btn btn-primary" id="create-bot-button" onclick="createBot()">Create Bot</button>
                                     </div>
                                 </div>   
                             </div>

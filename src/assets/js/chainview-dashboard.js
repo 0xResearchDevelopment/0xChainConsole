@@ -132,6 +132,7 @@ var formatGraphData = (rawNetProfitArr) => {
     var usdProfit = [];
     var xAxisData = [];
     var profitDifference = 0; 
+    var usdProfitDifference = 0; 
 
     const tbody = document.getElementById("dashboard-tbody");
     tbody.innerHTML = '';
@@ -142,6 +143,8 @@ var formatGraphData = (rawNetProfitArr) => {
     const rowSubNetProfit = document.createElement('tr');
     const rowBaseNetProfit = document.createElement('tr');
     const rowUserSubBaseNetProfit = document.createElement('tr');
+    const rowUsdProfit = document.createElement('tr');
+    const rowUsdProfitDiff = document.createElement('tr');
 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
     //for (let i = rawNetProfitArr.length - 1; i >=0; i--) {
@@ -151,6 +154,7 @@ var formatGraphData = (rawNetProfitArr) => {
         xAxisData.push(rawNetProfitArr[i].AS_OF);
         
         profitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
+        usdProfitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].AVG_AVG_USD_PROFIT_PERCENT - rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT) : 0;
         //console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); 
 
         if (i == 0) {
@@ -190,6 +194,16 @@ var formatGraphData = (rawNetProfitArr) => {
             var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
             tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
             rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
+
+            var tdUsdProfitLabel = document.createElement('td');
+            var textUsdProfitLabel = document.createTextNode("USD-Profit %");
+            tdUsdProfitLabel.appendChild(textUsdProfitLabel);
+            rowUsdProfit.appendChild(tdUsdProfitLabel);
+
+            var tdUsdProfitDiffLabel = document.createElement('td');
+            var textUsdProfitDiffLabel = document.createTextNode("USD-Change %");
+            tdUsdProfitDiffLabel.appendChild(textUsdProfitDiffLabel);
+            rowUsdProfitDiff.appendChild(tdUsdProfitDiffLabel);
         }
 
         var tdDate = document.createElement('td');
@@ -230,6 +244,18 @@ var formatGraphData = (rawNetProfitArr) => {
         var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
         tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
         rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
+
+        var tdUsdProfit = document.createElement('td');
+        var textUsdProfit = document.createTextNode(rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT+ "%");;
+        tdUsdProfit.setAttribute('style', rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT >= 0 ? 'color:green !important' : 'color:red !important');
+        tdUsdProfit.appendChild(textUsdProfit);
+        rowUsdProfit.appendChild(tdUsdProfit);
+
+        var tdProfitDiff = document.createElement('td');
+        var textProfitDiff = document.createTextNode(truncate(usdProfitDifference, 2)+ "%");
+        tdProfitDiff.setAttribute('style', usdProfitDifference >= 0 ? 'color:green !important' : 'color:red !important');
+        tdProfitDiff.appendChild(textProfitDiff);
+        rowUsdProfitDiff.appendChild(tdProfitDiff);
     }
 
     tbody.appendChild(rowDate);
@@ -239,6 +265,8 @@ var formatGraphData = (rawNetProfitArr) => {
     tbody.appendChild(rowSubNetProfit);
     tbody.appendChild(rowBaseNetProfit);
     tbody.appendChild(rowUserSubBaseNetProfit);
+    tbody.appendChild(rowUsdProfit);
+    tbody.appendChild(rowUsdProfitDiff);
 
     return {
         netProfitArray: netProfit,
