@@ -398,9 +398,11 @@ var getUserProfile = () => {
                 
                 var investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
                 var currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
-                document.getElementById("invested-usd").innerHTML = investedUsd.toLocaleString();
-                document.getElementById("current-usd").innerHTML = currentUsd.toLocaleString();
-                document.getElementById("usd-profit").innerHTML = currentUsd - investedUsd;
+                var profitUsd = currentUsd - investedUsd;
+                document.getElementById("invested-usd").innerHTML = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+                document.getElementById("current-usd").innerHTML = "$ " + currentUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+                var profitDesign = (profitUsd >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + profitUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 }) + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + (-1*profitUsd).toLocaleString() + "<i class='ti ti-trending-down ms-1'></i></span>";
+                document.getElementById("usd-profit").innerHTML = profitDesign;
 
                 console.log('##TOTAL_TOKEN_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED);
                 console.log('##TOTAL_BASE_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED);

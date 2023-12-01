@@ -77,7 +77,7 @@ var tokenPieChartData = {
         height: 295,
         type: "radialBar",
     },
-    colors: ["rgba(38, 191, 148, 0.4)"],
+    colors: ["rgba(38, 191, 148, 0.95)"],
     plotOptions: {
         radialBar: {
             hollow: {
@@ -100,7 +100,7 @@ var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"
 investmentChart.render();
 function index1() {
     investmentChart.updateOptions({
-        colors: ["rgba(38, 191, 148, 0.4)"],
+        colors: ["rgba(38, 191, 148, 0.95)"],
     });
 }
 
@@ -294,7 +294,7 @@ var updateChartData = (netProfit, baseNetProfit,usdNetProfit, XAxisInput) => {
                 {
                     name: "USD",
                     data: usdNetProfit,
-                    type: 'bar',
+                    type: 'line',
                   }
             ],
             xaxis: {
@@ -405,9 +405,9 @@ var chartData = {
         {
             name: "USD",
             data: inputUsdProfit,
-            type: 'bar'
+            type: 'line'
           }],
-    colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)","rgba(38, 191, 148, 0.4)"], //setting line color here
+    colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)","rgba(38, 191, 148, 0.95)"], //setting line color here
     fill: {
         type: ['gradient','gradient','solid'],
         gradient: {
