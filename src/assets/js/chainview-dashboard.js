@@ -71,7 +71,7 @@ var tokenPieChartData = {
 };
 
 var investmentSummaryNetProfit = 0;
-var tokenPieChartData = {
+var investmentPieChartData = {
     series: [investmentSummaryNetProfit],
     chart: {
         height: 295,
@@ -96,7 +96,7 @@ function index1() {
     });
 }
 
-var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), tokenPieChartData);
+var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), investmentPieChartData);
 investmentChart.render();
 function index1() {
     investmentChart.updateOptions({
@@ -114,9 +114,10 @@ var updateTokenPieChartData = () => {
 }
 
 var updateInvestmentPieChartData = () => {
-    var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), tokenPieChartData);
+    var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), investmentPieChartData);
     investmentChart.render();
     investmentChart.updateOptions({
+        colors: ["rgba(38, 191, 148, 0.95)"],
         series: [investmentSummaryNetProfit]
     });
 }
@@ -367,7 +368,7 @@ var chartData = {
         enabled: true
     },
     stroke: {
-        width: [2.5, 2.5, 0],
+        width: [2.5, 2.5, 2.5],
         curve: "smooth",
     },
     legend: {
@@ -409,7 +410,7 @@ var chartData = {
           }],
     colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)","rgba(38, 191, 148, 0.95)"], //setting line color here
     fill: {
-        type: ['gradient','gradient','solid'],
+        type: ['gradient','gradient','gradient'],
         gradient: {
             gradientToColors: ['#4776E6','#F5B849',"transparent"]
         },

@@ -331,6 +331,10 @@
     let typehead = document.querySelector('#typehead');
     typehead.addEventListener('click', showSearchResult);
     document.body.addEventListener('click', removeSearchResult);
+
+    let typeheadModal = document.querySelector('#typehead-modal');
+    typeheadModal.addEventListener('click', showSearchResult);
+    document.body.addEventListener('click', removeSearchResult);
 })();
 
 function showSearchResult(event){
@@ -338,6 +342,9 @@ function showSearchResult(event){
     event.stopPropagation();
     let headerSearch = document.querySelector('#headersearch');
     headerSearch.classList.add('searchdrop');
+
+    let headerSearchModal = document.querySelector('#headersearch-modal');
+    headerSearchModal.classList.add('searchdrop');
 }
 function removeSearchResult(event){
     let headerSearch = document.querySelector('#headersearch');

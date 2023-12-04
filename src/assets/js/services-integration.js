@@ -1067,10 +1067,27 @@ var autocompleteMatch = (input) => {
 }
 
 //Show search box results
-var showSearchResults = (value) => {
+var showSearchResultsDesktopView = (value) => {
     console.log('value: '+ value);
     let bots = autocompleteMatch(value.toUpperCase());
     const ulist = document.getElementById("search-results-ul");
+    ulist.innerHTML = '';
+    for (i=0; i<bots.length; i++) {
+        const list = document.createElement('li');
+        list.classList.add('p-1','d-flex','align-items-center','text-muted','mb-1','search-app');
+        list.innerHTML = `<a href="javascript:navigateTokenStats(${bots[i].BOT_ID}, ${bots[i].SUBSCRIBE_STATUS})">
+                                <i><div class='avatar avatar-xs br-0 ms-auto'><span class='fs-12 text-primary'><img src='${bots[i].BOT_TOKEN_ICON}'/></span></div>${bots[i].BOT_NAME}</i>
+                          </a>`;
+        ulist.appendChild(list);
+    }
+};
+
+var showSearchResultsMobileView = (value) => {
+    console.log('value: '+ value);
+    let bots = autocompleteMatch(value.toUpperCase());
+    const ulist = document.getElementById("search-results-ul-modal");
+    //console.log('ulist: '+ ulist);
+    console.log('bots: '+ bots);
     ulist.innerHTML = '';
     for (i=0; i<bots.length; i++) {
         const list = document.createElement('li');

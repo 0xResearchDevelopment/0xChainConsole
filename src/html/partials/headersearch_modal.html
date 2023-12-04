@@ -3,22 +3,15 @@
         <div class="modal-content">
             <div class="modal-body">
               <span class="input-group">
-                <input type="search" class="form-control px-2 " placeholder="Search..." aria-label="Username">
-                <a href="javascript:showSearchResults123('binance');" class="input-group-text bg-secondary text-white" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>
+                <input type="text" class="form-control px-2 " id="typehead-modal" onKeyUp="showSearchResultsMobileView(this.value);" placeholder="Search Strategy..." autocomplete="off">
+                <a class="input-group-text bg-secondary text-white" id="Search-Grid"><i class="fe fe-search header-link-icon fs-18"></i></a>
               </span>
-              <div class="mt-3">
-                <div class="main-header-center  d-none d-lg-block  header-link">
-                  <input type="text" class="form-control form-control-lg" id="typehead" placeholder="Search Strategy..." 
-                      autocomplete="off" onKeyUp="javascript:showSearchResults123(this.value);" />
-                  <button type="button"  aria-label="button" class="btn pe-1"><i class="fe fe-search" aria-hidden="true"></i></button>
-                  <div id="headersearch" class="header-search">
-                      <div class="mt-3">
-                          <ul class="ps-2" id="search-results-ul-modal">
-                              <!-- Contents will be loaded dynamically -->
-                          </ul>
-                      </div>
-                  </div>
-              </div>
+              <div id="headersearch-modal" class="header-search">
+                <div class="mt-3">
+                    <ul class="ps-2" id="search-results-ul-modal">
+                        <!-- Contents will be loaded dynamically -->
+                    </ul>
+                </div>
               </div>
           </div>
         </div>
