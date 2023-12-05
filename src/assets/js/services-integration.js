@@ -2,6 +2,8 @@ var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 var subscribedBots = [];
 var profileFilePath = '';
+var investedUsd = 0;
+var currentUsd = 0;
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -396,12 +398,15 @@ var getUserProfile = () => {
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
                 document.getElementById("active-bots").innerHTML = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
                 
-                var investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
-                var currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
+                investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
+                currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
                 var profitUsd = currentUsd - investedUsd;
-                document.getElementById("invested-usd").innerHTML = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
-                document.getElementById("current-usd").innerHTML = "$ " + currentUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
-                var profitDesign = (profitUsd >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + profitUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 }) + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + (-1*profitUsd).toLocaleString() + "<i class='ti ti-trending-down ms-1'></i></span>";
+                investedUsd = Math.round(investedUsd).toString();
+                currentUsd = Math.round(currentUsd).toString();
+                profitUsd = Math.round(profitUsd).toString();
+                document.getElementById("invested-usd").innerHTML = "$ " + "".padStart(investedUsd.length, "*");
+                document.getElementById("current-usd").innerHTML = "$ " + "".padStart(currentUsd.length, "*");
+                var profitDesign = (Number(profitUsd) >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + "".padStart(profitUsd.length, "*") + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + "".padStart(profitUsd.length-1, "*"); + "<i class='ti ti-trending-down ms-1'></i></span>";
                 document.getElementById("usd-profit").innerHTML = profitDesign;
 
                 console.log('##TOTAL_TOKEN_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED);
@@ -510,6 +515,35 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex2Div);
     cardBodyDiv.appendChild(flex3Div);
     cardBodyDiv.appendChild(flex4Div);
+}
+
+
+var hideShowInvData = (iconNumber) => {
+    if(iconNumber == 0){
+        document.getElementById('eye-slash').style.display = 'inline';
+        document.getElementById('eye').style.display = 'none';
+
+        var profitUsd = Number(currentUsd) - Number(investedUsd);
+        investedUsd = Number(investedUsd);
+        currentUsd = Number(currentUsd);
+        document.getElementById("invested-usd").innerHTML = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+        document.getElementById("current-usd").innerHTML = "$ " + currentUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+        var profitDesign = (profitUsd >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + profitUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 }) + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + (-1*profitUsd).toLocaleString() + "<i class='ti ti-trending-down ms-1'></i></span>";
+        document.getElementById("usd-profit").innerHTML = profitDesign;
+    }
+    else {
+        document.getElementById('eye').style.display = 'inline';
+        document.getElementById('eye-slash').style.display = 'none';
+
+        var profitUsd = Number(currentUsd) - Number(investedUsd);
+        investedUsd = Math.round(investedUsd).toString();
+        currentUsd = Math.round(currentUsd).toString();
+        profitUsd = Math.round(profitUsd).toString();
+        document.getElementById("invested-usd").innerHTML = "$ " + "".padStart(investedUsd.length, "*");
+        document.getElementById("current-usd").innerHTML = "$ " + "".padStart(currentUsd.length, "*");
+        var profitDesign = (Number(profitUsd) >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + "".padStart(profitUsd.length, "*") + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + "".padStart(profitUsd.length-1, "*"); + "<i class='ti ti-trending-down ms-1'></i></span>";
+        document.getElementById("usd-profit").innerHTML = profitDesign;
+    }
 }
 
 var navigateTokenStats = (botId, userSubscriptionStatus) => {
