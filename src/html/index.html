@@ -3,6 +3,10 @@
 <link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+
 <!-- Axios dependency-->
 <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
 
@@ -18,7 +22,7 @@
         @SPK@include("partials/header.html")
 
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Dashboard", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Summary'})
+        @SPK@include("partials/index-page-header.html", {"title": "Dashboard", "subtitle": 'Chainview', "subtitle2": 'Summary'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -27,6 +31,33 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-md-2" id="dashboard-box-container"> <!-- TODO: to set number of boxes per row-->
+                        </div>
+                        <!--Table div-->
+                        <div style="display: none;" class="mt-5 mb-3" id="dashboard-grid-container">
+                            <table id="indexBotsListDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Total Trades</th>
+                                        <th scope="col">Bot Name</th>
+                                        <th scope="col">Base Icon</th>
+                                        <th scope="col">Token Icon</th>
+                                        <th scope="col">Token Netprofit</th>
+                                        <th scope="col">Base Netprofit</th>
+                                        <th scope="col">Token Entry Amt</th>
+                                        <th scope="col">Last Trade Qty</th>
+                                        <th scope="col">Last Trade Date</th>
+                                        <th scope="col">Subscribed On</th>
+                                        <th scope="col">Bot Id</th>
+                                        <th scope="col">Symbol</th>
+                                        <th scope="col">Timeframe</th>
+                                        <th scope="col">App TS</th>
+                                        <th scope="col">Avg USD Profit</th>
+                                        <th scope="col">Avg USD Profit %</th>
+                                    </tr>
+                                </thead>
+                                   <tbody id="index-grid-tbody">
+                                    </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -236,6 +267,20 @@
     <script src="../assets/libs/jsvectormap/maps/world-merc.js"></script>
     <script src="../assets/libs/chart.js/chart.min.js"></script>
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!--Jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <!-- Datatables Cdn -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <!-- <script src="../assets/js/sales-dashboard.js"></script> -->
    <script src="../assets/js/chainview-dashboard.js"></script>

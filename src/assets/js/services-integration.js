@@ -392,6 +392,11 @@ var getUserProfile = () => {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
+                
+                    createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].TOKEN_NETPROFIT,
+                        subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
+                        subscribedBots[i].BOT_ID,subscribedBots[i].BOT_NAME,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].APP_TS_FMT,
+                        subscribedBots[i].AVG_USD_PROFIT,subscribedBots[i].AVG_USD_PROFIT_PERCENT);
                 }
 
                 document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
@@ -428,6 +433,7 @@ var getUserProfile = () => {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
+                document.getElementById("grid-switch").disabled = false;
             }
         }).catch(err => {
             console.log(err, err.response);
@@ -517,6 +523,34 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex4Div);
 }
 
+var createDashboardGridRows = (totalTrades, symbol, timeframe, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botName, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent) => {
+    const row = document.createElement('tr');
+    const tokenColorCode = tokenNetProfit > 0 ? 'success' : 'danger'
+    const tokenProfitTrend = tokenNetProfit > 0 ? 'trending-up' : 'trending-down'
+    const baseColorCode = baseNetProfit > 0 ? 'success' : 'danger'
+    const baseProfitTrend = baseNetProfit > 0 ? 'trending-up' : 'trending-down'
+    const usdColorCode = avgUsdProfitPercent > 0 ? 'success' : 'danger'
+    const usdProfitTrend = avgUsdProfitPercent > 0 ? 'trending-up' : 'trending-down'
+    row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
+    <td style = 'font-size: 12px;'>${botName}</td>
+    <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>
+    <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botTokenIcon} class="fs-20"></div></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${tokenEntryAmount}</td>
+    <td style = 'font-size: 12px;'>${lastTradeQty}</td>
+    <td style = 'font-size: 12px;'>${lastTradedDate}</td>
+    <td style = 'font-size: 12px;'>${subscribedOn}</td>
+    <td style = 'font-size: 12px;'>${botId}</td>
+    <td style = 'font-size: 12px;'>${symbol}</td>
+    <td style = 'font-size: 12px;'>${timeframe}</td>
+    <td style = 'font-size: 12px;'>${appTS}</td>
+    <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>`;
+
+    const tbody = document.getElementById("index-grid-tbody");
+    tbody.appendChild(row);
+}
 
 var hideShowInvData = (iconNumber) => {
     if(iconNumber == 0){
@@ -543,6 +577,39 @@ var hideShowInvData = (iconNumber) => {
         document.getElementById("current-usd").innerHTML = "$ " + "".padStart(currentUsd.length, "*");
         var profitDesign = (Number(profitUsd) >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + "".padStart(profitUsd.length, "*") + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + "".padStart(profitUsd.length-1, "*"); + "<i class='ti ti-trending-down ms-1'></i></span>";
         document.getElementById("usd-profit").innerHTML = profitDesign;
+    }
+}
+
+var applyResponsivenessBots = () => {
+    if(!$.fn.dataTable.isDataTable('#indexBotsListDataTable')) {
+        $('#indexBotsListDataTable').DataTable({
+            responsive: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                sSearch: ''
+            },
+            order: [[0, 'desc']],   //Soring by BotID decensing order
+            "pageLength": 25,
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ], dom: 'flirtBlp' //'Bfrtip'
+        });
+    }
+};
+
+var switchView = () => {
+    if(document.getElementById("grid-switch").checked){
+        document.getElementById('dashboard-grid-container').style.display = 'block';
+        document.getElementById('dashboard-box-container').style.display = 'none';
+        document.getElementById('index-header').style.paddingBottom = '0rem';
+        document.getElementById('index-header').style.minHeight = '65px';
+        applyResponsivenessBots();
+    }
+    else{
+        document.getElementById('dashboard-grid-container').style.display = 'none';
+        document.getElementById('dashboard-box-container').style.display = 'flex';
+        document.getElementById('index-header').style.paddingBottom = '3rem';
+        document.getElementById('index-header').style.minHeight = '115px';
     }
 }
 
@@ -1075,19 +1142,6 @@ var readAllNotifications = () => {
     });
 };
 
-//for testing upload functionality purpose
-// var uploadFile = () => {
-//     var formData = new FormData();
-//     var imagefile = document.querySelector('#file');
-//     formData.append("image", imagefile.files[0]);
-//     console.log('formData: '+ formData);
-//     axios.post(targetEndPointUrlBase+'/api/auth/ftp', formData, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data'
-//         }
-//     })
-// }
-
 var autocompleteMatch = (input) => {
     if (input == '') {
       return [];
@@ -1181,6 +1235,6 @@ var uploadProfilePhoto = () => {
                   },0);
           }
       });
-  };
-  
+};
+
 //****************************************************************** */
