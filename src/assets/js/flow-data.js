@@ -38,6 +38,7 @@ var loadFlowData = () => {
                         tableData[j].performance, tableData[j].market_cap, tableData[j].company_name);   
                 }
                 applyResponsiveness(tableData.length);
+                showToastAlerts('flow-data-success','alert-success-msg',`Loaded ${tableData.length} records of ${rawData.length}`);
             }
         }).catch(err => {
             console.log("inside err");

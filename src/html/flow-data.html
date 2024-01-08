@@ -69,6 +69,17 @@
         </div>
         <!-- End::app-content -->
 
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+            <div id="flow-data-success" class="toast colored-toast text-bg-success" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <span id="alert-success-msg" class="fs-18"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         @SPK@include("partials/headersearch_modal.html")
         @SPK@include("partials/footer.html")
         @SPK@include("partials/side-bar.html")
