@@ -22,7 +22,7 @@ var loadFlowData = () => {
                         "call_flow": rawData[i].json_record.options.call_flow, //*100 + '%'
                         "put_count": rawData[i].json_record.options.put_count,
                         "put_flow": rawData[i].json_record.options.put_flow, //*100 + '%'
-                        "json_performance": rawData[i].json_record.perf, //*100 + '%'
+                        "json_performance": rawData[i].json_record.perf, //*100 + '%' -- Stock changes today in $$
                         "performance": rawData[i].performance, //*100 + '%'
                         "market_cap": rawData[i].json_record.market_cap,
                         "company_name": rawData[i].company_name
@@ -36,8 +36,9 @@ var loadFlowData = () => {
                     var datevalue = tableData[j].date_added; 
                     var converteddate = Date.parse(datevalue);
                     console.log ("### Dates: " + tableData[j].date_added + " - " + converteddate); //TODO: date format fix
+                    var priceChangePercentage = (tableData[j].json_performance / tableData[j].added_price) *100;
                     createTableRows(tableData[j].ticker, tableData[j].type, datevalue, tableData[j].added_price, tableData[j].multiplier,
-                        tableData[j].call_count, tableData[j].call_flow, tableData[j].put_count,tableData[j].put_flow, tableData[j].json_performance,
+                        tableData[j].call_count, tableData[j].call_flow, tableData[j].put_count,tableData[j].put_flow, priceChangePercentage,
                         tableData[j].performance, tableData[j].market_cap, tableData[j].company_name);   
                 }
                 applyResponsiveness(tableData.length);
@@ -62,12 +63,12 @@ var createTableRows = (ticker, type, date_added, added_price, multiplier, call_c
     const callFlowTrend = call_flow >= .8 &&  call_count >= 20000 && revisedMarketCap >= 20 ? 'bi bi-patch-check-fill text-success ms-1 fs-14' : '';
     const putFlowTheme = put_flow >= .8 ? 'success' : put_flow < .8 && put_flow >= .5 ? 'info' : 'secondary';
     const putFlowTrend = put_flow >= .8 &&  put_count >= 20000 && revisedMarketCap >= 20  ? 'bi bi-patch-check-fill text-success ms-1 fs-14' : '';
-    const jsonPerformanceTheme = json_performance > 0 ? 'success' : 'danger'
+    const jsonPerformanceTheme = json_performance > 0 ? 'success' : 'info'; // Stock changes today in $$
     // const jsonPerformanceTrend = json_performance > 0 ? 'trending-up' : 'trending-down'
-    const performanceTheme = performance > 0 ? 'success' : 'danger'
+    const performanceTheme = performance > 0 ? 'success' : 'info'
     // const performanceTrend = performance > 0 ? 'trending-up' : 'trending-down'
     const badgeTheme = (type == 'CALL') ? 'primary' : 'secondary';
-    const shorlistedTicker = call_flow >= .8 &&  call_count >= 20000 && revisedMarketCap >= 20 ? 'Yes' : put_flow >= .8 &&  put_count >= 20000 && revisedMarketCap >= 20 ? 'Yes' : '-';
+    const shorlistedTicker = call_flow >= .8 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .8 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
 /* 
     const dateObj = new Date(date_added);
     formatOption = {
@@ -81,16 +82,16 @@ var createTableRows = (ticker, type, date_added, added_price, multiplier, call_c
     row.innerHTML = `<td style = 'font-size: 12px;'>${ticker}</td>
     <td style = 'font-size: 12px;'>${shorlistedTicker}</td>
     <td style = 'font-size: 12px;'><span class="badge bg-${badgeTheme}-transparent rounded-pill badge-sm fs-12 fw-semibold">${type}</span></td>
-    <td style = 'font-size: 12px;'>${date_added}</td>
-    <td style = 'font-size: 12px;'>$${added_price}</td>
     <td style = 'font-size: 12px;'>${Math.round(multiplier*100)/100}</td>
-    <td style = 'font-size: 12px;'>${call_count}</td>
     <td style = 'font-size: 12px;'><span class='badge bg-${callFlowTheme}-transparent fs-12 rounded-pill'>${Math.round((call_flow*100)*100)/100}%  <i class='${callFlowTrend}'></i></span></td>
-    <td style = 'font-size: 12px;'>${put_count}</td>
     <td style = 'font-size: 12px;'><span class='badge bg-${putFlowTheme}-transparent fs-12 rounded-pill'>${Math.round((put_flow*100)*100)/100}% <i class='${putFlowTrend}'></i></span></td>
+    <td style = 'font-size: 12px;'>${call_count}</td>
+    <td style = 'font-size: 12px;'>${put_count}</td>
+    <td style = 'font-size: 12px;'>$${added_price}</td>
     <td style = 'font-size: 12px;'>$${revisedMarketCap}</td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${jsonPerformanceTheme}-transparent fs-12 rounded-pill'>${Math.round((json_performance*100)*100)/100}%</span> 
-                <span class='badge bg-${performanceTheme}-transparent fs-12 rounded-pill'>${Math.round((performance*100)*100)/100}%</span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${jsonPerformanceTheme}-transparent fs-12 rounded-pill'>${Math.round(json_performance)}%</span> 
+                <span class='badge bg-${performanceTheme}-transparent fs-12 rounded-pill'>${Math.round((performance))}%</span></td>
+    <td style = 'font-size: 12px;'>${date_added}</td>
     <td style = 'font-size: 12px;'>${company_name}</td>`;
 
     const tbody = document.getElementById("flow-data-tbody");
