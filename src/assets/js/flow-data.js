@@ -35,8 +35,8 @@ var loadFlowData = () => {
                 for (let j = 0; j < tableData.length; j++) {
                     var datevalue = tableData[j].date_added; 
                     var converteddate = Date.parse(datevalue);
-                    console.log ("### Dates: " + tableData[j].date_added + " - " + converteddate);
-                    createTableRows(tableData[j].ticker, tableData[j].type, converteddate, tableData[j].added_price, tableData[j].multiplier,
+                    console.log ("### Dates: " + tableData[j].date_added + " - " + converteddate); //TODO: date format fix
+                    createTableRows(tableData[j].ticker, tableData[j].type, datevalue, tableData[j].added_price, tableData[j].multiplier,
                         tableData[j].call_count, tableData[j].call_flow, tableData[j].put_count,tableData[j].put_flow, tableData[j].json_performance,
                         tableData[j].performance, tableData[j].market_cap, tableData[j].company_name);   
                 }
