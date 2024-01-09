@@ -22,7 +22,7 @@
     <div class="page">
         @SPK@include("partials/header.html")
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Flow Data", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Flow Data'})
+        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Equity Options", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Equity Options'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -34,7 +34,7 @@
                         <div class="card custom-card">
                             <div class="card-header">
                                 <div class="card-title">
-                                    Option Flow data
+                                    Options Daily Flow as of Timestamp
                                     <i class="fa fa-refresh ms-3" aria-hidden="true" onclick="loadFlowData()" style="font-size: x-large;cursor:pointer"></i>
                                 </div>
                             </div>
@@ -43,16 +43,17 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Ticker</th>
-                                            <th scope="col">Type</th>
-                                            <th scope="col">Date Added</th>
-                                            <th scope="col">Price</th>
+                                            <th scope="col">Pick</th>
+                                            <th scope="col">Option</th>
+                                            <th scope="col">Updated TS</th>
+                                            <th scope="col">Price $</th>
                                             <th scope="col">Multiplier</th>
                                             <th scope="col">Call(#)</th>
                                             <th scope="col">Call(%)</th>
                                             <th scope="col">Put(#)</th>
                                             <th scope="col">Put(%)</th>
-                                            <th scope="col">MCap($B)</th>
-                                            <th scope="col">Performance</th>
+                                            <th scope="col">M.Cap $B</th>
+                                            <th scope="col">Performance %</th>
                                             <th scope="col">Company Name</th>
                                         </tr>
                                     </thead>
