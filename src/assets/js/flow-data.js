@@ -68,7 +68,7 @@ var createTableRows = (ticker, type, date_added, added_price, multiplier, call_c
     const performanceTheme = performance > 0 ? 'success' : 'info'
     // const performanceTrend = performance > 0 ? 'trending-up' : 'trending-down'
     const badgeTheme = (type == 'CALL') ? 'primary' : 'secondary';
-    const shorlistedTicker = call_flow >= .8 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .8 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
+    const shorlistedTicker = call_flow >= .69 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .69 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
 /* 
     const dateObj = new Date(date_added);
     formatOption = {
