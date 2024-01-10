@@ -14,7 +14,7 @@
 
 </head>
 
-<body onload="loadFlowData()">
+<body onload="loadOptionFlowData()">
 
     @SPK@include("partials/switcher.html")
     @SPK@include("partials/loader.html")
@@ -39,28 +39,34 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <table id="flowDataResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Ticker</th>
-                                            <th scope="col">Pick</th>
-                                            <th scope="col">Option</th>
-                                            <th scope="col">Multiplier</th>
-                                            <th scope="col">Call(%)</th>
-                                            <th scope="col">Put(%)</th>
-                                            <th scope="col">Call(#)</th>
-                                            <th scope="col">Put(#)</th>
-                                            <th scope="col">Price $</th>
-                                            <th scope="col">M.Cap $B</th>
-                                            <th scope="col">Performance %</th>
-                                            <th scope="col">Last Updated TS</th>
-                                            <th scope="col">Company Name</th>
-                                        </tr>
-                                    </thead>
-                                   <tbody id="equity-options-tbody">
-   
-                                    </tbody>
-                                </table>
+                                <ul class="nav nav-tabs mb-3 nav-justified nav-style-1 d-sm-flex d-block" id="option-flow-tab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" data-bs-toggle="tab" role="tab" href="#options" aria-selected="true">Options</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" role="tab" href="#ticker-history" aria-selected="false" tabindex="-1">Ticker History</a>
+                                    </li>
+                                    <li class="nav-item active" role="presentation">
+                                        <a class="nav-link" data-bs-toggle="tab" role="tab" href="#watchlist" onclick="loadWatchlistData()" aria-selected="false" tabindex="-1">Watchlist</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane text-muted active show" id="options" role="tabpanel">
+                                        <div>
+                                            <!--Contents will be loaded dynamically-->
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane text-muted" id="ticker-history" role="tabpanel">
+                                        <div>
+                                            <!--Contents will be loaded dynamically-->
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane text-muted" id="watchlist" role="tabpanel">
+                                        <div>
+                                            <!--Contents will be loaded dynamically-->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -76,6 +82,17 @@
                 <div class="d-flex">
                     <div class="toast-body">
                         <span id="alert-success-msg" class="fs-18"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-5">
+            <div id="equity-options-data-error" class="toast colored-toast text-bg-secondary" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <span id="alert-error-msg" class="fs-18"></span>
                     </div>
                 </div>
             </div>
