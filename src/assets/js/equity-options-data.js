@@ -1,7 +1,6 @@
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
 var loadOptionFlowData = () => {
-    //var tableData = [];
     const authToken = localStorage.getItem('authToken');
     axios
         .get(
@@ -216,7 +215,7 @@ var createTableRowsOptions = (ticker, type, date_added, added_price, multiplier,
     const performanceTheme = performance > 0 ? 'success' : 'info'
     const badgeTheme = (optionType == 'CALL') ? 'primary' : 'secondary';
     const shorlistedTicker = call_flow >= .69 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .69 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
-    //const
+
     const row = document.createElement('tr');
     row.innerHTML = `<td style = 'font-size: 12px;'>${ticker}</td>
     <td style = 'font-size: 12px;'>${shorlistedTicker}</td>
@@ -255,7 +254,7 @@ var createTableRowsTickerHistory = (ticker, type, date_added, added_price, multi
     const performanceTheme = performance > 0 ? 'success' : 'info'
     const badgeTheme = (optionType == 'CALL') ? 'primary' : 'secondary';
     const shorlistedTicker = call_flow >= .69 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .69 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
-    //const
+
     const row = document.createElement('tr');
     row.innerHTML = `<td style = 'font-size: 12px;'>${ticker}</td>
     <td style = 'font-size: 12px;'>${shorlistedTicker}</td>
@@ -288,7 +287,7 @@ var createTableRowsWatchlist = (ticker, type, date_added, added_price, multiplie
     const performanceTheme = performance > 0 ? 'success' : 'info'
     const badgeTheme = (optionType == 'CALL') ? 'primary' : 'secondary';
     const shorlistedTicker = call_flow >= .69 &&  call_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : put_flow >= .69 &&  put_count >= 20000 && revisedMarketCap >= 5 ? 'Yes' : '-';  //TODO: $5Billions marketcap
-    //const
+
     const row = document.createElement('tr');
     row.innerHTML = `<td style = 'font-size: 12px;'>${ticker}</td>
     <td style = 'font-size: 12px;'>${shorlistedTicker}</td>
