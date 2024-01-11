@@ -176,6 +176,10 @@ var getTokenStats = (parentPage) => {
   if(profileObj.ROLE_CODE == 99){
     document.getElementById('admin-menu').style.display = 'block';
   }
+  if(profile.ROLE_CODE <= 10){
+    document.getElementById('equity-options-menu').style.display = 'none';
+    document.getElementById('dashboard-menu-count').innerHTML = 1;
+  }
 
   loadRateScore();
   console.log("## botId: " + botId + " userSubscriptionStatusValue: " +userSubscriptionStatusValue);

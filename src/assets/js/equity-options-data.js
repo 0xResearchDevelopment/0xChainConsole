@@ -1,6 +1,34 @@
 var targetEndPointUrlBase = 'https://euabq2smd3.execute-api.us-east-1.amazonaws.com/dev';
 
 var loadOptionFlowData = () => {
+    loadHeaderData();
+    const tableDiv = document.createElement('div');
+    tableDiv.innerHTML = `<table id="optionsResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ticker</th>
+                                <th scope="col">Pick</th>
+                                <th scope="col">Option</th>
+                                <th scope="col">Multiplier</th>
+                                <th scope="col">Call(%)</th>
+                                <th scope="col">Put(%)</th>
+                                <th scope="col">Call(#)</th>
+                                <th scope="col">Put(#)</th>
+                                <th scope="col">Price $</th>
+                                <th scope="col">M.Cap $B</th>
+                                <th scope="col">Performance %</th>
+                                <th scope="col">Last Updated TS</th>
+                                <th scope="col">Company Name</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                    <tbody id="options-tbody">
+                    </tbody>`;
+
+    const containerDiv = document.getElementById("options");
+    containerDiv.innerHTML = '';
+    containerDiv.appendChild(tableDiv);
+
     const authToken = localStorage.getItem('authToken');
     axios
         .get(
@@ -15,49 +43,25 @@ var loadOptionFlowData = () => {
             if (res.status == 200) {
                 console.log(res.data);
                 const optionsData = (res.data.equityOptionsData != undefined && res.data.equityOptionsData != null) ? res.data.equityOptionsData : null;
-                var tableDataCount = 0;
-
-                const tableDiv = document.createElement('div');
-                tableDiv.innerHTML = `<table id="optionsResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Ticker</th>
-                                            <th scope="col">Pick</th>
-                                            <th scope="col">Option</th>
-                                            <th scope="col">Multiplier</th>
-                                            <th scope="col">Call(%)</th>
-                                            <th scope="col">Put(%)</th>
-                                            <th scope="col">Call(#)</th>
-                                            <th scope="col">Put(#)</th>
-                                            <th scope="col">Price $</th>
-                                            <th scope="col">M.Cap $B</th>
-                                            <th scope="col">Performance %</th>
-                                            <th scope="col">Action</th>
-                                            <th scope="col">Last Updated TS</th>
-                                            <th scope="col">Company Name</th>
-                                        </tr>
-                                    </thead>
-                                <tbody id="options-tbody">
-                                </tbody>`;
-
-                const containerDiv = document.getElementById("options");
-                containerDiv.innerHTML = '';
-                containerDiv.appendChild(tableDiv);
+                var optionTableData = [];
 
                 for (let i = 0; i < optionsData.length; i++) {
                     if(optionsData[i].OPTIONS_TYPE != null){
-                        var formattedDate = Date.parse(optionsData[i].TICKER_ADDED_TS_STR);
+                        var formattedDate = optionsData[i].TICKER_ADDED_TS_STR.replace(/T/, ' ').replace(/\..+/, '');
                         var priceChangePercentage = (optionsData[i].PERFORMANCE_1 / optionsData[i].TICKER_PRICE) *100;
                         createTableRowsOptions(optionsData[i].TICKER, optionsData[i].OPTIONS_TYPE, formattedDate, optionsData[i].TICKER_PRICE, optionsData[i].TIKCER_MULTIPLIER,
                             optionsData[i].OPTIONS_COUNT_CALL, optionsData[i].OPTIONS_FLOW_CALL, optionsData[i].OPTIONS_COUNT_PUT,optionsData[i].OPTIONS_FLOW_PUT, priceChangePercentage,
-                            optionsData[i].PERFORMANCE_2, optionsData[i].MARKET_CAP, optionsData[i].TICKER_NAME, 1);
+                            optionsData[i].PERFORMANCE_2, optionsData[i].MARKET_CAP, optionsData[i].TICKER_NAME);
                             
-                            tableDataCount = tableDataCount + 1;
+                        optionTableData.push(optionsData[i]);
                     }              
                 }
 
-                applyResponsivenessOptions(optionsData.length);
-                showToastAlerts('equity-options-data-success','alert-success-msg',`Loaded ${tableDataCount} records of ${optionsData.length}`);
+                var optionTableDataSorted = optionTableData.sort(({TICKER_ADDED_TS_STR:a}, {TICKER_ADDED_TS_STR:b}) => b-a);
+
+                applyResponsivenessOptions(optionTableData.length);
+                document.getElementById("latest-timestamp").innerHTML = optionTableDataSorted[0].TICKER_ADDED_TS_STR.replace(/T/, ' ').replace(/\..+/, '');
+                document.getElementById("option-load-status").innerHTML = `(Loaded ${optionTableData.length} records of ${optionsData.length})`;
             }
         }).catch(err => {
             console.log("inside err");
@@ -72,72 +76,103 @@ var loadOptionFlowData = () => {
 }
 
 var loadTickerHistoryData = (ticker) => {
-    const authToken = localStorage.getItem('authToken');
-    axios
-        .post(
-            targetEndPointUrlBase+'/api/equity/options/getDataByTicker',
-            {ticker: ticker},
-            {
-                headers: {
-                    Authorization: `Bearer ${authToken}`
+    document.getElementById('ticker-input').value = '';
+    document.getElementById("ticker-search").disabled = true;
+    const tableDiv = document.createElement('div');
+    tableDiv.innerHTML = `<table id="tickerHistoryResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ticker</th>
+                                <th scope="col">Pick</th>
+                                <th scope="col">Option</th>
+                                <th scope="col">Multiplier</th>
+                                <th scope="col">Call(%)</th>
+                                <th scope="col">Put(%)</th>
+                                <th scope="col">Call(#)</th>
+                                <th scope="col">Put(#)</th>
+                                <th scope="col">Price $</th>
+                                <th scope="col">M.Cap $B</th>
+                                <th scope="col">Performance %</th>
+                                <th scope="col">Last Updated TS</th>
+                                <th scope="col">Company Name</th>
+                            </tr>
+                        </thead>
+                    <tbody id="ticker-history-tbody">
+                    </tbody>`;
+
+    const containerDiv = document.getElementById("ticker-history-table");
+    containerDiv.innerHTML = '';
+    containerDiv.appendChild(tableDiv);
+
+    if(ticker != null && ticker != '') {
+        const authToken = localStorage.getItem('authToken');
+        axios
+            .post(
+                targetEndPointUrlBase+'/api/equity/options/getDataByTicker',
+                {ticker: ticker},
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`
+                    }
                 }
-            }
-        )
-        .then(res => {
-            if (res.status == 200) {
-                console.log(res.data);
-                const tickerData = (res.data.tickerData != undefined && res.data.tickerData != null) ? res.data.tickerData : null;
-
-                const tableDiv = document.createElement('div');
-                tableDiv.innerHTML = `<table id="tickerHistoryResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Ticker</th>
-                                            <th scope="col">Pick</th>
-                                            <th scope="col">Option</th>
-                                            <th scope="col">Multiplier</th>
-                                            <th scope="col">Call(%)</th>
-                                            <th scope="col">Put(%)</th>
-                                            <th scope="col">Call(#)</th>
-                                            <th scope="col">Put(#)</th>
-                                            <th scope="col">Price $</th>
-                                            <th scope="col">M.Cap $B</th>
-                                            <th scope="col">Performance %</th>
-                                            <th scope="col">Last Updated TS</th>
-                                            <th scope="col">Company Name</th>
-                                        </tr>
-                                    </thead>
-                                <tbody id="ticker-history-tbody">
-                                </tbody>`;
-
-                const containerDiv = document.getElementById("ticker-history");
-                containerDiv.innerHTML = '';
-                containerDiv.appendChild(tableDiv);
-
-                for (let i = 0; i < tickerData.length; i++) {
-                    if(tickerData[i].OPTIONS_TYPE != null){
-                        var formattedDate = Date.parse(tickerData[i].TICKER_ADDED_TS_STR);
-                        var priceChangePercentage = (tickerData[i].PERFORMANCE_1 / tickerData[i].TICKER_PRICE) *100;
-                        createTableRowsTickerHistory(tickerData[i].TICKER, tickerData[i].OPTIONS_TYPE, formattedDate, tickerData[i].TICKER_PRICE, tickerData[i].TIKCER_MULTIPLIER,
-                            tickerData[i].OPTIONS_COUNT_CALL, tickerData[i].OPTIONS_FLOW_CALL, tickerData[i].OPTIONS_COUNT_PUT,tickerData[i].OPTIONS_FLOW_PUT, priceChangePercentage,
-                            tickerData[i].PERFORMANCE_2, tickerData[i].MARKET_CAP, tickerData[i].TICKER_NAME, 3);
-                    }              
+            )
+            .then(res => {
+                if (res.status == 200) {
+                    console.log(res.data);
+                    const tickerData = (res.data.tickerData != undefined && res.data.tickerData != null) ? res.data.tickerData : null;
+    
+                    for (let i = 0; i < tickerData.length; i++) {
+                        if(tickerData[i].OPTIONS_TYPE != null){
+                            var formattedDate = tickerData[i].TICKER_ADDED_TS_STR.replace(/T/, ' ').replace(/\..+/, '');
+                            var priceChangePercentage = (tickerData[i].PERFORMANCE_1 / tickerData[i].TICKER_PRICE) *100;
+                            createTableRowsTickerHistory(tickerData[i].TICKER, tickerData[i].OPTIONS_TYPE, formattedDate, tickerData[i].TICKER_PRICE, tickerData[i].TIKCER_MULTIPLIER,
+                                tickerData[i].OPTIONS_COUNT_CALL, tickerData[i].OPTIONS_FLOW_CALL, tickerData[i].OPTIONS_COUNT_PUT,tickerData[i].OPTIONS_FLOW_PUT, priceChangePercentage,
+                                tickerData[i].PERFORMANCE_2, tickerData[i].MARKET_CAP, tickerData[i].TICKER_NAME, 3);
+                        }              
+                    }
+                    applyResponsivenessTickerHistory(tickerData.length);
                 }
-                applyResponsivenessTickerHistory(tickerData.length);
-            }
-        }).catch(err => {
-            console.log("inside err");
-            console.log(err, err.response);
-            if(err.response.status == 401) {
-                setTimeout(()=> {
-                    window.location.href='sign-in-cover.html';
-                 }
-                 ,delayInMS);
-            }
-        }) 
+            }).catch(err => {
+                console.log("inside err");
+                console.log(err, err.response);
+                if(err.response.status == 401) {
+                    setTimeout(()=> {
+                        window.location.href='sign-in-cover.html';
+                     }
+                     ,delayInMS);
+                }
+            }) 
+    }
 }
 
 var loadWatchlistData = () => {
+    const tableDiv = document.createElement('div');
+    tableDiv.innerHTML = `<table id="watchlistResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">Ticker</th>
+                                <th scope="col">Pick</th>
+                                <th scope="col">Option</th>
+                                <th scope="col">Multiplier</th>
+                                <th scope="col">Call(%)</th>
+                                <th scope="col">Put(%)</th>
+                                <th scope="col">Call(#)</th>
+                                <th scope="col">Put(#)</th>
+                                <th scope="col">Price $</th>
+                                <th scope="col">M.Cap $B</th>
+                                <th scope="col">Performance %</th>
+                                <th scope="col">Last Updated TS</th>
+                                <th scope="col">Company Name</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                    <tbody id="watchlist-tbody">
+                    </tbody>`;
+
+    const containerDiv = document.getElementById("watchlist");
+    containerDiv.innerHTML = '';
+    containerDiv.appendChild(tableDiv);
+
     const authToken = localStorage.getItem('authToken');
     axios
         .get(
@@ -153,40 +188,13 @@ var loadWatchlistData = () => {
                 console.log(res.data);
                 const watchlistData = (res.data.watchlistData != undefined && res.data.watchlistData != null) ? res.data.watchlistData : null;
 
-                const tableDiv = document.createElement('div');
-                tableDiv.innerHTML = `<table id="watchlistResponsiveTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Ticker</th>
-                                            <th scope="col">Pick</th>
-                                            <th scope="col">Option</th>
-                                            <th scope="col">Multiplier</th>
-                                            <th scope="col">Call(%)</th>
-                                            <th scope="col">Put(%)</th>
-                                            <th scope="col">Call(#)</th>
-                                            <th scope="col">Put(#)</th>
-                                            <th scope="col">Price $</th>
-                                            <th scope="col">M.Cap $B</th>
-                                            <th scope="col">Performance %</th>
-                                            <th scope="col">Action</th>
-                                            <th scope="col">Last Updated TS</th>
-                                            <th scope="col">Company Name</th>
-                                        </tr>
-                                    </thead>
-                                <tbody id="watchlist-tbody">
-                                </tbody>`;
-
-                const containerDiv = document.getElementById("watchlist");
-                containerDiv.innerHTML = '';
-                containerDiv.appendChild(tableDiv);
-
                 for (let i = 0; i < watchlistData.length; i++) {
                     if(watchlistData[i].OPTIONS_TYPE != null){
-                        var formattedDate = Date.parse(watchlistData[i].TICKER_ADDED_TS_STR);
+                        var formattedDate = watchlistData[i].TICKER_ADDED_TS_STR.replace(/T/, ' ').replace(/\..+/, '');
                         var priceChangePercentage = (watchlistData[i].PERFORMANCE_1 / watchlistData[i].TICKER_PRICE) *100;
                         createTableRowsWatchlist(watchlistData[i].TICKER, watchlistData[i].OPTIONS_TYPE, formattedDate, watchlistData[i].TICKER_PRICE, watchlistData[i].TIKCER_MULTIPLIER,
                             watchlistData[i].OPTIONS_COUNT_CALL, watchlistData[i].OPTIONS_FLOW_CALL, watchlistData[i].OPTIONS_COUNT_PUT,watchlistData[i].OPTIONS_FLOW_PUT, priceChangePercentage,
-                            watchlistData[i].PERFORMANCE_2, watchlistData[i].MARKET_CAP, watchlistData[i].TICKER_NAME, 3);
+                            watchlistData[i].PERFORMANCE_2, watchlistData[i].MARKET_CAP, watchlistData[i].TICKER_NAME);
                     }              
                 }
                 applyResponsivenessWatchlist(watchlistData.length);
@@ -204,7 +212,7 @@ var loadWatchlistData = () => {
 }
 
 var createTableRowsOptions = (ticker, type, date_added, added_price, multiplier, call_count, call_flow, 
-    put_count,put_flow, json_performance, performance, market_cap, company_name, tab_no) => {
+    put_count,put_flow, json_performance, performance, market_cap, company_name) => {
     const optionType = type == 1 ? 'CALL' : 'PUT'    
     const revisedMarketCap = Math.round((market_cap/1000000000)*100)/100;
     const callFlowTheme = call_flow >= .8 ? 'success' : call_flow < .8 && call_flow >= .5 ? 'info' : 'secondary';
@@ -227,16 +235,16 @@ var createTableRowsOptions = (ticker, type, date_added, added_price, multiplier,
     <td style = 'font-size: 12px;'>${put_count}</td>
     <td style = 'font-size: 12px;'>$${added_price}</td>
     <td style = 'font-size: 12px;'>$${revisedMarketCap}</td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${jsonPerformanceTheme}-transparent fs-12 rounded-pill'>${Math.round(json_performance)}%</span> 
-                <span class='badge bg-${performanceTheme}-transparent fs-12 rounded-pill'>${Math.round((performance))}%</span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${jsonPerformanceTheme}-transparent fs-12 rounded-pill'>${Math.round(json_performance*100)/100}%</span> 
+                <span class='badge bg-${performanceTheme}-transparent fs-12 rounded-pill'>${Math.round(performance*100)/100}%</span></td>
+    <td style = 'font-size: 12px;'>${date_added}</td>
+    <td style = 'font-size: 12px;'>${company_name}</td>
     <td style = 'font-size: 12px;'>
         <div class="hstack gap-2 fs-15">
-            <a href="javascript:navigateToTickerHistory('${ticker}')" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-link"></i></a>
-            <a href="javascript:addWatchList('${ticker}', '${company_name}')" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-play-list-add-fill"></i></a>
+            <button onclick="navigateToTickerHistory('${ticker}')" class="dt-button buttons-html5" type="button"><span>Ticker History</span></button>
+            <button onclick="addWatchList('${ticker}', '${company_name}')" class="dt-button buttons-html5" type="button"><span>Add to Watchlist</span></button>
         </div>
-    </td>
-    <td style = 'font-size: 12px;'>${date_added}</td>
-    <td style = 'font-size: 12px;'>${company_name}</td>`;
+    </td>`;
 
     const tbody = document.getElementById("options-tbody");
     tbody.appendChild(row);
@@ -276,7 +284,7 @@ var createTableRowsTickerHistory = (ticker, type, date_added, added_price, multi
 }
 
 var createTableRowsWatchlist = (ticker, type, date_added, added_price, multiplier, call_count, call_flow, 
-    put_count,put_flow, json_performance, performance, market_cap, company_name, tab_no) => {
+    put_count,put_flow, json_performance, performance, market_cap, company_name) => {
     const optionType = type == 1 ? 'CALL' : 'PUT'    
     const revisedMarketCap = Math.round((market_cap/1000000000)*100)/100;
     const callFlowTheme = call_flow >= .8 ? 'success' : call_flow < .8 && call_flow >= .5 ? 'info' : 'secondary';
@@ -301,13 +309,13 @@ var createTableRowsWatchlist = (ticker, type, date_added, added_price, multiplie
     <td style = 'font-size: 12px;'>$${revisedMarketCap}</td>
     <td style = 'font-size: 12px;'><span class='badge bg-${jsonPerformanceTheme}-transparent fs-12 rounded-pill'>${Math.round(json_performance)}%</span> 
                 <span class='badge bg-${performanceTheme}-transparent fs-12 rounded-pill'>${Math.round((performance))}%</span></td>
+    <td style = 'font-size: 12px;'>${date_added}</td>
+    <td style = 'font-size: 12px;'>${company_name}</td>
     <td style = 'font-size: 12px;'>
         <div class="hstack gap-2 fs-15">
-            <a href="javascript:removeWatchList('${ticker}')" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-close-line"></i></a>
+            <button onclick="removeWatchList('${ticker}')" class="dt-button buttons-html5" type="button"><span>Remove from Watchlist</span></button>
         </div>
-    </td>
-    <td style = 'font-size: 12px;'>${date_added}</td>
-    <td style = 'font-size: 12px;'>${company_name}</td>`;
+    </td>`;
 
     const tbody = document.getElementById("watchlist-tbody");
     tbody.appendChild(row);
@@ -365,8 +373,6 @@ var addWatchList = (ticker, tickerName) => {
         tickerName: tickerName,
     }
 
-    console.log(watchlistData);
-
     const authToken = localStorage.getItem('authToken');
     axios
         .post(
@@ -380,11 +386,8 @@ var addWatchList = (ticker, tickerName) => {
         )
         .then(res => {
             console.log("res: " + JSON.stringify(res.data));
-            showToastAlerts('equity-options-data-success','alert-success-msg',res.data.message);
             if (res.status == 201) {
-                setTimeout(()=> {
-                    switchTab('watchlist')
-                }, delayInMS);
+                showToastAlerts('equity-options-data-success','alert-success-msg',res.data.message);
             }
         })
         .catch(err => {
@@ -442,4 +445,36 @@ var switchTab = (tabName) => {
 var navigateToTickerHistory = (ticker) => {
     switchTab('ticker-history');
     loadTickerHistoryData(ticker);
+}
+
+var validateTickerInput = () => {
+    var tickerInput = document.getElementById('ticker-input').value;
+    console.log('##validateTickerInput: '+ tickerInput);
+    if(tickerInput.length > 0){
+        document.getElementById("ticker-search").disabled = false;
+    }
+    else{
+        document.getElementById("ticker-search").disabled = true;
+    }
+}
+
+var searchTicker = () => {
+    var tickerInput = document.getElementById('ticker-input').value.toUpperCase();
+    if(tickerInput.length > 0){
+        loadTickerHistoryData(tickerInput);
+    }
+}
+
+var loadHeaderData = () => {
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
+    const username = profile.NAME_FIRST + " " + profile.NAME_LAST;
+    document.getElementById("header-user-name").innerHTML = username;
+    document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
+    if(profile.ROLE_CODE == 99){
+        document.getElementById('admin-menu').style.display = 'block';
+    }
+    if(profile.ROLE_CODE <= 10){
+        document.getElementById('equity-options-menu').style.display = 'none';
+        document.getElementById('dashboard-menu-count').innerHTML = 1;
+    }
 }

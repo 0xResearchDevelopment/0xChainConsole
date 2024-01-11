@@ -423,6 +423,10 @@ var loadHeaderData = () => {
     if(profile.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
     }
+    if(profile.ROLE_CODE <= 10){
+        document.getElementById('equity-options-menu').style.display = 'none';
+        document.getElementById('dashboard-menu-count').innerHTML = 1;
+    }
 }
 
 var createBot = () => {

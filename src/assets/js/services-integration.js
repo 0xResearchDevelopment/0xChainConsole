@@ -350,6 +350,10 @@ var getUserProfile = () => {
                 if(profile.ROLE_CODE == 99){
                     document.getElementById('admin-menu').style.display = 'block';
                 }
+                if(profile.ROLE_CODE <= 10){
+                    document.getElementById('equity-options-menu').style.display = 'none';
+                    document.getElementById('dashboard-menu-count').innerHTML = 1;
+                }
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
                 //localStorage.setItem('statsSummaryObj', JSON.stringify(subscribtionStatsSummary));
@@ -722,6 +726,10 @@ var loadProfilePage = () => {
                 if(profile.ROLE_CODE == 99){
                     document.getElementById('admin-menu').style.display = 'block';
                 }
+                if(profile.ROLE_CODE <= 10){
+                    document.getElementById('equity-options-menu').style.display = 'none';
+                    document.getElementById('dashboard-menu-count').innerHTML = 1;
+                }
                 document.getElementById("profile-header-name").innerHTML = username;
                 document.getElementById("profile-header-email").innerHTML = profile.EMAIL_ID;     
                 document.getElementById("profile-header-phone").innerHTML = (profile.PHONE_PRIMARY != null && profile.PHONE_PRIMARY != undefined) ? profile.PHONE_PRIMARY : "Primary-Phone";  
@@ -879,6 +887,10 @@ var loadPricingPage = () => {
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
     if(profile.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
+    }
+    if(profile.ROLE_CODE <= 10){
+        document.getElementById('equity-options-menu').style.display = 'none';
+        document.getElementById('dashboard-menu-count').innerHTML = 1;
     }
 
     if(active_bots_latest == 1){

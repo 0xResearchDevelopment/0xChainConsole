@@ -21,7 +21,11 @@ var loadWorkflowPage = () => {
     document.getElementById("header-profile-photo").src = profileObj.PROFILE_PHOTO;
     if(profileObj.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
-      }
+    }
+    if(profile.ROLE_CODE <= 10){
+      document.getElementById('equity-options-menu').style.display = 'none';
+      document.getElementById('dashboard-menu-count').innerHTML = 1;
+    }
 
     var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
     if (parentPage == 1) {
