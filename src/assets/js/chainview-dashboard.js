@@ -175,7 +175,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowNetProfit.appendChild(tdNetProfitLabel);
 
             var tdProfitDiffLabel = document.createElement('td');
-            var textProfitDiffLabel = document.createTextNode("Change %");
+            var textProfitDiffLabel = document.createTextNode("Token-Change %");
             tdProfitDiffLabel.appendChild(textProfitDiffLabel);
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 
@@ -184,20 +184,20 @@ var formatGraphData = (rawNetProfitArr) => {
             tdActiveBotsLabel.appendChild(textActiveBotsLabel);
             rowActiveBots.appendChild(tdActiveBotsLabel);
 
-            var tdSubNetProfitLabel = document.createElement('td');
-            var textSubNetProfitLabel = document.createTextNode("Total Profit");
-            tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
-            rowSubNetProfit.appendChild(tdSubNetProfitLabel);
+            // var tdSubNetProfitLabel = document.createElement('td');
+            // var textSubNetProfitLabel = document.createTextNode("Total Profit");
+            // tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
+            // rowSubNetProfit.appendChild(tdSubNetProfitLabel);
 
             var tdBaseNetProfitLabel = document.createElement('td');
             var textBaseNetProfitLabel = document.createTextNode("Base-Profit");
             tdBaseNetProfitLabel.appendChild(textBaseNetProfitLabel);
             rowBaseNetProfit.appendChild(tdBaseNetProfitLabel);
 
-            var tdUserSubBaseNetProfitLabel = document.createElement('td');
-            var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
-            tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
-            rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
+            // var tdUserSubBaseNetProfitLabel = document.createElement('td');
+            // var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
+            // tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
+            // rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
 
             var tdUsdProfitLabel = document.createElement('td');
             var textUsdProfitLabel = document.createTextNode("USD-Profit %");
@@ -233,10 +233,10 @@ var formatGraphData = (rawNetProfitArr) => {
         tdActiveBots.appendChild(textActiveBots);
         rowActiveBots.appendChild(tdActiveBots);
 
-        var tdSubNetProfit = document.createElement('td');
-        var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
-        tdSubNetProfit.appendChild(textSubNetProfit);
-        rowSubNetProfit.appendChild(tdSubNetProfit);
+        // var tdSubNetProfit = document.createElement('td');
+        // var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
+        // tdSubNetProfit.appendChild(textSubNetProfit);
+        // rowSubNetProfit.appendChild(tdSubNetProfit);
 
         var tdBaseNetProfit = document.createElement('td');
         var textBaseNetProfit = document.createTextNode(rawNetProfitArr[i].BASE_NETPROFIT + "%");
@@ -244,10 +244,10 @@ var formatGraphData = (rawNetProfitArr) => {
         tdBaseNetProfit.appendChild(textBaseNetProfit);
         rowBaseNetProfit.appendChild(tdBaseNetProfit);
 
-        var tdUserSubBaseNetProfit = document.createElement('td');
-        var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
-        tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
-        rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
+        // var tdUserSubBaseNetProfit = document.createElement('td');
+        // var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
+        // tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
+        // rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
 
         var tdUsdProfit = document.createElement('td');
         var textUsdProfit = document.createTextNode(rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT+ "%");;

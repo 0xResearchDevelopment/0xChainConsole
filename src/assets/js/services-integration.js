@@ -400,7 +400,7 @@ var getUserProfile = () => {
                     createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].PLATFORM,subscribedBots[i].TOKEN_NETPROFIT,
                         subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
                         subscribedBots[i].BOT_ID,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].APP_TS_FMT,subscribedBots[i].AVG_USD_PROFIT,
-                        subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT);
+                        subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED);
                 }
 
                 document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
@@ -527,7 +527,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex4Div);
 }
 
-var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent) => {
+var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd) => {
     const row = document.createElement('tr');
     const strategyName = symbol + '_' + timeframe;
     const tokenColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
@@ -539,31 +539,34 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const usdPercent = baseUsdProfitPercent >= tokenUsdProfitPercent ? baseUsdProfitPercent : tokenUsdProfitPercent;
     const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
     const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
+    const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
     row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
     <td style = 'font-size: 12px;'>
         <div class="lh-1 d-flex align-items-center">
             <span class="avatar avatar-xs avatar-rounded">
                 <img src=${botTokenIcon}>
             </span>
-            <span> -  
-                <a href="javascript:navigateBotStats(14, 1)" class="fs-12 ms-auto mt-auto">${strategyName}</a>
+            <span> 
+                <a href="javascript:navigateTokenStats(${botId}, ${subscriptionStatus})" class="fs-12 ms-auto mt-auto"> : ${strategyName} [${botId}]</a>
             </span>
         </div>
     </td>
     <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${investedUsd}</td>
+    <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
     <td style = 'font-size: 12px;'>${tokenEntryAmount}</td>
     <td style = 'font-size: 12px;'>${lastTradeQty}</td>
-    <td style = 'font-size: 12px;'>${lastTradedDate}</td>
+    <td style = 'font-size: 12px;'>${appTS}</td>
     <td style = 'font-size: 12px;'>${subscribedOn}</td>
-    <td style = 'font-size: 12px;'>${botId}</td>
+    <td style = 'font-size: 12px;'>${usrsubscriptionStatusFlag}</td>
     <td style = 'font-size: 12px;'>${symbol}</td>
     <td style = 'font-size: 12px;'>${timeframe}</td>
-    <td style = 'font-size: 12px;'>${appTS}</td>
-    <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
+    <td style = 'font-size: 12px;'>${lastTradedDate}</td>
     <td style = 'font-size: 12px;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'>${platform}</td>
+
     <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>`;
 
     const tbody = document.getElementById("index-grid-tbody");
@@ -606,7 +609,7 @@ var applyResponsivenessBots = () => {
                 searchPlaceholder: 'Search...',
                 sSearch: ''
             },
-            order: [[0, 'desc']],   //Soring by BotID decensing order
+            order: [[8, 'desc']],   //Soring by BotID decensing order
             "pageLength": 25,
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
