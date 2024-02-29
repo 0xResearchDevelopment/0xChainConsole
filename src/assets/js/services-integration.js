@@ -544,10 +544,10 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     <td style = 'font-size: 12px;'>
         <div class="lh-1 d-flex align-items-center">
             <span class="avatar avatar-xs avatar-rounded">
-                <img src=${botTokenIcon}>
+                <img src=${botTokenIcon}><img src=${botBaseIcon}>
             </span>
             <span> 
-                <a href="javascript:navigateTokenStats(${botId}, ${subscriptionStatus})" class="fs-12 ms-auto mt-auto"> : ${strategyName} [${botId}]</a>
+                <a href="javascript:navigateTokenStats(${botId}, ${subscriptionStatus})" class="fs-12 ms-auto mt-auto"> ${"--"} ${strategyName} [${botId}]</a>
             </span>
         </div>
     </td>
