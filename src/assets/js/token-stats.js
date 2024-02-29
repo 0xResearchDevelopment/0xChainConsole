@@ -363,13 +363,14 @@ var getTokenStats = (parentPage) => {
           currentUsdProfitValue = botDetails.TOKEN_USD_PROFIT_PERCENT >= 0 ? "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.TOKEN_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-down ms-1'></i></span>";
           document.getElementById("current-usd-value").innerHTML = "$ "+botDetails.TOKEN_USD_CURRENT;
           document.getElementById("current-usd-profit").innerHTML = currentUsdProfitValue;
-          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.TOKEN_USD_INVESTED;
+          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.TOKEN_USD_INVESTED + "   ($ " + (botDetails.TOKEN_USD_INVESTED/botDetails.TOKEN_ENTRY_AMOUNT).toFixed(2) + ")";
         } else {
           currentUsdProfitValue = botDetails.BASE_USD_PROFIT_PERCENT >= 0 ? "<span class='badge bg-success-transparent fs-14 rounded-pill'>" + botDetails.BASE_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>" + botDetails.BASE_USD_PROFIT_PERCENT + "%<i class='ti ti-trending-down ms-1'></i></span>";
           document.getElementById("current-usd-value").innerHTML = "$ "+botDetails.BASE_USD_CURRENT;
           document.getElementById("current-usd-profit").innerHTML = currentUsdProfitValue;
-          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.BASE_USD_INVESTED;
+          document.getElementById("invested-usd-value").innerHTML = "Invested : $ " + botDetails.BASE_USD_INVESTED + "   ($ " + (botDetails.BASE_USD_INVESTED/botDetails.TOKEN_ENTRY_AMOUNT).toFixed(2) + ")";
         }
+        document.getElementById("currentValuePertoken").innerHTML =  "Current Value (USD):" + "   ($ " + (botDetails.TOKEN_USD_CURRENT/botDetails.LAST_TRADE_QTY).toFixed(2) + ")";
 
         document.getElementById("profit-per-month").innerHTML = profitPerMonthDesign;
         document.getElementById("profit-per-trade").innerHTML = profitPerTradeDesign;
