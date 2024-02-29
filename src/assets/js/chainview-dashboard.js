@@ -25,7 +25,10 @@ var loadChartData = () => {
                 tokenSummaryNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT : 0;
                 updateTokenPieChartData();
 
-                investmentSummaryNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_AVG_USD_PROFIT_PERCENT : 0;
+                investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
+                currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
+                investmentSummaryNetProfit = ((currentUsd - investedUsd)/investedUsd)*100;
+                investmentSummaryNetProfit = Math.round(investmentSummaryNetProfit * 100) / 100
                 updateInvestmentPieChartData();
 
                 var graphData = formatGraphData(netProfitDaily);
@@ -337,6 +340,9 @@ var inputNetprofit = [];
 var inputBaseNetprofit = [];
 var inputUsdProfit = [];
 var inputXAxisData = [];
+
+var investedUsd = 0;
+var currentUsd = 0;
 
 console.log("1: ",inputNetprofit);
 console.log("2: ",inputBaseNetprofit);
