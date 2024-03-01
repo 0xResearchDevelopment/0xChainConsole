@@ -401,7 +401,8 @@ var getUserProfile = () => {
                     createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].PLATFORM,subscribedBots[i].TOKEN_NETPROFIT,
                         subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
                         subscribedBots[i].BOT_ID,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].APP_TS_FMT,subscribedBots[i].AVG_USD_PROFIT,
-                        subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED);
+                        subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED, 
+                        subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].BASE_INITIAL_CAPITAL, subscribedBots[i].BASE_CURRENT_BALANCE);
                 }
 
                 document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
@@ -558,7 +559,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex4Div);
 }
 
-var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd) => {
+var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd, totalNumberOfDaysRunning, baseInitial, baseCurrent) => {
     const row = document.createElement('tr');
     const strategyName = symbol + '_' + timeframe;
     const tokenColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
@@ -585,6 +586,7 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning}</td>
     <td style = 'font-size: 12px;'>${investedUsd}</td>
     <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
     <td style = 'font-size: 12px;'>${tokenEntryAmount}</td>
@@ -668,8 +670,8 @@ var applyResponsivenessBots = () => {
                 searchPlaceholder: 'Search...',
                 sSearch: ''
             },
-            order: [[8, 'desc']],   //Soring by BotID decensing order
-            "pageLength": 25,
+            order: [[10, 'desc']],   //Soring by BotID decensing order
+            "pageLength": 50,
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ], dom: 'flirtBlp' //'Bfrtip'
