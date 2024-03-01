@@ -545,8 +545,18 @@ var allocationChartData = {
         show: false
     },
     chart: {
-        height: 350,
+        height: 400,
         type: 'treemap'
+    },
+    dataLabels: {
+        enabled: true,
+        style: {
+            fontSize: '12px',
+        },
+        formatter: function (text, op) {
+            return [text, op.value+'%']
+        },
+        offsetY: -4
     },
     colors: [
         '#8e54e9',
