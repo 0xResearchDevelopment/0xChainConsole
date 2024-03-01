@@ -43,8 +43,8 @@ var loadChartData = () => {
 
                 for (let i = 0; i < allocationTradeSymbolSummary.length; i++) {
                     eachAllocation = {
-                        x: allocationTradeSymbolSummary[i].TRADE_SYMBOL,
-                        y: allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE
+                        x: allocationTradeSymbolSummary[i].TRADE_SYMBOL + ' [' + allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE_INVESTED + ']',
+                        y: allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE_CURRENT
                     }
                     allocationArr.push(eachAllocation);
                 }
