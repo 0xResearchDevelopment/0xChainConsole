@@ -341,6 +341,7 @@ var getUserProfile = () => {
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
                 const userInactiveBotsCountObj = (res.data.userInactiveBotsCount!=undefined && res.data.userInactiveBotsCount!=null)?res.data.userInactiveBotsCount:null;
                 const userSubmittedRequests = (res.data.userSubmittedRequestsCount!=undefined && res.data.userSubmittedRequestsCount!=null)?res.data.userSubmittedRequestsCount:null;
+                const allocationBaseSummary = (res.data.allocationBaseSummary!=undefined && res.data.allocationBaseSummary!=null)?res.data.allocationBaseSummary:[];
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -438,6 +439,36 @@ var getUserProfile = () => {
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
                 document.getElementById("grid-switch").disabled = false;
+
+                for (let i = 0; i < allocationBaseSummary.length; i++) {
+                    createTableRowsAllocation(
+                        allocationBaseSummary[i].BASE_CURRENCY_CODE,
+                        allocationBaseSummary[i].TRADE_ACTION,
+                        allocationBaseSummary[i].TOTAL_BASE_CURRENT,
+                        allocationBaseSummary[i].SYMBOL_COUNT,
+                        allocationBaseSummary[i].TOTAL_BASE_USD_CURRENT_VALUE,
+                    );
+                }
+                applyResponsivenessAllocation();
+
+                var symbolBaseCurrentSummary = [];
+                allocationBaseSummary.reduce(function(res, value) {
+                    if (!res[value.BASE_CURRENCY_CODE]) {
+                        res[value.BASE_CURRENCY_CODE] = { BASE_CURRENCY_CODE: value.BASE_CURRENCY_CODE, TOTAL_BASE_CURRENT: 0 };
+                        symbolBaseCurrentSummary.push(res[value.BASE_CURRENCY_CODE])
+                    }
+                    res[value.BASE_CURRENCY_CODE].TOTAL_BASE_CURRENT += Number(value.TOTAL_BASE_CURRENT);
+                    return res;
+                }, {});
+
+                for (let i = 0; i < symbolBaseCurrentSummary.length; i++) {
+                    createSymbolBoxes(
+                        symbolBaseCurrentSummary[i].BASE_CURRENCY_CODE,
+                        symbolBaseCurrentSummary[i].TOTAL_BASE_CURRENT
+                    );
+                }
+
+                //console.log("***result*** "+ JSON.stringify(symbolBaseCurrentSummary));
             }
         }).catch(err => {
             console.log(err, err.response);
@@ -573,6 +604,34 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     tbody.appendChild(row);
 }
 
+var createSymbolBoxes = (symbol, amount) => {
+    const div = document.createElement('div');
+    div.setAttribute("class", "col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-4 mb-lg-0");
+    div.innerHTML = `<div class="card custom-card shadow-none border">
+                        <div class="card-body py-3 row">
+                            <span class="col-md-6 fw-semibold">${symbol}</span>
+                            <span class="col-md-6">${Math.round(amount * 100) / 100}</span>
+                        </div>
+                    </div>`
+
+    const containerDiv = document.getElementById("symbol-box");
+    containerDiv.appendChild(div);
+}
+
+var createTableRowsAllocation = (baseCurrencyCode, tradeAction, totalBaseCurrent, symbolCount, totalBaseUsdCurrentValue) => {
+    const row = document.createElement('tr');
+    let action = tradeAction == 'B' ? 'In Trade' : (tradeAction == 'S' ? 'In Wallet' : 'NA');
+    row.innerHTML = `<td style = 'font-size: 12px;'>${baseCurrencyCode}</td>
+                    <td style = 'font-size: 12px;'>${action}</td>
+                    <td style = 'font-size: 12px;'>${totalBaseCurrent}</td>
+                    <td style = 'font-size: 12px;'>${symbolCount}</td>
+                    <td style = 'font-size: 12px;'>${'$ '+totalBaseUsdCurrentValue}</td>`;
+
+
+    const tbody = document.getElementById("allocation-breakdown-tbody");
+    tbody.appendChild(row);
+}
+
 var hideShowInvData = (iconNumber) => {
     if(iconNumber == 0){
         document.getElementById('eye-slash').style.display = 'inline';
@@ -616,6 +675,21 @@ var applyResponsivenessBots = () => {
             ], dom: 'flirtBlp' //'Bfrtip'
         });
     }
+};
+
+var applyResponsivenessAllocation = () => {
+    $('#allocationBreakdownTable').DataTable({
+        responsive: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: ''
+        },
+        order: [[0, 'desc']],   //Soring by BotID decensing order
+        "pageLength": 25,
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ], dom: 'flirtBlp' //'Bfrtip'
+    });
 };
 
 var switchView = () => {

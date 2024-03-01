@@ -219,15 +219,51 @@
 
                 <div class="row">
                     <div class="col-xxl-12">
-                        <div class="col-xxl-3 col-xl-3">
-                            <div class="card custom-card">
-                                <div class="card-header">
-                                    <div class="card-title">Your Recent Activities</div>
+                        <div class="row">
+                            <div class="col-xxl-9 cols-xl-9 cols-lg-9 cols-md-9 cols-sm-9">
+                                <div class="col-xxl-12 cols-xl-12 cols-lg-12 cols-md-12 cols-sm-12">
+                                    <div class="card custom-card">
+                                        <div class="card-header">
+                                            <div class="card-title">Allocation Breakdown</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" id="symbol-box">
+                                                <!--Elements will be added here dynamically at run time-->
+                                            </div>
+
+                                            <table id="allocationBreakdownTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Symbol</th> 
+                                                        <th scope="col">Action</th> 
+                                                        <th scope="col">Amount</th> 
+                                                        <th scope="col">Strategies</th> 
+                                                        <th scope="col">USD $</th> 
+                                                    </tr>
+                                                </thead>
+                                            <tbody id="allocation-breakdown-tbody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <ul class="task-list mb-0" id="activities-ul">
-                                        <!--lists are created dynamically on run time-->
-                                    </ul>
+                                <div class="col-xxl-12 cols-xl-12 cols-lg-12 cols-md-12 cols-sm-12">
+                                    <div class="card custom-card">
+                                        <div class="card-body">
+                                            <div id="allocationTreemap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-3 cols-xl-3 cols-lg-3 cols-md-3 cols-sm-3">
+                                <div class="card custom-card">
+                                    <div class="card-header">
+                                        <div class="card-title">Your Recent Activities</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="task-list mb-0" id="activities-ul">
+                                            <!--lists are created dynamically on run time-->
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -270,6 +306,7 @@
     <script src="../assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
     <script src="../assets/libs/jsvectormap/maps/world-merc.js"></script>
     <script src="../assets/libs/chart.js/chart.min.js"></script>
+    <!-- Apex Charts JS -->
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
 
     <!--Jquery-->

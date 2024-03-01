@@ -17,6 +17,9 @@ var loadChartData = () => {
             if (res.status == 200) {
                 console.log(res.data);
 
+                const allocationTradeSymbolSummary = (res.data.allocationTradeSymbolSummary!=undefined && res.data.allocationTradeSymbolSummary!=null)?res.data.allocationTradeSymbolSummary:[];
+                var eachAllocation;
+
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:null;
                 netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:null;
@@ -37,6 +40,15 @@ var loadChartData = () => {
                 inputUsdProfit = graphData.usdProfitArray;
                 inputXAxisData = graphData.xAxisDataArray;
                 updateChartData(inputNetprofit, inputBaseNetprofit, inputUsdProfit, inputXAxisData);
+
+                for (let i = 0; i < allocationTradeSymbolSummary.length; i++) {
+                    eachAllocation = {
+                        x: allocationTradeSymbolSummary[i].TRADE_SYMBOL,
+                        y: allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE
+                    }
+                    allocationArr.push(eachAllocation);
+                }
+                updateAllocationChartData();
             }
         }).catch(err => {
             console.log("inside err");
@@ -54,7 +66,7 @@ var loadChartData = () => {
 //API call to fetch Chart data
 loadChartData();
 
-/* starts : chainview - netprofit summary pie-chart */
+/* starts : chainview - token summary pie-chart */
 var tokenSummaryNetProfit = 0;
 var tokenPieChartData = {
     series: [tokenSummaryNetProfit],
@@ -73,6 +85,25 @@ var tokenPieChartData = {
     labels: ["Net Profit"],
 };
 
+var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
+tokenChart.render();
+function index1() {
+    tokenChart.updateOptions({
+        colors: ["rgba(" + myVarVal + ", 0.95)"],
+    });
+}
+
+var updateTokenPieChartData = () => {
+    var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
+    tokenChart.render();
+    tokenChart.updateOptions({
+        colors: ["rgba(" + myVarVal + ", 0.95)"],
+        series: [tokenSummaryNetProfit]
+    });
+}
+/* ends : chainview - token summary pie-chart */
+
+/* starts : chainview - investment summary pie-chart */
 var investmentSummaryNetProfit = 0;
 var investmentPieChartData = {
     series: [investmentSummaryNetProfit],
@@ -91,28 +122,11 @@ var investmentPieChartData = {
     labels: ["Net Profit"],
 };
 
-var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
-tokenChart.render();
-function index1() {
-    tokenChart.updateOptions({
-        colors: ["rgba(" + myVarVal + ", 0.95)"],
-    });
-}
-
 var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), investmentPieChartData);
 investmentChart.render();
 function index1() {
     investmentChart.updateOptions({
         colors: ["rgba(38, 191, 148, 0.95)"],
-    });
-}
-
-var updateTokenPieChartData = () => {
-    var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
-    tokenChart.render();
-    tokenChart.updateOptions({
-        colors: ["rgba(" + myVarVal + ", 0.95)"],
-        series: [tokenSummaryNetProfit]
     });
 }
 
@@ -124,7 +138,7 @@ var updateInvestmentPieChartData = () => {
         series: [investmentSummaryNetProfit]
     });
 }
-/* ends : chainview - netprofit summary pie-chart */
+/* ends : chainview - investment summary pie-chart */
 
 function truncate (num, places) {
     return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
@@ -344,11 +358,6 @@ var inputXAxisData = [];
 var investedUsd = 0;
 var currentUsd = 0;
 
-console.log("1: ",inputNetprofit);
-console.log("2: ",inputBaseNetprofit);
-console.log("3: ",inputXAxisData);
-console.log("4: ",inputUsdProfit);
-
 var chartData = {
     chart: {
         height: 350,
@@ -522,4 +531,53 @@ var changeLayout = (layout) => {
         document.getElementById("chart-view").innerHTML = "Hourly";
     }
 };
+/* ends : chainview - Netprofit stats line-chart */
+
+/* starts : chainview - Allocation tree map */
+var allocationArr = [];
+var allocationChartData = {
+    series: [
+        {
+            data: allocationArr
+        }
+    ],
+    legend: {
+        show: false
+    },
+    chart: {
+        height: 350,
+        type: 'treemap'
+    },
+    colors: [
+        '#8e54e9',
+        '#a65e76',
+        '#f5b849',
+        '#a66a5e',
+        '#a65e9a',
+        '#26bf94',
+        '#e6533c',
+        '#49b6f5',
+        '#5b67c7',
+        '#2dce89',
+        '#EF6537',
+        '#8c9097'
+    ],
+    plotOptions: {
+        treemap: {
+            distributed: true,
+            enableShades: false
+        }
+    }
+};
+var allocationChart = new ApexCharts(document.querySelector("#allocationTreemap"), allocationChartData);
+allocationChart.render();
+
+var updateAllocationChartData = () => {
+    var allocationChart = new ApexCharts(document.querySelector("#allocationTreemap"), allocationChartData);
+    allocationChart.render();
+    allocationChart.updateOptions({
+        //colors: ["rgba(38, 191, 148, 0.95)"],
+        series: [{data: allocationArr}]
+    });
+}
 //*********************** *********************/
