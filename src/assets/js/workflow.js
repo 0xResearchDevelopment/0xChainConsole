@@ -21,7 +21,11 @@ var loadWorkflowPage = () => {
     document.getElementById("header-profile-photo").src = profileObj.PROFILE_PHOTO;
     if(profileObj.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
-      }
+    }
+    if(profile.ROLE_CODE <= 10){
+      document.getElementById('equity-options-menu').style.display = 'none';
+      document.getElementById('dashboard-menu-count').innerHTML = 1;
+    }
 
     var targetEndPointUrl = targetEndPointUrlBase+'/api/tradingdata/getTokenStats';
     if (parentPage == 1) {
@@ -99,7 +103,7 @@ var loadWorkflowPage = () => {
 var validateInputs = () => {
     if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
         && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked
-        && document.getElementById('workflow-file').value.length > 0 && document.getElementById('workflow-remarks').value.length > 0)
+        && document.getElementById('workflow-file').value.length > 0 && document.getElementById('workflow-remarks').value.length > 0 && subscriptionFilePath.length > 0)
         {
             document.getElementById('workflow-submit-request').disabled = false;
         }
@@ -219,6 +223,8 @@ var uploadSubscriptionDoc = () => {
         subscriptionFilePath = res.data.filepath;
         if (res.status == 200) {
             showToastAlerts('workflow-success','alert-success-msg',res.data.message);
+            validateInputs();
+            document.getElementById('workflow-file-uploaded').style.display = 'block';
         }
     })
     .catch(err => {

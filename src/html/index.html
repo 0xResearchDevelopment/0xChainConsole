@@ -3,6 +3,10 @@
 <link rel="stylesheet" href="../assets/libs/swiper/swiper-bundle.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
+
 <!-- Axios dependency-->
 <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
 
@@ -18,7 +22,7 @@
         @SPK@include("partials/header.html")
 
         @SPK@include("partials/sidebar.html")
-        @SPK@include("partials/dashbord-page-header.html", {"dashbordtitle": "Dashboard", "dashbordsubtitle": 'Chainview', "dashbordsubtitle2": 'Summary'})
+        @SPK@include("partials/index-page-header.html", {"title": "Dashboard", "subtitle": 'Chainview', "subtitle2": 'Summary'})
 
         <!-- Start::app-content -->
         <div class="main-content app-content">
@@ -27,6 +31,36 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="row row-cols-xxl-5 row-cols-xl-3 row-cols-md-2" id="dashboard-box-container"> <!-- TODO: to set number of boxes per row-->
+                        </div>
+                        <!--Table div-->
+                        <div style="display: none;" class="mt-5 mb-3" id="dashboard-grid-container">
+                            <table id="indexBotsListDataTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Trades</th>
+                                        <th scope="col">Strategy</th>
+                                        <th scope="col">Token %</th>
+                                        <th scope="col">Base %</th>
+                                        <th scope="col">USD %</th>
+                                        <th scope="col">Days</th>
+                                        <th scope="col">Invested $</th>
+                                        <th scope="col">Profit $</th>
+                                        <th scope="col">Entry Qty</th>
+                                        <th scope="col">Last Traded</th>
+                                        <th scope="col">Last Trade Date</th>
+                                        <th scope="col">Subscribed On</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Symbol</th>
+                                        <th scope="col">Timeframe</th>
+                                        <th scope="col">App TS</th>
+                                        <th scope="col">Avg USD Profit %</th>
+                                        <th scope="col">Platform</th>
+                                        <th scope="col">Base Icon</th>
+                                    </tr>
+                                </thead>
+                                   <tbody id="index-grid-tbody">
+                                    </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -47,35 +81,21 @@
                                         <div class="card custom-card">
                                             <div class="card-header justify-content-between">
                                                 <div class="card-title">
-                                                    Summary
+                                                    Token Summary
                                                 </div>
-                                                <!-- <div class="dropdown">
-                                                    <a href="javascript:void(0);"
-                                                        class="btn-outline-light btn btn-sm text-muted"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">Overall<i
-                                                            class="ri-arrow-down-s-line align-middle ms-1"></i></a>
-                                                    <ul class="dropdown-menu mb-0" role="menu">
-                                                        <li class="border-bottom"><a class="dropdown-item"
-                                                                href="javascript:void(0);">Today</a></li>
-                                                        <li class="border-bottom"><a class="dropdown-item"
-                                                                href="javascript:void(0);">Last Week</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                                                        </li>
-                                                    </ul>
-                                                </div> -->
                                                 <div>
-                                                    <i class="fa fa-refresh" aria-hidden="true" onclick="changeLayout(0)" style="font-size: x-large;cursor:pointer"></i>
+                                                    <i class="fa fa-refresh" aria-hidden="true" onclick="" style="font-size: x-large;cursor:pointer"></i>
                                                 </div>
                                             </div>
                                             <div class="card-body p-0">
                                                 <div class="">
                                                     <div class=" border-bottom">
-                                                        <div id="avgNetProfit"></div>
+                                                        <div id="tokenSummary"></div>
 
                                                         <div class="d-flex justify-content-center mb-3">
                                                             <div class="text-center text-muted">
                                                                 <!-- <p>As of: 03-10-2023</p>   -->
-                                                                <h6 class="text-muted">As of: <span id="as-of-summary" class="text-primary"></span></h6> 
+                                                                <h6 class="text-muted">As of: <span id="as-of-token-summary" class="text-primary"></span></h6> 
                                                             </div>    
                                                         </div>
                                                     </div>
@@ -110,7 +130,7 @@
                                                 <div class="dropdown d-flex">
                                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary-light btn-wave waves-effect waves-light d-flex align-items-center me-2"><i class="ri-filter-3-line me-1"></i>Filter</a>
                                                     <a href="javascript:void(0);" class="btn dropdown-toggle btn-sm btn-wave waves-effect waves-light btn-primary d-flex align-items-center" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-calendar-2-line me-1"></i><span id="chart-view">Hourly</span></a>
+                                                        <i class="ri-calendar-2-line me-1"></i><span id="chart-view">Daily</span></a>
                                                         
                                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLayout(0)">Hourly</a></li>
@@ -131,15 +151,51 @@
                     </div> 
                     <div class="col-xxl-3 cols-xl-3 cols-lg-3 cols-md-3 cols-sm-3">
                         <div class="col-xxl-12">
-                            <div class="col-xxl-12 col-xl-6">
-                                <div class="card custom-card">
-                                    <div class="card-header">
-                                        <div class="card-title">Your Recent Activities</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="task-list mb-0" id="activities-ul">
-                                            <!--lists are created dynamically on run time-->
-                                        </ul>
+                            <div class="row">
+                                <div class="col-xxl-12 col-xl-6">
+                                    <div class="card custom-card">
+                                        <div class="card-header justify-content-between">
+                                            <div class="card-title">
+                                                Investment Summary
+                                            </div>
+                                            <div style="font-size: x-large;cursor:pointer">
+                                                <i class="fa fa-eye" id="eye" aria-hidden="true" style="display: inline;" onclick="hideShowInvData(0)"></i>
+                                                <i class="fa fa-eye-slash" id="eye-slash" aria-hidden="true" style="display: none;" onclick="hideShowInvData(1)"></i>
+                                                <i class="fa fa-refresh" aria-hidden="true" onclick=""></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <div class="">
+                                                <div>
+                                                    <div id="investmentSummary"></div>
+                                                </div>
+
+                                                <div class="border-bottom">
+                                                    <div class="d-flex justify-content-center mb-3">
+                                                        <div class="text-center text-muted">
+                                                            <!-- <p>As of: 03-10-2023</p>   -->
+                                                            <h6 class="text-muted">Profit: <span id="usd-profit" class="text-primary"></span></h6> 
+                                                        </div>    
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex justify-content-center">
+                                                    <div class="d-flex p-4 border-end">
+                                                        <div class="text-center">
+                                                            <p class="mb-1 text-muted">Investment</p>
+                                                            <h5 class="mb-0 text-primary" id="invested-usd"> </h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="d-flex p-4">
+                                                        <div class="text-center">
+                                                            <p class="mb-1 text-muted">Current Value</p>
+                                                            <h5 class="mb-0 text-primary" id="current-usd"></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -156,6 +212,59 @@
                                     <!-- Table contents will be generated at Run time-->
                                 </tbody>
                             </table>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="row">
+                    <div class="col-xxl-12">
+                        <div class="row">
+                            <div class="col-xxl-9 cols-xl-9 cols-lg-9 cols-md-9 cols-sm-9">
+                                <div class="col-xxl-12 cols-xl-12 cols-lg-12 cols-md-12 cols-sm-12">
+                                    <div class="card custom-card">
+                                        <div class="card-header">
+                                            <div class="card-title">Allocation Breakdown</div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row" id="symbol-box">
+                                                <!--Elements will be added here dynamically at run time-->
+                                            </div>
+
+                                            <table id="allocationBreakdownTable" class="table table-bordered border-primary text-nowrap table-hover mt-4" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Symbol</th> 
+                                                        <th scope="col">Action</th> 
+                                                        <th scope="col">Amount</th> 
+                                                        <th scope="col">Strategies</th> 
+                                                        <th scope="col">USD $</th> 
+                                                    </tr>
+                                                </thead>
+                                            <tbody id="allocation-breakdown-tbody"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xxl-12 cols-xl-12 cols-lg-12 cols-md-12 cols-sm-12">
+                                    <div class="card custom-card">
+                                        <div class="card-body">
+                                            <div id="allocationTreemap"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xxl-3 cols-xl-3 cols-lg-3 cols-md-3 cols-sm-3">
+                                <div class="card custom-card">
+                                    <div class="card-header">
+                                        <div class="card-title">Your Recent Activities</div>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="task-list mb-0" id="activities-ul">
+                                            <!--lists are created dynamically on run time-->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div> 
                 </div>
@@ -196,7 +305,22 @@
     <script src="../assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
     <script src="../assets/libs/jsvectormap/maps/world-merc.js"></script>
     <script src="../assets/libs/chart.js/chart.min.js"></script>
+    <!-- Apex Charts JS -->
     <script src="../assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!--Jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <!-- Datatables Cdn -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <!-- <script src="../assets/js/sales-dashboard.js"></script> -->
    <script src="../assets/js/chainview-dashboard.js"></script>

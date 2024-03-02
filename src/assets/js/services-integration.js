@@ -2,6 +2,8 @@ var delayInMS = 3000;
 var targetEndPointUrlBase = 'https://y3rjcjo5g3.execute-api.us-east-1.amazonaws.com/live';
 var subscribedBots = [];
 var profileFilePath = '';
+var investedUsd = 0;
+var currentUsd = 0;
 
 var signUp = async () => {
     var firstName = document.getElementById('signup-fname').value;
@@ -179,7 +181,7 @@ var signIn = () => {
         })
         .catch(err => {
             console.log(err.response);
-            showToastAlerts('signin-error','alert-error-msg',err.response.data.message);
+            showToastAlerts('signin-error','alert-error-msg',err.response.data.errors);
         });
     }
 };
@@ -339,6 +341,7 @@ var getUserProfile = () => {
                 const userActiveBotsLatest = (res.data.userActiveBotsLatest!=undefined && res.data.userActiveBotsLatest!=null)?res.data.userActiveBotsLatest:null;
                 const userInactiveBotsCountObj = (res.data.userInactiveBotsCount!=undefined && res.data.userInactiveBotsCount!=null)?res.data.userInactiveBotsCount:null;
                 const userSubmittedRequests = (res.data.userSubmittedRequestsCount!=undefined && res.data.userSubmittedRequestsCount!=null)?res.data.userSubmittedRequestsCount:null;
+                const allocationBaseSummary = (res.data.allocationBaseSummary!=undefined && res.data.allocationBaseSummary!=null)?res.data.allocationBaseSummary:[];
 
                 var username = profile.NAME_FIRST + " " + profile.NAME_LAST;
                 console.log("# inside getUserProfile - res - username:", username);
@@ -347,6 +350,10 @@ var getUserProfile = () => {
                 // Role based menu access - Administrator 
                 if(profile.ROLE_CODE == 99){
                     document.getElementById('admin-menu').style.display = 'block';
+                }
+                if(profile.ROLE_CODE <= 10){
+                    document.getElementById('equity-options-menu').style.display = 'none';
+                    document.getElementById('dashboard-menu-count').innerHTML = 1;
                 }
 
                 localStorage.setItem('profileObj', JSON.stringify(profile)); 
@@ -390,11 +397,33 @@ var getUserProfile = () => {
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
                                             subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
+                
+                    createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].PLATFORM,subscribedBots[i].TOKEN_NETPROFIT,
+                        subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
+                        subscribedBots[i].BOT_ID,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].APP_TS_FMT,subscribedBots[i].AVG_USD_PROFIT,
+                        subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED, 
+                        subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].BASE_INITIAL_CAPITAL, subscribedBots[i].BASE_CURRENT_BALANCE);
                 }
 
-                document.getElementById("as-of-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
+                document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
                 document.getElementById("active-bots").innerHTML = (userActiveBotsLatest.ACTIVE_BOTS_LATEST != null) ? userActiveBotsLatest.ACTIVE_BOTS_LATEST : 0;
+                
+                investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
+                currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
+                var profitUsd = currentUsd - investedUsd;
+                investedUsd = Math.round(investedUsd).toString();
+                currentUsd = Math.round(currentUsd).toString();
+                profitUsd = Math.round(profitUsd).toString();
+                document.getElementById("invested-usd").innerHTML = "$ " + "".padStart(investedUsd.length, "*");
+                document.getElementById("current-usd").innerHTML = "$ " + "".padStart(currentUsd.length, "*");
+                var profitDesign = (Number(profitUsd) >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + "".padStart(profitUsd.length, "*") + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + "".padStart(profitUsd.length-1, "*"); + "<i class='ti ti-trending-down ms-1'></i></span>";
+                document.getElementById("usd-profit").innerHTML = profitDesign;
+
+                console.log('##TOTAL_TOKEN_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED);
+                console.log('##TOTAL_BASE_USD_INVESTED: '+ subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED);
+                console.log('##TOTAL_TOKEN_USD_CURRENT: '+ subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT);
+                console.log('##TOTAL_BASE_USD_CURRENT: '+ subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT);
 
                 const theme = new Map([
                     ["PROFILE", 'success'],
@@ -410,6 +439,37 @@ var getUserProfile = () => {
                     populateRecentActivities(recentActivities[i].DESC,recentActivities[i].MODULE,
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
+                document.getElementById("grid-switch").disabled = false;
+
+                for (let i = 0; i < allocationBaseSummary.length; i++) {
+                    createTableRowsAllocation(
+                        allocationBaseSummary[i].BASE_CURRENCY_CODE,
+                        allocationBaseSummary[i].TRADE_ACTION,
+                        allocationBaseSummary[i].TOTAL_BASE_CURRENT,
+                        allocationBaseSummary[i].SYMBOL_COUNT,
+                        allocationBaseSummary[i].TOTAL_BASE_USD_CURRENT_VALUE,
+                    );
+                }
+                applyResponsivenessAllocation();
+
+                var symbolBaseCurrentSummary = [];
+                allocationBaseSummary.reduce(function(res, value) {
+                    if (!res[value.BASE_CURRENCY_CODE]) {
+                        res[value.BASE_CURRENCY_CODE] = { BASE_CURRENCY_CODE: value.BASE_CURRENCY_CODE, TOTAL_BASE_CURRENT: 0 };
+                        symbolBaseCurrentSummary.push(res[value.BASE_CURRENCY_CODE])
+                    }
+                    res[value.BASE_CURRENCY_CODE].TOTAL_BASE_CURRENT += Number(value.TOTAL_BASE_CURRENT);
+                    return res;
+                }, {});
+
+                for (let i = 0; i < symbolBaseCurrentSummary.length; i++) {
+                    createSymbolBoxes(
+                        symbolBaseCurrentSummary[i].BASE_CURRENCY_CODE,
+                        symbolBaseCurrentSummary[i].TOTAL_BASE_CURRENT
+                    );
+                }
+
+                //console.log("***result*** "+ JSON.stringify(symbolBaseCurrentSummary));
             }
         }).catch(err => {
             console.log(err, err.response);
@@ -497,6 +557,157 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex2Div);
     cardBodyDiv.appendChild(flex3Div);
     cardBodyDiv.appendChild(flex4Div);
+}
+
+var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd, totalNumberOfDaysRunning, baseInitial, baseCurrent) => {
+    const row = document.createElement('tr');
+    const strategyName = symbol + '_' + timeframe;
+    const tokenColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
+    const tokenProfitTrend = tokenNetProfit > 0 ? 'trending-up' : 'trending-down';
+    const baseColorCode = baseNetProfit > 0 ? 'success' : 'danger';
+    const baseProfitTrend = baseNetProfit > 0 ? 'trending-up' : 'trending-down';
+    const usdColorCode = avgUsdProfitPercent > 0 ? 'success' : 'danger';
+    const usdProfitTrend = avgUsdProfitPercent > 0 ? 'trending-up' : 'trending-down';
+    const usdPercent = baseUsdProfitPercent >= tokenUsdProfitPercent ? baseUsdProfitPercent : tokenUsdProfitPercent;
+    const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
+    const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
+    const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
+    row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
+    <td style = 'font-size: 12px;'>
+        <div class="lh-1 d-flex align-items-center">
+            <span class="avatar avatar-xs avatar-rounded">
+                <img src=${botTokenIcon}><img src=${botBaseIcon}>
+            </span>
+            <span> 
+                <a href="javascript:navigateTokenStats(${botId}, ${subscriptionStatus})" class="fs-12 ms-auto mt-auto"> ${"--"} ${strategyName} [${botId}]</a>
+            </span>
+        </div>
+    </td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning}</td>
+    <td style = 'font-size: 12px;'>${investedUsd}</td>
+    <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
+    <td style = 'font-size: 12px;'>${tokenEntryAmount}</td>
+    <td style = 'font-size: 12px;'>${lastTradeQty}</td>
+    <td style = 'font-size: 12px;'>${appTS}</td>
+    <td style = 'font-size: 12px;'>${subscribedOn}</td>
+    <td style = 'font-size: 12px;'>${usrsubscriptionStatusFlag}</td>
+    <td style = 'font-size: 12px;'>${symbol}</td>
+    <td style = 'font-size: 12px;'>${timeframe}</td>
+    <td style = 'font-size: 12px;'>${lastTradedDate}</td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${platform}</td>
+
+    <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>`;
+
+    const tbody = document.getElementById("index-grid-tbody");
+    tbody.appendChild(row);
+}
+
+var createSymbolBoxes = (symbol, amount) => {
+    const div = document.createElement('div');
+    div.setAttribute("class", "col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-4 mb-lg-0");
+    div.innerHTML = `<div class="card custom-card shadow-none border">
+                        <div class="card-body py-3 row">
+                            <span class="col-md-6 fw-semibold">${symbol}</span>
+                            <span class="col-md-6">${Math.round(amount * 100) / 100}</span>
+                        </div>
+                    </div>`
+
+    const containerDiv = document.getElementById("symbol-box");
+    containerDiv.appendChild(div);
+}
+
+var createTableRowsAllocation = (baseCurrencyCode, tradeAction, totalBaseCurrent, symbolCount, totalBaseUsdCurrentValue) => {
+    const row = document.createElement('tr');
+    let action = tradeAction == 'B' ? 'In Trade' : (tradeAction == 'S' ? 'In Wallet' : 'NA');
+    row.innerHTML = `<td style = 'font-size: 12px;'>${baseCurrencyCode}</td>
+                    <td style = 'font-size: 12px;'>${action}</td>
+                    <td style = 'font-size: 12px;'>${totalBaseCurrent}</td>
+                    <td style = 'font-size: 12px;'>${symbolCount}</td>
+                    <td style = 'font-size: 12px;'>${'$ '+totalBaseUsdCurrentValue}</td>`;
+
+
+    const tbody = document.getElementById("allocation-breakdown-tbody");
+    tbody.appendChild(row);
+}
+
+var hideShowInvData = (iconNumber) => {
+    if(iconNumber == 0){
+        document.getElementById('eye-slash').style.display = 'inline';
+        document.getElementById('eye').style.display = 'none';
+
+        var profitUsd = Number(currentUsd) - Number(investedUsd);
+        investedUsd = Number(investedUsd);
+        currentUsd = Number(currentUsd);
+        document.getElementById("invested-usd").innerHTML = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+        document.getElementById("current-usd").innerHTML = "$ " + currentUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+        var profitDesign = (profitUsd >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + profitUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 }) + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + (-1*profitUsd).toLocaleString() + "<i class='ti ti-trending-down ms-1'></i></span>";
+        document.getElementById("usd-profit").innerHTML = profitDesign;
+    }
+    else {
+        document.getElementById('eye').style.display = 'inline';
+        document.getElementById('eye-slash').style.display = 'none';
+
+        var profitUsd = Number(currentUsd) - Number(investedUsd);
+        investedUsd = Math.round(investedUsd).toString();
+        currentUsd = Math.round(currentUsd).toString();
+        profitUsd = Math.round(profitUsd).toString();
+        document.getElementById("invested-usd").innerHTML = "$ " + "".padStart(investedUsd.length, "*");
+        document.getElementById("current-usd").innerHTML = "$ " + "".padStart(currentUsd.length, "*");
+        var profitDesign = (Number(profitUsd) >= 0) ?  "<span class='badge bg-success-transparent fs-14 rounded-pill'> $ " + "".padStart(profitUsd.length, "*") + "<i class='ti ti-trending-up ms-1'></i></span>" : "<span class='badge bg-danger-transparent fs-14 rounded-pill'>- $ " + "".padStart(profitUsd.length-1, "*"); + "<i class='ti ti-trending-down ms-1'></i></span>";
+        document.getElementById("usd-profit").innerHTML = profitDesign;
+    }
+}
+
+var applyResponsivenessBots = () => {
+    if(!$.fn.dataTable.isDataTable('#indexBotsListDataTable')) {
+        $('#indexBotsListDataTable').DataTable({
+            responsive: true,
+            language: {
+                searchPlaceholder: 'Search...',
+                sSearch: ''
+            },
+            order: [[10, 'desc']],   //Soring by BotID decensing order
+            "pageLength": 50,
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ], dom: 'flirtBlp' //'Bfrtip'
+        });
+    }
+};
+
+var applyResponsivenessAllocation = () => {
+    $('#allocationBreakdownTable').DataTable({
+        responsive: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: ''
+        },
+        order: [[0, 'desc']],   //Soring by BotID decensing order
+        "pageLength": 25,
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ], dom: 'flirtBlp' //'Bfrtip'
+    });
+};
+
+var switchView = () => {
+    if(document.getElementById("grid-switch").checked){
+        document.getElementById('dashboard-grid-container').style.display = 'block';
+        document.getElementById('dashboard-box-container').style.display = 'none';
+        document.getElementById('index-header').style.paddingBottom = '0rem';
+        document.getElementById('index-header').style.minHeight = '65px';
+        applyResponsivenessBots();
+    }
+    else{
+        document.getElementById('dashboard-grid-container').style.display = 'none';
+        document.getElementById('dashboard-box-container').style.display = 'flex';
+        document.getElementById('index-header').style.paddingBottom = '3rem';
+        document.getElementById('index-header').style.minHeight = '115px';
+    }
 }
 
 var navigateTokenStats = (botId, userSubscriptionStatus) => {
@@ -607,6 +818,10 @@ var loadProfilePage = () => {
                 document.getElementById("profile-header-photo").src = profile.PROFILE_PHOTO;
                 if(profile.ROLE_CODE == 99){
                     document.getElementById('admin-menu').style.display = 'block';
+                }
+                if(profile.ROLE_CODE <= 10){
+                    document.getElementById('equity-options-menu').style.display = 'none';
+                    document.getElementById('dashboard-menu-count').innerHTML = 1;
                 }
                 document.getElementById("profile-header-name").innerHTML = username;
                 document.getElementById("profile-header-email").innerHTML = profile.EMAIL_ID;     
@@ -765,6 +980,10 @@ var loadPricingPage = () => {
     document.getElementById("header-profile-photo").src = profile.PROFILE_PHOTO;
     if(profile.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
+    }
+    if(profile.ROLE_CODE <= 10){
+        document.getElementById('equity-options-menu').style.display = 'none';
+        document.getElementById('dashboard-menu-count').innerHTML = 1;
     }
 
     if(active_bots_latest == 1){
@@ -1028,19 +1247,6 @@ var readAllNotifications = () => {
     });
 };
 
-//for testing upload functionality purpose
-// var uploadFile = () => {
-//     var formData = new FormData();
-//     var imagefile = document.querySelector('#file');
-//     formData.append("image", imagefile.files[0]);
-//     console.log('formData: '+ formData);
-//     axios.post(targetEndPointUrlBase+'/api/auth/ftp', formData, {
-//         headers: {
-//           'Content-Type': 'multipart/form-data'
-//         }
-//     })
-// }
-
 var autocompleteMatch = (input) => {
     if (input == '') {
       return [];
@@ -1054,10 +1260,27 @@ var autocompleteMatch = (input) => {
 }
 
 //Show search box results
-var showSearchResults = (value) => {
+var showSearchResultsDesktopView = (value) => {
     console.log('value: '+ value);
     let bots = autocompleteMatch(value.toUpperCase());
     const ulist = document.getElementById("search-results-ul");
+    ulist.innerHTML = '';
+    for (i=0; i<bots.length; i++) {
+        const list = document.createElement('li');
+        list.classList.add('p-1','d-flex','align-items-center','text-muted','mb-1','search-app');
+        list.innerHTML = `<a href="javascript:navigateTokenStats(${bots[i].BOT_ID}, ${bots[i].SUBSCRIBE_STATUS})">
+                                <i><div class='avatar avatar-xs br-0 ms-auto'><span class='fs-12 text-primary'><img src='${bots[i].BOT_TOKEN_ICON}'/></span></div>${bots[i].BOT_NAME}</i>
+                          </a>`;
+        ulist.appendChild(list);
+    }
+};
+
+var showSearchResultsMobileView = (value) => {
+    console.log('value: '+ value);
+    let bots = autocompleteMatch(value.toUpperCase());
+    const ulist = document.getElementById("search-results-ul-modal");
+    //console.log('ulist: '+ ulist);
+    console.log('bots: '+ bots);
     ulist.innerHTML = '';
     for (i=0; i<bots.length; i++) {
         const list = document.createElement('li');
@@ -1081,9 +1304,14 @@ var profilePhotoChoosen = (value) => {
 };
 
 var uploadProfilePhoto = () => {
+    const profile = JSON.parse(localStorage.getItem('profileObj'));
     var formData = new FormData();
-    var profilePhoto = document.getElementById('profile-photo');
-    formData.append("file", profilePhoto.files[0]);
+    var profilePhoto = document.getElementById('profile-photo').files[0];
+    var fileName = profile.USER_ID + '_' + profile.NAME_FIRST + '_' + profile.NAME_LAST;
+    var profilePhotoNamed = new File([profilePhoto], fileName , {
+      type: fileName.type,
+    });
+    formData.append("file", profilePhotoNamed);
       
      axios
       .post(
@@ -1112,6 +1340,6 @@ var uploadProfilePhoto = () => {
                   },0);
           }
       });
-  };
-  
+};
+
 //****************************************************************** */

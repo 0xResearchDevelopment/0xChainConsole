@@ -111,15 +111,15 @@ var createTableRowsProcessed = (reqId, reqType, reqStatus, reqDesc, botId, userE
 //<td style = 'font-size: 12px;'>${botTimeframe}</td>
 //<td style = 'font-size: 12px;'>${botExchange}</td>
     
-var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName, botSimulate, botStatus, botBaseIcon, botTokenIcon, createdOn, updatedOn) => {
+var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName, botSimulate, botStatus, botBaseIcon, botTokenIcon, currencyId, createdOn, updatedOn) => {
     const row = document.createElement('tr');
     let botSimulateText = botSimulate == 1 ? 'Yes' : 'No';
     let botStatusText = botStatus == 1 ? '<span class="text-success"><i class="ri-checkbox-circle-fill fs-14"></i>  Active</span>' : '<span class="text-muted"><i class="ri-checkbox-circle-blank-fill fs-14"></i>  Inactive</span>';
     row.innerHTML = `<td style = 'font-size: 12px;'>${botId}</td>
                     <td style = 'font-size: 12px;'>
                         <div class="hstack gap-2 fs-15">
-                            <a href="javascript:loadUpdateBotModal('${botId}', '${botName}','${botSimulate}','${botStatus}','${botBaseIcon}','${botTokenIcon}');" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-edit-line"></i></a>
-                            <a href="javascript:deleteBot('${botId}', '${botName}','${botSimulate}',0,'${botBaseIcon}','${botTokenIcon}',0);" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-delete-bin-line"></i></a>
+                            <a href="javascript:loadUpdateBotModal('${botId}', '${botSymbol}', '${botTimeframe}', '${botExchange}', '${botName}','${botSimulate}','${botStatus}','${botBaseIcon}','${botTokenIcon}','${currencyId}');" class="btn btn-icon btn-sm btn-info-light rounded-pill"><i class="ri-edit-line"></i></a>
+                            <a href="javascript:deleteBot('${botId}');" class="btn btn-icon btn-sm btn-danger-light rounded-pill"><i class="ri-delete-bin-line"></i></a>
                         </div>
                     </td>
 
@@ -129,6 +129,7 @@ var createTableRowsBots = (botId, botSymbol, botTimeframe, botExchange, botName,
     <td style = 'font-size: 12px;'>${botStatusText}</td>
     <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>
     <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botTokenIcon} class="fs-20"></div></td>
+    <td style = 'font-size: 12px;'>${currencyId}</td>
     <td style = 'font-size: 12px;'>${createdOn}</td>
     <td style = 'font-size: 12px;'>${updatedOn}</td>`;
 
@@ -324,6 +325,7 @@ var loadAdminBots = () => {
                             bots[i].BOT_STATUS,
                             bots[i].BOT_BASE_ICON,
                             bots[i].BOT_TOKEN_ICON,
+                            bots[i].CURRENCY_ID,
                             bots[i].CREATED_ON,
                             bots[i].UPDATED_ON
                         );
@@ -421,6 +423,10 @@ var loadHeaderData = () => {
     if(profile.ROLE_CODE == 99){
         document.getElementById('admin-menu').style.display = 'block';
     }
+    if(profile.ROLE_CODE <= 10){
+        document.getElementById('equity-options-menu').style.display = 'none';
+        document.getElementById('dashboard-menu-count').innerHTML = 1;
+    }
 }
 
 var createBot = () => {
@@ -430,12 +436,13 @@ var createBot = () => {
     var botExchange = document.getElementById('bot-exchange').value;
     var botBaseIcon = document.getElementById('bot-base-icon').value;
     var botTokenIcon = document.getElementById('bot-token-icon').value;
+    var currencyId = document.getElementById('currency-id').value;
 
     if(botSymbol.length == 0){
         document.getElementById('bot-symbol').classList.add("is-invalid");
         document.getElementById('bot-symbol-empty').style.display = 'block';
     }
-    if(botTimeframe == 'Select'){
+    if(botTimeframe == 'Select Timeframe'){
         document.getElementById('bot-timeframe').classList.add("is-invalid");
         document.getElementById('bot-timeframe-empty').style.display = 'block';
     }
@@ -451,10 +458,16 @@ var createBot = () => {
         document.getElementById('bot-token-icon').classList.add("is-invalid");
         document.getElementById('bot-token-icon-empty').style.display = 'block';
     }
+    if(currencyId <= 0){
+        document.getElementById('currency-id').classList.add("is-invalid");
+        document.getElementById('currency-id-empty').style.display = 'block';
+    }
 
-    if(botSymbol.length > 0 && botTimeframe != 'Select' && botExchange.length > 0 
-        && botBaseIcon.length > 0 && botTokenIcon.length > 0) {
+    if(botSymbol.length > 0 && botTimeframe != 'Select Timeframe' && botExchange.length > 0 
+        && botBaseIcon.length > 0 && botTokenIcon.length > 0 && currencyId > 0) {
         
+        document.getElementById('create-bot-button').disabled = true;
+
         const botData = {
             botSymbol: botSymbol.toUpperCase(),
             botTimeframe: botTimeframe.toUpperCase(),
@@ -463,6 +476,7 @@ var createBot = () => {
             botStatus: document.querySelector('input[name="bot-status-radio"]:checked').value == 'active' ? 1 : 0,
             botBaseIcon: botBaseIcon,
             botTokenIcon: botTokenIcon,
+            currencyId: currencyId
         }
 
         console.log(botData);
@@ -511,16 +525,22 @@ var resetAddBotInputFields = () => {
     document.getElementById('bot-base-icon').classList.remove("is-invalid");
     document.getElementById('bot-token-icon-empty').style.display = 'none';
     document.getElementById('bot-token-icon').classList.remove("is-invalid");
+    document.getElementById('currency-id-empty').style.display = 'none';
+    document.getElementById('currency-id').classList.remove("is-invalid");
 }
 
-var updateBot = (botId,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage) => { //parentPage = 0 -> delete request, parentPage = 1 -> update request
+var updateBot = (botId,botSymbol,botTimeframe,botExchange,botSimulate,botStatus,botBaseIcon,botTokenIcon,currencyId) => { //parentPage = 0 -> delete request, parentPage = 1 -> update request
 
 const updatedBot = {
                 botId: botId,
+                botSymbol: botSymbol.toUpperCase(),
+                botTimeframe: botTimeframe.toUpperCase(),
+                botExchange: botExchange.toUpperCase(),
                 botSimulate: botSimulate,
                 botStatus: botStatus,
                 botBaseIcon: botBaseIcon,
-                botTokenIcon: botTokenIcon
+                botTokenIcon: botTokenIcon,
+                currencyId: currencyId
             }
 
 const authToken = localStorage.getItem('authToken');
@@ -555,7 +575,7 @@ const authToken = localStorage.getItem('authToken');
         });
 };
 
-var deleteBot = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon,parentPage) => { //TODO: need to implement modal before deleting the bot (its a physical delete)
+var deleteBot = (botId) => { //TODO: need to implement modal before deleting the bot (its a physical delete)
 
     const updatedBot = {
         botId: botId
@@ -591,9 +611,12 @@ var deleteBot = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon,pa
         });
 };
 
-var loadUpdateBotModal = (botId,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon) => {
+var loadUpdateBotModal = (botId,botSymbol,botTimeframe,botExchange,botName,botSimulate,botStatus,botBaseIcon,botTokenIcon,currencyId) => {
     $("#updateBotModal").modal('show'); 
     document.getElementById("staticBackdropLabel").innerHTML = "Update Bot: " + botName;
+    document.getElementById('bot-symbol').value = botSymbol;
+    document.getElementById('bot-timeframe').value = botTimeframe;
+    document.getElementById('bot-exchange').value = botExchange;
     document.getElementById("bot-simulate").checked = botSimulate == 1 ? true : false;
     if(botStatus == 1){
         document.getElementById("bot-status-active").checked = true;
@@ -602,11 +625,9 @@ var loadUpdateBotModal = (botId,botName,botSimulate,botStatus,botBaseIcon,botTok
         document.getElementById("bot-status-inactive").checked = true;
     }
 
-    //console.log('botBaseIcon: '+ botBaseIcon);
-    //console.log('botTokenIcon: '+ botBaseIcon);
-
     document.getElementById('bot-base-icon').value = botBaseIcon;
     document.getElementById('bot-token-icon').value = botTokenIcon;
+    document.getElementById('currency-id').value = currencyId;
 
     var updateBotButton = document.getElementById("update-modal-submit");
     updateBotButton.onclick = function callValidateUpdateBotInput() {
@@ -633,16 +654,34 @@ var loadUpdateUserModal = (email, userStatus, roleCode, clientId) => {
 }
 
 var validateUpdateBotInput = (botId) => {
+    document.getElementById('bot-symbol-empty').style.display = 'none';
+    document.getElementById('bot-symbol').classList.remove("is-invalid");
+    document.getElementById('bot-exchange-empty').style.display = 'none';
+    document.getElementById('bot-exchange').classList.remove("is-invalid");
     document.getElementById('bot-base-icon-empty').style.display = 'none';
     document.getElementById('bot-base-icon').classList.remove("is-invalid");
     document.getElementById('bot-token-icon-empty').style.display = 'none';
     document.getElementById('bot-token-icon').classList.remove("is-invalid");
+    document.getElementById('currency-id-empty').style.display = 'none';
+    document.getElementById('currency-id').classList.remove("is-invalid");
     
+    var botSymbol = document.getElementById('bot-symbol').value;
+    var botTimeframe = document.getElementById('bot-timeframe').options[document.getElementById('bot-timeframe').selectedIndex].text;
+    var botExchange = document.getElementById('bot-exchange').value;
     var botSimulate = document.getElementById("bot-simulate").checked ? 1 : 0;
     var botStatus = document.querySelector('input[name="bot-status-radio"]:checked').value == 'active' ? 1 : 0;
     var botBaseIcon = document.getElementById('bot-base-icon').value;
     var botTokenIcon = document.getElementById('bot-token-icon').value;
+    var currencyId = document.getElementById('currency-id').value;
 
+    if(botSymbol.length == 0){
+        document.getElementById('bot-symbol').classList.add("is-invalid");
+        document.getElementById('bot-symbol-empty').style.display = 'block';
+    }
+    if(botExchange.length == 0){
+        document.getElementById('bot-exchange').classList.add("is-invalid");
+        document.getElementById('bot-exchange-empty').style.display = 'block';
+    }
     if(botBaseIcon.length == 0){
         document.getElementById('bot-base-icon').classList.add("is-invalid");
         document.getElementById('bot-base-icon-empty').style.display = 'block';
@@ -651,9 +690,13 @@ var validateUpdateBotInput = (botId) => {
         document.getElementById('bot-token-icon').classList.add("is-invalid");
         document.getElementById('bot-token-icon-empty').style.display = 'block';
     }
+    if(currencyId <= 0){
+        document.getElementById('currency-id').classList.add("is-invalid");
+        document.getElementById('currency-id-empty').style.display = 'block';
+    }
 
-    if(botBaseIcon.length > 0 && botTokenIcon.length > 0) {
-        updateBot(botId,botSimulate,botStatus,botBaseIcon,botTokenIcon,1);
+    if(botSymbol.length > 0 && botExchange.length > 0 && botBaseIcon.length > 0 && botTokenIcon.length > 0 && currencyId > 0) {
+        updateBot(botId,botSymbol,botTimeframe,botExchange,botSimulate,botStatus,botBaseIcon,botTokenIcon,currencyId);
         $("#updateBotModal").modal('hide');
     }
 } 

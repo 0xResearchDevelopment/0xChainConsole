@@ -17,19 +17,38 @@ var loadChartData = () => {
             if (res.status == 200) {
                 console.log(res.data);
 
+                const allocationTradeSymbolSummary = (res.data.allocationTradeSymbolSummary!=undefined && res.data.allocationTradeSymbolSummary!=null)?res.data.allocationTradeSymbolSummary:[];
+                var eachAllocation;
+
                 const subscribtionStatsSummary = (res.data.subscribtionStatsSummary!=undefined && res.data.subscribtionStatsSummary!=null)?res.data.subscribtionStatsSummary:null;
                 netProfitHourly = (res.data.netprofitHourlyData!=undefined && res.data.netprofitHourlyData!=null)?res.data.netprofitHourlyData:null;
                 netProfitDaily = (res.data.netprofitDailyData!=undefined && res.data.netprofitDailyData!=null)?res.data.netprofitDailyData:null;
                 netProfitMonthly = (res.data.netprofitMonthlyData!=undefined && res.data.netprofitMonthlyData!=null)?res.data.netprofitMonthlyData:null;
 
-                avgNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT : 0;
-                updatePieChartData();
+                tokenSummaryNetProfit = subscribtionStatsSummary != null ? subscribtionStatsSummary.AVG_USER_SUB_NETPROFIT : 0;
+                updateTokenPieChartData();
 
-                var graphData = formatGraphData(netProfitHourly);
+                investedUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED < subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED ? subscribtionStatsSummary.TOTAL_BASE_USD_INVESTED : subscribtionStatsSummary.TOTAL_TOKEN_USD_INVESTED) : 0;
+                currentUsd = (subscribtionStatsSummary != null) ? (subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT < subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT ? subscribtionStatsSummary.TOTAL_BASE_USD_CURRENT : subscribtionStatsSummary.TOTAL_TOKEN_USD_CURRENT) : 0;
+                investmentSummaryNetProfit = ((currentUsd - investedUsd)/investedUsd)*100;
+                investmentSummaryNetProfit = Math.round(investmentSummaryNetProfit * 100) / 100
+                updateInvestmentPieChartData();
+
+                var graphData = formatGraphData(netProfitDaily);
                 inputNetprofit = graphData.netProfitArray;
                 inputBaseNetprofit = graphData.baseNetProfitArray;
+                inputUsdProfit = graphData.usdProfitArray;
                 inputXAxisData = graphData.xAxisDataArray;
-                updateChartData(inputNetprofit, inputBaseNetprofit, inputXAxisData);
+                updateChartData(inputNetprofit, inputBaseNetprofit, inputUsdProfit, inputXAxisData);
+
+                for (let i = 0; i < allocationTradeSymbolSummary.length; i++) {
+                    eachAllocation = {
+                        x: allocationTradeSymbolSummary[i].TRADE_SYMBOL + ' [' + allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE_INVESTED + ']',
+                        y: allocationTradeSymbolSummary[i].ALLOCATION_PERCENTAGE_CURRENT
+                    }
+                    allocationArr.push(eachAllocation);
+                }
+                updateAllocationChartData();
             }
         }).catch(err => {
             console.log("inside err");
@@ -47,10 +66,10 @@ var loadChartData = () => {
 //API call to fetch Chart data
 loadChartData();
 
-/* starts : chainview - netprofit summary pie-chart */
-var avgNetProfit = 0;
-var pieChartData = {
-    series: [avgNetProfit],  /* get this value from loacl storage*/
+/* starts : chainview - token summary pie-chart */
+var tokenSummaryNetProfit = 0;
+var tokenPieChartData = {
+    series: [tokenSummaryNetProfit],
     chart: {
         height: 295,
         type: "radialBar",
@@ -66,23 +85,60 @@ var pieChartData = {
     labels: ["Net Profit"],
 };
 
-var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
-chart2.render();
+var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
+tokenChart.render();
 function index1() {
-    chart2.updateOptions({
+    tokenChart.updateOptions({
         colors: ["rgba(" + myVarVal + ", 0.95)"],
     });
 }
 
-var updatePieChartData = () => {
-    var chart2 = new ApexCharts(document.querySelector("#avgNetProfit"), pieChartData);
-    chart2.render();
-    chart2.updateOptions({
+var updateTokenPieChartData = () => {
+    var tokenChart = new ApexCharts(document.querySelector("#tokenSummary"), tokenPieChartData);
+    tokenChart.render();
+    tokenChart.updateOptions({
         colors: ["rgba(" + myVarVal + ", 0.95)"],
-        series: [avgNetProfit]
+        series: [tokenSummaryNetProfit]
     });
 }
-/* ends : chainview - netprofit summary pie-chart */
+/* ends : chainview - token summary pie-chart */
+
+/* starts : chainview - investment summary pie-chart */
+var investmentSummaryNetProfit = 0;
+var investmentPieChartData = {
+    series: [investmentSummaryNetProfit],
+    chart: {
+        height: 295,
+        type: "radialBar",
+    },
+    colors: ["rgba(38, 191, 148, 0.95)"],
+    plotOptions: {
+        radialBar: {
+            hollow: {
+                size: "65%",
+            },
+        },
+    },
+    labels: ["Net Profit"],
+};
+
+var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), investmentPieChartData);
+investmentChart.render();
+function index1() {
+    investmentChart.updateOptions({
+        colors: ["rgba(38, 191, 148, 0.95)"],
+    });
+}
+
+var updateInvestmentPieChartData = () => {
+    var investmentChart = new ApexCharts(document.querySelector("#investmentSummary"), investmentPieChartData);
+    investmentChart.render();
+    investmentChart.updateOptions({
+        colors: ["rgba(38, 191, 148, 0.95)"],
+        series: [investmentSummaryNetProfit]
+    });
+}
+/* ends : chainview - investment summary pie-chart */
 
 function truncate (num, places) {
     return Math.trunc(num * Math.pow(10, places)) / Math.pow(10, places);
@@ -91,8 +147,10 @@ function truncate (num, places) {
 var formatGraphData = (rawNetProfitArr) => {
     var netProfit = [];
     var baseNetProfit = [];
+    var usdProfit = [];
     var xAxisData = [];
     var profitDifference = 0; 
+    var usdProfitDifference = 0; 
 
     const tbody = document.getElementById("dashboard-tbody");
     tbody.innerHTML = '';
@@ -103,13 +161,18 @@ var formatGraphData = (rawNetProfitArr) => {
     const rowSubNetProfit = document.createElement('tr');
     const rowBaseNetProfit = document.createElement('tr');
     const rowUserSubBaseNetProfit = document.createElement('tr');
+    const rowUsdProfit = document.createElement('tr');
+    const rowUsdProfitDiff = document.createElement('tr');
 
     for (let i = 0; i < rawNetProfitArr.length; i++) {
     //for (let i = rawNetProfitArr.length - 1; i >=0; i--) {
         netProfit.push(rawNetProfitArr[i].NETPROFIT);
         baseNetProfit.push(rawNetProfitArr[i].BASE_NETPROFIT);
+        usdProfit.push(rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT);
         xAxisData.push(rawNetProfitArr[i].AS_OF);
+        
         profitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].NETPROFIT - rawNetProfitArr[i].NETPROFIT) : 0;
+        usdProfitDifference = i + 1 < rawNetProfitArr.length ? (rawNetProfitArr[i + 1].AVG_AVG_USD_PROFIT_PERCENT - rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT) : 0;
         //console.log("### i:" + i + " profitDifference:" + truncate(profitDifference, 2) + "%"); 
 
         if (i == 0) {
@@ -126,7 +189,7 @@ var formatGraphData = (rawNetProfitArr) => {
             rowNetProfit.appendChild(tdNetProfitLabel);
 
             var tdProfitDiffLabel = document.createElement('td');
-            var textProfitDiffLabel = document.createTextNode("Change %");
+            var textProfitDiffLabel = document.createTextNode("Token-Change %");
             tdProfitDiffLabel.appendChild(textProfitDiffLabel);
             rowProfitDiff.appendChild(tdProfitDiffLabel);
 
@@ -135,20 +198,30 @@ var formatGraphData = (rawNetProfitArr) => {
             tdActiveBotsLabel.appendChild(textActiveBotsLabel);
             rowActiveBots.appendChild(tdActiveBotsLabel);
 
-            var tdSubNetProfitLabel = document.createElement('td');
-            var textSubNetProfitLabel = document.createTextNode("Total Profit");
-            tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
-            rowSubNetProfit.appendChild(tdSubNetProfitLabel);
+            // var tdSubNetProfitLabel = document.createElement('td');
+            // var textSubNetProfitLabel = document.createTextNode("Total Profit");
+            // tdSubNetProfitLabel.appendChild(textSubNetProfitLabel);
+            // rowSubNetProfit.appendChild(tdSubNetProfitLabel);
 
             var tdBaseNetProfitLabel = document.createElement('td');
             var textBaseNetProfitLabel = document.createTextNode("Base-Profit");
             tdBaseNetProfitLabel.appendChild(textBaseNetProfitLabel);
             rowBaseNetProfit.appendChild(tdBaseNetProfitLabel);
 
-            var tdUserSubBaseNetProfitLabel = document.createElement('td');
-            var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
-            tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
-            rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
+            // var tdUserSubBaseNetProfitLabel = document.createElement('td');
+            // var textUserSubBaseNetProfitLabel = document.createTextNode("Base-Total Profit");
+            // tdUserSubBaseNetProfitLabel.appendChild(textUserSubBaseNetProfitLabel);
+            // rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfitLabel);
+
+            var tdUsdProfitLabel = document.createElement('td');
+            var textUsdProfitLabel = document.createTextNode("USD-Profit %");
+            tdUsdProfitLabel.appendChild(textUsdProfitLabel);
+            rowUsdProfit.appendChild(tdUsdProfitLabel);
+
+            var tdUsdProfitDiffLabel = document.createElement('td');
+            var textUsdProfitDiffLabel = document.createTextNode("USD-Change %");
+            tdUsdProfitDiffLabel.appendChild(textUsdProfitDiffLabel);
+            rowUsdProfitDiff.appendChild(tdUsdProfitDiffLabel);
         }
 
         var tdDate = document.createElement('td');
@@ -174,10 +247,10 @@ var formatGraphData = (rawNetProfitArr) => {
         tdActiveBots.appendChild(textActiveBots);
         rowActiveBots.appendChild(tdActiveBots);
 
-        var tdSubNetProfit = document.createElement('td');
-        var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
-        tdSubNetProfit.appendChild(textSubNetProfit);
-        rowSubNetProfit.appendChild(tdSubNetProfit);
+        // var tdSubNetProfit = document.createElement('td');
+        // var textSubNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_NETPROFIT + "%");
+        // tdSubNetProfit.appendChild(textSubNetProfit);
+        // rowSubNetProfit.appendChild(tdSubNetProfit);
 
         var tdBaseNetProfit = document.createElement('td');
         var textBaseNetProfit = document.createTextNode(rawNetProfitArr[i].BASE_NETPROFIT + "%");
@@ -185,10 +258,22 @@ var formatGraphData = (rawNetProfitArr) => {
         tdBaseNetProfit.appendChild(textBaseNetProfit);
         rowBaseNetProfit.appendChild(tdBaseNetProfit);
 
-        var tdUserSubBaseNetProfit = document.createElement('td');
-        var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
-        tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
-        rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
+        // var tdUserSubBaseNetProfit = document.createElement('td');
+        // var textUserSubBaseNetProfit = document.createTextNode(rawNetProfitArr[i].TOTAL_USER_SUB_BASE_NETPROFIT + "%");
+        // tdUserSubBaseNetProfit.appendChild(textUserSubBaseNetProfit);
+        // rowUserSubBaseNetProfit.appendChild(tdUserSubBaseNetProfit);
+
+        var tdUsdProfit = document.createElement('td');
+        var textUsdProfit = document.createTextNode(rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT+ "%");;
+        tdUsdProfit.setAttribute('style', rawNetProfitArr[i].AVG_AVG_USD_PROFIT_PERCENT >= 0 ? 'color:green !important' : 'color:red !important');
+        tdUsdProfit.appendChild(textUsdProfit);
+        rowUsdProfit.appendChild(tdUsdProfit);
+
+        var tdProfitDiff = document.createElement('td');
+        var textProfitDiff = document.createTextNode(truncate(usdProfitDifference, 2)+ "%");
+        tdProfitDiff.setAttribute('style', usdProfitDifference >= 0 ? 'color:green !important' : 'color:red !important');
+        tdProfitDiff.appendChild(textProfitDiff);
+        rowUsdProfitDiff.appendChild(tdProfitDiff);
     }
 
     tbody.appendChild(rowDate);
@@ -198,15 +283,18 @@ var formatGraphData = (rawNetProfitArr) => {
     tbody.appendChild(rowSubNetProfit);
     tbody.appendChild(rowBaseNetProfit);
     tbody.appendChild(rowUserSubBaseNetProfit);
+    tbody.appendChild(rowUsdProfit);
+    tbody.appendChild(rowUsdProfitDiff);
 
     return {
         netProfitArray: netProfit,
         baseNetProfitArray: baseNetProfit,
+        usdProfitArray: usdProfit,
         xAxisDataArray: xAxisData
     };
 };
 
-var updateChartData = (netProfit, baseNetProfit, XAxisInput) => {
+var updateChartData = (netProfit, baseNetProfit,usdNetProfit, XAxisInput) => {
     var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
         chart.render();
         chart.updateOptions({
@@ -220,7 +308,12 @@ var updateChartData = (netProfit, baseNetProfit, XAxisInput) => {
                     name: 'Base',
                     data: baseNetProfit,
                     type: 'line',
-                }
+                },
+                {
+                    name: "USD",
+                    data: usdNetProfit,
+                    type: 'line',
+                  }
             ],
             xaxis: {
                 type: 'day',
@@ -259,11 +352,11 @@ var netProfitMonthly = [];
 
 var inputNetprofit = [];
 var inputBaseNetprofit = [];
+var inputUsdProfit = [];
 var inputXAxisData = [];
 
-console.log("1: ",inputNetprofit);
-console.log("2: ",inputBaseNetprofit);
-console.log("3: ",inputXAxisData);
+var investedUsd = 0;
+var currentUsd = 0;
 
 var chartData = {
     chart: {
@@ -272,12 +365,12 @@ var chartData = {
             show: false
         },
         dropShadow: {
-            enabled: false,
+            enabled: true,
             enabledOnSeries: undefined,
             top: 5,
             left: 0,
             blur: 3,
-            color: ['rgba(245 ,187 ,116, 0.2)'],
+            color: ['rgba(245 ,187 ,116, 0.2)', "rgba(255,255,255,0)",'var(--primary02)'],
             opacity: 0.5
         },
     },
@@ -290,7 +383,7 @@ var chartData = {
         enabled: true
     },
     stroke: {
-        width: [2.5],
+        width: [2.5, 2.5, 2.5],
         curve: "smooth",
     },
     legend: {
@@ -324,12 +417,17 @@ var chartData = {
             name: 'Token Base Netprofit',
             data: inputBaseNetprofit,
             type: 'line',
-        }],
-    colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)"], //setting line color here
+        },
+        {
+            name: "USD",
+            data: inputUsdProfit,
+            type: 'line'
+          }],
+    colors: ["rgba(15, 75, 160, 0.95)","rgb(245, 184, 73)","rgba(38, 191, 148, 0.95)"], //setting line color here
     fill: {
-        type: ['gradient','gradient'],
+        type: ['gradient','gradient','gradient'],
         gradient: {
-            gradientToColors: ['#4776E6','#F5B849']
+            gradientToColors: ['#4776E6','#F5B849',"transparent"]
         },
     },
     yaxis: {
@@ -344,7 +442,10 @@ var chartData = {
         },
         labels: {
             formatter: function (y) {
-                return y.toFixed(0) + "";
+                if (typeof y !== "undefined") {
+                    return y.toFixed(0) + "";
+                }
+                return y;
             },
             show: true,
             style: {
@@ -388,7 +489,7 @@ document.getElementById("earnings").innerHTML = "";
 var chart = new ApexCharts(document.querySelector("#earnings"), chartData);
 chart.render();
 
-updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
+updateChartData(inputNetprofit,inputBaseNetprofit,inputUsdProfit,inputXAxisData);
 
 function earnings() {
     chart.updateOptions({
@@ -403,28 +504,90 @@ var changeLayout = (layout) => {
         var graphData = formatGraphData(netProfitMonthly);
         inputNetprofit = graphData.netProfitArray;
         inputBaseNetprofit = graphData.baseNetProfitArray;
+        inputUsdProfit = graphData.usdProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputUsdProfit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Monthly";
     }
     else if(layout == 1){
         var graphData = formatGraphData(netProfitDaily);
         inputNetprofit = graphData.netProfitArray;
         inputBaseNetprofit = graphData.baseNetProfitArray;
+        inputUsdProfit = graphData.usdProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputUsdProfit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Daily";
     }
     else {
         var graphData = formatGraphData(netProfitHourly);
         inputNetprofit = graphData.netProfitArray;
         inputBaseNetprofit = graphData.baseNetProfitArray;
+        inputUsdProfit = graphData.usdProfitArray;
         inputXAxisData = graphData.xAxisDataArray;
 
-        updateChartData(inputNetprofit,inputBaseNetprofit,inputXAxisData);
+        updateChartData(inputNetprofit,inputBaseNetprofit,inputUsdProfit,inputXAxisData);
         document.getElementById("chart-view").innerHTML = "Hourly";
     }
 };
+/* ends : chainview - Netprofit stats line-chart */
+
+/* starts : chainview - Allocation tree map */
+var allocationArr = [];
+var allocationChartData = {
+    series: [
+        {
+            data: allocationArr
+        }
+    ],
+    legend: {
+        show: false
+    },
+    chart: {
+        height: 400,
+        type: 'treemap'
+    },
+    dataLabels: {
+        enabled: true,
+        style: {
+            fontSize: '12px',
+        },
+        formatter: function (text, op) {
+            return [text, op.value+'%']
+        },
+        offsetY: -4
+    },
+    colors: [
+        '#8e54e9',
+        '#a65e76',
+        '#f5b849',
+        '#a66a5e',
+        '#a65e9a',
+        '#26bf94',
+        '#e6533c',
+        '#49b6f5',
+        '#5b67c7',
+        '#2dce89',
+        '#EF6537',
+        '#8c9097'
+    ],
+    plotOptions: {
+        treemap: {
+            distributed: true,
+            enableShades: false
+        }
+    }
+};
+var allocationChart = new ApexCharts(document.querySelector("#allocationTreemap"), allocationChartData);
+allocationChart.render();
+
+var updateAllocationChartData = () => {
+    var allocationChart = new ApexCharts(document.querySelector("#allocationTreemap"), allocationChartData);
+    allocationChart.render();
+    allocationChart.updateOptions({
+        //colors: ["rgba(38, 191, 148, 0.95)"],
+        series: [{data: allocationArr}]
+    });
+}
 //*********************** *********************/
