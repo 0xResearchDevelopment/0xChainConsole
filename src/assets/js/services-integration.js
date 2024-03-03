@@ -393,16 +393,20 @@ var getUserProfile = () => {
                     location.href = "sign-in-cover.html";
                 }
 
+                let recommendationScoreCalculated = 0;
                 for (let i = 0; i < subscribedBots.length; i++) {
+
+                    recommendationScoreCalculated = calculateRecommendationScore(subscribedBots[i].TOKEN_NETPROFIT, subscribedBots[i].BASE_NETPROFIT, subscribedBots[i].AVG_USD_PROFIT_PERCENT,  subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].TOTAL_NUMOF_TRADES);
+
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM);                      
+                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM, recommendationScoreCalculated);                      
                 
                     createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].PLATFORM,subscribedBots[i].TOKEN_NETPROFIT,
                         subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
                         subscribedBots[i].BOT_ID,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].APP_TS_FMT,subscribedBots[i].AVG_USD_PROFIT,
                         subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED, 
-                        subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].BASE_INITIAL_CAPITAL, subscribedBots[i].BASE_CURRENT_BALANCE);
+                        subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].BASE_INITIAL_CAPITAL, subscribedBots[i].BASE_CURRENT_BALANCE, recommendationScoreCalculated);
                 }
 
                 document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
@@ -483,7 +487,7 @@ var getUserProfile = () => {
         })
 }
 
-var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount,tradeTimeframe,botId, subscribeStatus, platformName) => {
+var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, baseIconUrl,totalNoOfTrades,lastTradedDate,tokenEntryAmount,tradeTimeframe,botId, subscribeStatus, platformName, recommendationScore) => {
     const colDiv = document.createElement('div');
     colDiv.id = 'col-div';
     colDiv.setAttribute("class", "col card-background");
@@ -525,7 +529,7 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     const flex5Div = document.createElement('div');
     flex5Div.id = 'flex5-div';
     flex5Div.setAttribute("class", "d-flex mt-2");
-    flex5Div.innerHTML = `<p class="fw-medium mb-0 fs-12 text-muted"><span>As Of:${lastTradedDate}</span></p>`
+    flex5Div.innerHTML = `<p class="fw-medium mb-0 fs-12 text-muted"><span>${lastTradedDate}</span></p>`
 
     const flex3Div = document.createElement('div');
     flex3Div.id = 'flex3-div';
@@ -536,6 +540,18 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     flex4Div.id = 'flex4-div';
     flex4Div.setAttribute("class", "d-flex mt-2");
 
+    let recommendationScoreColorCode = recommendationScore > 0 ? 'primary' : 'secondary';
+    let recommendationTick = "";
+    let recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-info ms-1 fs-18">Keep a watch, it may move either way</i>';
+    if(recommendationScore >=1.49) {
+        recommendationTick = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18">Overall looks good</i>';
+    } else if (recommendationScore <=0.99) {
+        recommendationTick = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18">Not moving well, take a decision</i>';
+    } 
+
+    
 
     if(netProfit>0){
         flex4Div.innerHTML = `<span class="badge bg-success-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-up ms-1"></i></span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>
@@ -545,6 +561,12 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
         flex4Div.innerHTML = `<span class="badge bg-danger-transparent fs-14 rounded-pill">${netProfit}% <i class="ti ti-trending-down ms-1"></i></span><a href='#' class='ms-1 fs-16' data-bs-toggle='offcanvas'><i class='bx bx-cog bx-spin'></i></a>
         <a href="javascript:void(0);" onclick="navigateTokenStats(${botId}, ${subscribeStatus})" class="text-muted fs-14 ms-auto text-decoration-underline mt-auto">more</a>`
     }
+
+    const flexScoreDiv = document.createElement('div');
+    flexScoreDiv.id = 'flexScoreDiv-div';
+    flexScoreDiv.setAttribute("class", "d-flex");
+    flexScoreDiv.innerHTML = `<p class="fw-medium mb-1 fs-14 text-muted">Score : <span class='badge bg-${recommendationScoreColorCode}-transparent fs-12 rounded-pill'>${recommendationScore.toFixed(2)} ${recommendationTick}</span></p>`
+
 
     const containerDiv = document.getElementById("dashboard-box-container");
     containerDiv.appendChild(colDiv);
@@ -556,10 +578,38 @@ var createDashboardBoxes = (tradeSymbol,lastTradeQty,netProfit,tokenIconUrl, bas
     cardBodyDiv.appendChild(flex5Div);
     cardBodyDiv.appendChild(flex2Div);
     cardBodyDiv.appendChild(flex3Div);
+    cardBodyDiv.appendChild(flexScoreDiv);
     cardBodyDiv.appendChild(flex4Div);
 }
 
-var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd, totalNumberOfDaysRunning, baseInitial, baseCurrent) => {
+var calculateRecommendationScore = (tokenNetProfit, baseNetProfit, usdPercent, totalNumberOfDaysRunning, totalTrades) => {
+    let recommendationScore = 0;
+    let tokenWeightageFactor = 0.67;
+    let baseWeightageFactor = 0.2;
+    let usdWeightageFactor = 0.1;
+    let durationWeightageFactor = 0.03;
+    if(totalNumberOfDaysRunning <=90 ) {
+        tokenWeightageFactor = 0.67;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.03;      
+    } else if (totalNumberOfDaysRunning >= 91 && totalNumberOfDaysRunning <= 180) {
+        tokenWeightageFactor = 0.64;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.06;    
+    } else if (totalNumberOfDaysRunning >= 181) {
+        tokenWeightageFactor = 0.6;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.1;    
+    }
+
+    recommendationScore = ((tokenNetProfit*tokenWeightageFactor) + (baseNetProfit*baseWeightageFactor) + (usdPercent*usdWeightageFactor) + (totalNumberOfDaysRunning*durationWeightageFactor))/totalTrades;
+    return recommendationScore;
+}
+
+var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNetProfit, baseNetProfit, tokenEntryAmount, lastTradeQty, lastTradedDate, subscribedOn, botId, botBaseIcon, botTokenIcon, appTS, avgUsdProfit, avgUsdProfitPercent, baseUsdProfitPercent, tokenUsdProfitPercent, subscriptionStatus, investedUsd, totalNumberOfDaysRunning, baseInitial, baseCurrent, recommendationScore) => {
     const row = document.createElement('tr');
     const strategyName = symbol + '_' + timeframe;
     const tokenColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
@@ -572,11 +622,17 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
     const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
     const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
-    const tokenBaseAvgProfit = (tokenNetProfit*0.6+baseNetProfit*0.4);
-    const avgMonthlyProfit = tokenBaseAvgProfit != 0 ? (tokenBaseAvgProfit/totalNumberOfDaysRunning)*30 : 0;
-    const avgMonthlyProfitColorCode = avgMonthlyProfit > 0 ? 'success' : 'danger';
-    const avgMonthlyProfitDisplay = avgMonthlyProfit.toFixed(1) + '%';
-
+    
+    let recommendationScoreColorCode = recommendationScore > 0 ? 'primary' : 'secondary';
+    let recommendationTick = "";
+    let recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-info ms-1 fs-18">Keep a watch, it may move either way</i>';
+    if(recommendationScore >=1.49) {
+        recommendationTick = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18">Overall looks good</i>';
+    } else if (recommendationScore <=0.99) {
+        recommendationTick = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18">Not moving well, take a decision</i>';
+    } 
     const investedUsdDisplay = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
     const avgUsdProfitDisplay = "$ " + avgUsdProfit.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
 
@@ -594,7 +650,7 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit.toFixed(1)}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit.toFixed(1)}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent.toFixed(1)}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${avgMonthlyProfitColorCode}-transparent fs-12 rounded-pill'>${avgMonthlyProfitDisplay}</span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${recommendationScoreColorCode}-transparent fs-12 rounded-pill'>${recommendationScore.toFixed(2)} ${recommendationTick}</span></td>
     <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning.toFixed(0)}</td>
     <td style = 'font-size: 12px;'>${investedUsdDisplay}</td>
     <td style = 'font-size: 12px;'>${avgUsdProfitDisplay}</td>
@@ -608,7 +664,7 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     <td style = 'font-size: 12px;'>${lastTradedDate}</td>
     <td style = 'font-size: 12px;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'>${platform}</td>
-
+    <td style = 'font-size: 12px;'>${recomendationMessage}</td>
     <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>`;
 
     const tbody = document.getElementById("index-grid-tbody");
