@@ -226,7 +226,7 @@ var getTokenStats = (parentPage) => {
         const approvedRequestSubmittedOn = res.data.approvedRequestsCounts.SUBMITTED_ON; //approvedRequests Submitted On
         const approvedRequestSubmittedID = res.data.approvedRequestsCounts.SUB_REQ_ID; //approvedRequests Submitted On
 
-        var formattedData = formatGraphData(netprofitDailyData);
+        var formattedData = formatGraphData(netprofitMonthlyData);
         tokenNetProfitArr = formattedData.tokenNetProfit;
         baseNetProfitArr = formattedData.baseNetProfit;
         overallProfitableArr = formattedData.overallProfitable;
