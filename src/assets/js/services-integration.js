@@ -394,9 +394,13 @@ var getUserProfile = () => {
                 }
 
                 let recommendationScoreCalculated = 0;
+                let totalRecommendationScoreCalculated = 0;
+                let avgRecommendationScoreCalculated = 0;
                 for (let i = 0; i < subscribedBots.length; i++) {
 
                     recommendationScoreCalculated = calculateRecommendationScore(subscribedBots[i].TOKEN_NETPROFIT, subscribedBots[i].BASE_NETPROFIT, subscribedBots[i].AVG_USD_PROFIT_PERCENT,  subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].TOTAL_NUMOF_TRADES);
+                    console.log('##Performance Score for : ' + subscribedBots[i].TRADE_SYMBOL + " " + recommendationScoreCalculated);
+                    totalRecommendationScoreCalculated = totalRecommendationScoreCalculated + recommendationScoreCalculated;
 
                     createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
                                             subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
@@ -408,6 +412,15 @@ var getUserProfile = () => {
                         subscribedBots[i].AVG_USD_PROFIT_PERCENT,subscribedBots[i].BASE_USD_PROFIT_PERCENT,subscribedBots[i].TOKEN_USD_PROFIT_PERCENT, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].TOKEN_USD_INVESTED, 
                         subscribedBots[i].TOTAL_NUMOF_DAYS, subscribedBots[i].BASE_INITIAL_CAPITAL, subscribedBots[i].BASE_CURRENT_BALANCE, recommendationScoreCalculated);
                 }
+
+                avgRecommendationScoreCalculated = totalRecommendationScoreCalculated / subscribedBots.length;
+                console.log('##Overall Performance Score : ' + avgRecommendationScoreCalculated);
+                
+                if(avgRecommendationScoreCalculated >=0.90) {
+                    document.getElementById("overall-performance-score").innerHTML = "<span class='badge bg-primary-transparent fs-18 rounded-pill'>" + avgRecommendationScoreCalculated.toFixed(2) + "<i class='bi bi-patch-check-fill text-success ms-1 fs-21'></i></span>";
+                } else if (avgRecommendationScoreCalculated <=0.89) {
+                    document.getElementById("overall-performance-score").innerHTML = "<span class='badge bg-danger-transparent fs-18 rounded-pill'>"+ avgRecommendationScoreCalculated.toFixed(2) + "<i class='bi bi-patch-exclamation-fill text-danger ms-1 fs-21'></i></span>";
+                } 
 
                 document.getElementById("as-of-token-summary").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.AS_OF_SUMMARY : new Date().toUTCString().slice(5, 16); //01-01-2023
                 document.getElementById("total-trades").innerHTML = (subscribtionStatsSummary != null) ? subscribtionStatsSummary.SUM_USER_SUB_TRADES : 0;
@@ -604,8 +617,11 @@ var calculateRecommendationScore = (tokenNetProfit, baseNetProfit, usdPercent, t
         usdWeightageFactor = 0.1;
         durationWeightageFactor = 0.1;    
     }
-
-    recommendationScore = ((tokenNetProfit*tokenWeightageFactor) + (baseNetProfit*baseWeightageFactor) + (usdPercent*usdWeightageFactor) + (totalNumberOfDaysRunning*durationWeightageFactor))/totalTrades;
+    let scoreValue = ((tokenNetProfit*tokenWeightageFactor) + (baseNetProfit*baseWeightageFactor) + (usdPercent*usdWeightageFactor) + (totalNumberOfDaysRunning*durationWeightageFactor));
+    if (scoreValue == 0 || scoreValue == 'NaN')
+        recommendationScore = 0; 
+    else
+        recommendationScore = scoreValue/totalTrades;
     return recommendationScore;
 }
 
