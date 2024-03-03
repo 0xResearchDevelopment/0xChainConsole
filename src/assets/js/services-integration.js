@@ -576,6 +576,10 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const avgMonthlyProfit = tokenBaseAvgProfit != 0 ? (tokenBaseAvgProfit/totalNumberOfDaysRunning)*30 : 0;
     const avgMonthlyProfitColorCode = avgMonthlyProfit > 0 ? 'success' : 'danger';
     const avgMonthlyProfitDisplay = avgMonthlyProfit.toFixed(1) + '%';
+
+    const investedUsdDisplay = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+    const avgUsdProfitDisplay = "$ " + avgUsdProfit.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+
     row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
     <td style = 'font-size: 12px;'>
         <div class="lh-1 d-flex align-items-center">
@@ -592,8 +596,8 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent.toFixed(1)}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
     <td style = 'font-size: 12px;'><span class='badge bg-${avgMonthlyProfitColorCode}-transparent fs-12 rounded-pill'>${avgMonthlyProfitDisplay}</span></td>
     <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning.toFixed(0)}</td>
-    <td style = 'font-size: 12px;'>${investedUsd.toFixed(0)}</td>
-    <td style = 'font-size: 12px;'>${avgUsdProfit.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'>${investedUsdDisplay}</td>
+    <td style = 'font-size: 12px;'>${avgUsdProfitDisplay}</td>
     <td style = 'font-size: 12px;'>${tokenEntryAmount.toFixed(0)}</td>
     <td style = 'font-size: 12px;'>${lastTradeQty.toFixed(0)}</td>
     <td style = 'font-size: 12px;'>${appTS}</td>
