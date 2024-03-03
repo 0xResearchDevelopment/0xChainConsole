@@ -572,6 +572,9 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
     const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
     const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
+    const tokenBaseAvgProfit = (tokenNetProfit+baseNetProfit)/2;
+    const avgMonthlyProfit = tokenBaseAvgProfit != 0 ? (tokenBaseAvgProfit/totalNumberOfDaysRunning)*30 : 0;
+    const avgMonthlyProfitDisplay = avgMonthlyProfit.toFixed(0) + '%';
     row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
     <td style = 'font-size: 12px;'>
         <div class="lh-1 d-flex align-items-center">
@@ -583,14 +586,15 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
             </span>
         </div>
     </td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning}</td>
-    <td style = 'font-size: 12px;'>${investedUsd}</td>
-    <td style = 'font-size: 12px;'>${avgUsdProfit}</td>
-    <td style = 'font-size: 12px;'>${tokenEntryAmount}</td>
-    <td style = 'font-size: 12px;'>${lastTradeQty}</td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit.toFixed(1)}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit.toFixed(1)}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent.toFixed(1)}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px;'>${avgMonthlyProfitDisplay}</td>
+    <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'>${investedUsd.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'>${avgUsdProfit.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'>${tokenEntryAmount.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'>${lastTradeQty.toFixed(0)}</td>
     <td style = 'font-size: 12px;'>${appTS}</td>
     <td style = 'font-size: 12px;'>${subscribedOn}</td>
     <td style = 'font-size: 12px;'>${usrsubscriptionStatusFlag}</td>
