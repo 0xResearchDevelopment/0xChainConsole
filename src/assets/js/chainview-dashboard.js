@@ -34,7 +34,7 @@ var loadChartData = () => {
                 investmentSummaryNetProfit = Math.round(investmentSummaryNetProfit * 100) / 100
                 updateInvestmentPieChartData();
 
-                var graphData = formatGraphData(netProfitDaily);
+                var graphData = formatGraphData(netProfitMonthly);
                 inputNetprofit = graphData.netProfitArray;
                 inputBaseNetprofit = graphData.baseNetProfitArray;
                 inputUsdProfit = graphData.usdProfitArray;
