@@ -59,7 +59,7 @@ var loadBotSummaryData = () => {
                 for (let i = 0; i < botsSummary.length; i++) {
                     userSubscriptionStatus  = findUserSubscriptionStatus(userSubscribedBots, botsSummary[i].BOT_ID);
                     userSubscriptionStatusActiveInactive  = findUserSubscriptionStatusActiveOrInactive(userSubscribedBots, botsSummary[i].BOT_ID);
-                    var avgTimePerTrade = botsSummary[i].AVG_TIME_PER_TRADE < 1 ? truncate(botsSummary[i].AVG_TIME_PER_TRADE*24,2) + " hours" : truncate(botsSummary[i].AVG_TIME_PER_TRADE,2) +  " days";        
+                    var avgTimePerTrade = botsSummary[i].AVG_TIME_PER_TRADE < 1 ? truncate(botsSummary[i].AVG_TIME_PER_TRADE*24,2).toFixed(1) + " hours" : truncate(botsSummary[i].AVG_TIME_PER_TRADE,2).toFixed(1) +  " days";        
                     createTableRows(
                         userSubscriptionStatus,
                         userSubscriptionStatusActiveInactive,
@@ -73,7 +73,8 @@ var loadBotSummaryData = () => {
                         botsSummary[i].PROFIT_PER_MONTH,
                         avgTimePerTrade,    //botsSummary[i].AVG_TIME_PER_TRADE, 
                         botsSummary[i].TOTAL_NUMOF_DAYS, 
-                        botsSummary[i].APP_TS_FORMATED
+                        botsSummary[i].APP_TS_FORMATED,
+                        botsSummary[i].AVG_USD_PROFIT_PERCENT
                     );                      
                 } 
                 applyResponsiveness(botsSummary.length);
@@ -121,13 +122,16 @@ var findUserSubscriptionStatusActiveOrInactive = (userSubscribedBots, botID) => 
     return userSubscriptionStatusActiveInactive;
 };
 
-var createTableRows = (userSubscriptionStatus, userSubscriptionStatusActiveInactive, tokenIcon, botId, botName, tokenNetProfit, baseNetprofit, successRate, noOfTrades, profitPerMonth, avgTimePerTrade, totalNoOfDays, appTS) => {
+var createTableRows = (userSubscriptionStatus, userSubscriptionStatusActiveInactive, tokenIcon, botId, botName, tokenNetProfit, baseNetprofit, successRate, noOfTrades, profitPerMonth, avgTimePerTrade, totalNoOfDays, appTS, avgUsdProfitPercentage) => {
     //const tradeActionText = tradeAction == 'B' ? 'Bought' : tradeAction == 'S' ? 'Sold' : tradeAction;
     const tokenNetProfitColorCode = tokenNetProfit > 0 ? 'success' : 'danger';
     const tokanNetprofitTrend = tokenNetProfit > 0 ? 'trending-up' : 'trending-down';
 
     const baseNetProfitColorCode = baseNetprofit > 0 ? 'success' : 'danger';
     const baseNetprofitTrend = baseNetprofit > 0 ? 'trending-up' : 'trending-down';
+
+    const usdAvgNetProfitColorCode = avgUsdProfitPercentage > 0 ? 'success' : 'danger';
+    const usdAvgNetprofitTrend = avgUsdProfitPercentage > 0 ? 'trending-up' : 'trending-down';
 
     const successRateColorCode = successRate > 40 ? 'text-success' : 'text-danger';
     const successRateTrend = successRate > 40 ? 'caret-up-fill' : 'caret-down-fill';
@@ -141,6 +145,46 @@ var createTableRows = (userSubscriptionStatus, userSubscriptionStatusActiveInact
     const userSubscriptionStatusColor = userSubscriptionStatusActiveInactive == -1 ? 'primary' : userSubscriptionStatusActiveInactive >= 1 ? 'secondary' : 'info';
     const userSubscriptionStatusIcon = userSubscriptionStatusActiveInactive == -1 ? '<i class="ti ti-packge-import fs-18"></i>' : userSubscriptionStatusActiveInactive >= 1 ? '<i class="ti ti-rocket fs-18"></i>' : '<i class="ti ti-rocket fs-18"></i>';
 
+
+    //Weightage score calculation
+    let recommendationScore = 0;
+    let tokenWeightageFactor = 0.57;
+    let sucessrateWeightageFactor = 0.1;
+    let baseWeightageFactor = 0.2;
+    let usdWeightageFactor = 0.1;
+    let durationWeightageFactor = 0.03;
+    if(totalNoOfDays <=90 ) {
+        tokenWeightageFactor = 0.57;
+        sucessrateWeightageFactor = 0.1;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.03;      
+    } else if (totalNoOfDays >= 91 && totalNoOfDays <= 180) {
+        tokenWeightageFactor = 0.54;
+        sucessrateWeightageFactor = 0.1;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.06;    
+    } else if (totalNoOfDays >= 181) {
+        tokenWeightageFactor = 0.5;
+        sucessrateWeightageFactor = 0.1;
+        baseWeightageFactor = 0.2;
+        usdWeightageFactor = 0.1;
+        durationWeightageFactor = 0.1;    
+    }
+
+    recommendationScore = ((tokenNetProfit*tokenWeightageFactor) + (baseNetprofit*baseWeightageFactor) + (avgUsdProfitPercentage*usdWeightageFactor) + (totalNoOfDays*durationWeightageFactor) + (successRate*sucessrateWeightageFactor))/noOfTrades;
+    let recommendationScoreColorCode = recommendationScore > 0 ? 'primary' : 'secondary';
+    let recommendationTick = "";
+    let recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-info ms-1 fs-18">Keep a watch, it may move either way</i>';
+    if(recommendationScore >= 1.49) {
+        recommendationTick = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-check-fill text-success ms-1 fs-18">Overall looks good</i>';
+    } else if (recommendationScore <=0.99) {
+        recommendationTick = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18"></i>';
+        recomendationMessage = '<i class="bi bi-patch-exclamation-fill text-danger ms-1 fs-18">Not moving well, take a decision</i>';
+    } 
+
     //const badgeTheme = (tradeAction == 'B') ? 'success' : 'secondary';
     const row = document.createElement('tr');
 
@@ -152,11 +196,12 @@ var createTableRows = (userSubscriptionStatus, userSubscriptionStatusActiveInact
 
     row.innerHTML = `<td style = 'font-size: 12px;'><span class='badge bg-${userSubscriptionStatusColor}-transparent rounded-pill'>${userSubscriptionStatusIcon}<a href='javascript:navigateBotStats(${botId}, ${userSubscriptionStatusActiveInactive});' class='fs-12 ms-auto mt-auto'>${userSubscriptionStatusDesign}</a></span><span>${botId}</span></td>
     <td style = 'font-size: 12px;'><div class='lh-1 d-flex align-items-center'><span class='avatar avatar-xs avatar-rounded'><img src='${tokenIcon}'></span><span>-  <a href='javascript:navigateBotStats(${botId}, ${userSubscriptionStatusActiveInactive})' class='fs-12 ms-auto mt-auto'>${botName}</a></span></div></td>
-    <td style = 'font-size: 12px;'>${totalNoOfDays} days</td>
-    <td style = 'font-size: 12px;'><span class='text-${tokenNetProfitColorCode}'><i class='ti ti-${tokanNetprofitTrend} me-1 align-middle'></i>${tokenNetProfit}%</span></td>    
-    <td style = 'font-size: 12px;'><span class='text-${baseNetProfitColorCode}'><i class='ti ti-${baseNetprofitTrend} me-1 align-middle'></i>${baseNetprofit}%</span></td>
-    <td style = 'font-size: 14px;'> <span class='text-${profitPerMonthColor}'><i class='ti ti-${profitPerMonthTrend} me-1 align-middle'></i>${profitPerMonth}%</span><i class='bi ${recommendateRating} text-success ms-1 fs-21'></i></td>
-    <td style = 'font-size: 12px;'><div class='progress progress-xs progress-custom progress-animate' role='progressbar' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100'><div class='progress-bar bg-primary' style='width: ${successRate}%'></div></div><span class='fs-11'>${successRate}%<i class='bi bi-${successRateTrend} ms-1 ${successRateColorCode}'></i></span></td>
+    <td style = 'font-size: 12px;'>${totalNoOfDays.toFixed(0)}</td>
+    <td style = 'font-size: 12px;'><span class='text-${tokenNetProfitColorCode}'><i class='ti ti-${tokanNetprofitTrend} me-1 align-middle'></i>${tokenNetProfit.toFixed(0)}%</span></td>    
+    <td style = 'font-size: 12px;'><span class='text-${baseNetProfitColorCode}'><i class='ti ti-${baseNetprofitTrend} me-1 align-middle'></i>${baseNetprofit.toFixed(0)}%</span></td>
+    <td style = 'font-size: 12px;'><span class='text-${usdAvgNetProfitColorCode}'><i class='ti ti-${usdAvgNetprofitTrend} me-1 align-middle'></i>${avgUsdProfitPercentage.toFixed(0)}%</span></td>
+    <td style = 'font-size: 14px;'> <span class='badge bg-${recommendationScoreColorCode}-transparent fs-12 rounded-pill'>${recommendationScore.toFixed(2)} ${recommendationTick}</span></td>
+    <td style = 'font-size: 12px;'><div class='progress progress-xs progress-custom progress-animate' role='progressbar' aria-valuenow='50' aria-valuemin='0' aria-valuemax='100'><div class='progress-bar bg-primary' style='width: ${successRate.toFixed(0)}%'></div></div><span class='fs-11'>${successRate}%<i class='bi bi-${successRateTrend} ms-1 ${successRateColorCode}'></i></span></td>
     <td style = 'font-size: 12px;'>${noOfTrades}</td>
     <td style = 'font-size: 12px;'>${avgTimePerTrade}</td>
     <td style = 'font-size: 12px;'>${appTS}</td>`;
@@ -183,7 +228,7 @@ var applyResponsiveness = (arrSize) => {
             searchPlaceholder: 'Search...',
             sSearch: ''
         },
-        order: [[3, 'desc']],   //Soring by EventID decensing order
+        order: [[6, 'desc']],   //Soring by EventID decensing order
         "pageLength": arrSize,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
