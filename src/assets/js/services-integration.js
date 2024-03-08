@@ -321,6 +321,7 @@ var getTodayDate = () => {
 var getUserProfile = () => {
     getAllNotifications();
     const authToken = localStorage.getItem('authToken');
+    const gridView = (sessionStorage.getItem('gridView')!=undefined && sessionStorage.getItem('gridView')!=null)?sessionStorage.getItem('gridView'):false;
     
     axios
         .get(
@@ -457,36 +458,57 @@ var getUserProfile = () => {
                                         recentActivities[i].ACTIVITY_TS,theme.get(recentActivities[i].MODULE));                      
                 }
                 document.getElementById("grid-switch").disabled = false;
+                if(gridView == "true"){
+                    applyDashboardGridView();
+                    document.getElementById("grid-switch").checked = true;
+                }
+                else{
+                    applyDashboardBoxView();
+                    document.getElementById("grid-switch").checked = false;
+                }
+
+                var allocationSummaryConsolidated = [];
 
                 for (let i = 0; i < allocationBaseSummary.length; i++) {
+                    const foundIndex = allocationSummaryConsolidated.findIndex(obj => obj.SYMBOL == allocationBaseSummary[i].BASE_CURRENCY_CODE); 
+                    if(foundIndex >= 0){    
+                        oldObj = allocationSummaryConsolidated[foundIndex];
+                        newObj = {
+                            'SYMBOL':oldObj.SYMBOL,
+                            'IN_TRADE': allocationBaseSummary[i].TRADE_ACTION == 'B' ? allocationBaseSummary[i].TOTAL_BASE_CURRENT : oldObj.IN_TRADE,
+                            'IN_WALLET': allocationBaseSummary[i].TRADE_ACTION == 'S' ? allocationBaseSummary[i].TOTAL_BASE_CURRENT : oldObj.IN_WALLET,
+                            'STRATEGY_TRADE': allocationBaseSummary[i].TRADE_ACTION == 'B' ? allocationBaseSummary[i].SYMBOL_COUNT : oldObj.STRATEGY_TRADE,
+                            'STRATEGY_WALLET': allocationBaseSummary[i].TRADE_ACTION == 'S' ? allocationBaseSummary[i].SYMBOL_COUNT : oldObj.STRATEGY_WALLET,
+                            'INVESTED_USD': (Number(oldObj.INVESTED_USD) + Number(allocationBaseSummary[i].TOTAL_BASE_USD_INVESTED_VALUE)),
+                            'CURRENT_USD': (Number(oldObj.CURRENT_USD) + Number(allocationBaseSummary[i].TOTAL_BASE_USD_CURRENT_VALUE))
+                        }
+                        allocationSummaryConsolidated[foundIndex] = newObj;
+                    }
+                    else{
+                        allocationSummaryConsolidated.push({
+                            'SYMBOL':allocationBaseSummary[i].BASE_CURRENCY_CODE,
+                            'IN_TRADE': allocationBaseSummary[i].TRADE_ACTION == 'B' ? allocationBaseSummary[i].TOTAL_BASE_CURRENT : 0,
+                            'IN_WALLET': allocationBaseSummary[i].TRADE_ACTION == 'S' ? allocationBaseSummary[i].TOTAL_BASE_CURRENT : 0,
+                            'STRATEGY_TRADE': allocationBaseSummary[i].TRADE_ACTION == 'B' ? allocationBaseSummary[i].SYMBOL_COUNT : 0,
+                            'STRATEGY_WALLET': allocationBaseSummary[i].TRADE_ACTION == 'S' ? allocationBaseSummary[i].SYMBOL_COUNT : 0,
+                            'INVESTED_USD': allocationBaseSummary[i].TOTAL_BASE_USD_INVESTED_VALUE,
+                            'CURRENT_USD': allocationBaseSummary[i].TOTAL_BASE_USD_CURRENT_VALUE
+                        })  
+                    }
+                };
+
+                for (let i = 0; i < allocationSummaryConsolidated.length; i++) {
                     createTableRowsAllocation(
-                        allocationBaseSummary[i].BASE_CURRENCY_CODE,
-                        allocationBaseSummary[i].TRADE_ACTION,
-                        allocationBaseSummary[i].TOTAL_BASE_CURRENT,
-                        allocationBaseSummary[i].SYMBOL_COUNT,
-                        allocationBaseSummary[i].TOTAL_BASE_USD_CURRENT_VALUE,
+                        allocationSummaryConsolidated[i].SYMBOL,
+                        Math.round(allocationSummaryConsolidated[i].IN_TRADE * 100) / 100,
+                        Math.round(allocationSummaryConsolidated[i].IN_WALLET * 100) / 100,
+                        allocationSummaryConsolidated[i].STRATEGY_TRADE,
+                        allocationSummaryConsolidated[i].STRATEGY_WALLET,
+                        Math.round(allocationSummaryConsolidated[i].INVESTED_USD * 100) / 100,
+                        Math.round(allocationSummaryConsolidated[i].CURRENT_USD * 100) / 100,
                     );
                 }
                 applyResponsivenessAllocation();
-
-                var symbolBaseCurrentSummary = [];
-                allocationBaseSummary.reduce(function(res, value) {
-                    if (!res[value.BASE_CURRENCY_CODE]) {
-                        res[value.BASE_CURRENCY_CODE] = { BASE_CURRENCY_CODE: value.BASE_CURRENCY_CODE, TOTAL_BASE_CURRENT: 0 };
-                        symbolBaseCurrentSummary.push(res[value.BASE_CURRENCY_CODE])
-                    }
-                    res[value.BASE_CURRENCY_CODE].TOTAL_BASE_CURRENT += Number(value.TOTAL_BASE_CURRENT);
-                    return res;
-                }, {});
-
-                for (let i = 0; i < symbolBaseCurrentSummary.length; i++) {
-                    createSymbolBoxes(
-                        symbolBaseCurrentSummary[i].BASE_CURRENCY_CODE,
-                        symbolBaseCurrentSummary[i].TOTAL_BASE_CURRENT
-                    );
-                }
-
-                //console.log("***result*** "+ JSON.stringify(symbolBaseCurrentSummary));
             }
         }).catch(err => {
             console.log(err, err.response);
@@ -638,6 +660,7 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
     const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
     const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
+    const bgColor = subscriptionStatus > 0 ? '#fff' : '#d3d3d3';
     
     let recommendationScoreColorCode = recommendationScore > 0 ? 'primary' : 'secondary';
     let recommendationTick = "";
@@ -652,8 +675,8 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const investedUsdDisplay = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
     const avgUsdProfitDisplay = "$ " + avgUsdProfit.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
 
-    row.innerHTML = `<td style = 'font-size: 12px;'>${totalTrades}</td>
-    <td style = 'font-size: 12px;'>
+    row.innerHTML = `<td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${totalTrades}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>
         <div class="lh-1 d-flex align-items-center">
             <span class="avatar avatar-xs avatar-rounded">
                 <img src=${botTokenIcon}><img src=${botBaseIcon}>
@@ -663,25 +686,25 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
             </span>
         </div>
     </td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit.toFixed(1)}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit.toFixed(1)}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent.toFixed(1)}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${recommendationScoreColorCode}-transparent fs-12 rounded-pill'>${recommendationScore.toFixed(2)} ${recommendationTick}</span></td>
-    <td style = 'font-size: 12px;'>${totalNumberOfDaysRunning.toFixed(0)}</td>
-    <td style = 'font-size: 12px;'>${investedUsdDisplay}</td>
-    <td style = 'font-size: 12px;'>${avgUsdProfitDisplay}</td>
-    <td style = 'font-size: 12px;'>${tokenEntryAmount.toFixed(0)}</td>
-    <td style = 'font-size: 12px;'>${lastTradeQty.toFixed(0)}</td>
-    <td style = 'font-size: 12px;'>${appTS}</td>
-    <td style = 'font-size: 12px;'>${subscribedOn}</td>
-    <td style = 'font-size: 12px;'>${usrsubscriptionStatusFlag}</td>
-    <td style = 'font-size: 12px;'>${symbol}</td>
-    <td style = 'font-size: 12px;'>${timeframe}</td>
-    <td style = 'font-size: 12px;'>${lastTradedDate}</td>
-    <td style = 'font-size: 12px;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>
-    <td style = 'font-size: 12px;'>${platform}</td>
-    <td style = 'font-size: 12px;'>${recomendationMessage}</td>
-    <td style = 'font-size: 12px;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>`;
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><span class='badge bg-${tokenColorCode}-transparent fs-12 rounded-pill'>${tokenNetProfit.toFixed(1)}%<i class='ti ti-${tokenProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><span class='badge bg-${baseColorCode}-transparent fs-12 rounded-pill'>${baseNetProfit.toFixed(1)}%<i class='ti ti-${baseProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><span class='badge bg-${usdPercentColorCode}-transparent fs-12 rounded-pill'>${usdPercent.toFixed(1)}%<i class='ti ti-${usdPercentProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><span class='badge bg-${recommendationScoreColorCode}-transparent fs-12 rounded-pill'>${recommendationScore.toFixed(2)} ${recommendationTick}</span></td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${totalNumberOfDaysRunning.toFixed(0)}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${investedUsdDisplay}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${avgUsdProfitDisplay}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${tokenEntryAmount.toFixed(0)}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${lastTradeQty.toFixed(0)}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${appTS}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${subscribedOn}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${usrsubscriptionStatusFlag}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${symbol}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${timeframe}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${lastTradedDate}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><span class='badge bg-${usdColorCode}-transparent fs-12 rounded-pill'>${avgUsdProfitPercent}%<i class='ti ti-${usdProfitTrend} ms-1'></i></span></td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${platform}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'>${recomendationMessage}</td>
+    <td style = 'font-size: 12px; background-color: ${bgColor} !important;'><div class="avatar avatar-sm br-4 ms-auto"><img src=${botBaseIcon} class="fs-20"></div></td>`;
 
     const tbody = document.getElementById("index-grid-tbody");
     tbody.appendChild(row);
@@ -701,14 +724,18 @@ var createSymbolBoxes = (symbol, amount) => {
     containerDiv.appendChild(div);
 }
 
-var createTableRowsAllocation = (baseCurrencyCode, tradeAction, totalBaseCurrent, symbolCount, totalBaseUsdCurrentValue) => {
+var createTableRowsAllocation = (symbol, inTrade, inWallet, strategyTrade, strategyWallet, investedUsd, currentUsd) => {
     const row = document.createElement('tr');
-    let action = tradeAction == 'B' ? 'In Trade' : (tradeAction == 'S' ? 'In Wallet' : 'NA');
-    row.innerHTML = `<td style = 'font-size: 12px;'>${baseCurrencyCode}</td>
-                    <td style = 'font-size: 12px;'>${action}</td>
-                    <td style = 'font-size: 12px;'>${totalBaseCurrent}</td>
-                    <td style = 'font-size: 12px;'>${symbolCount}</td>
-                    <td style = 'font-size: 12px;'>${'$ '+totalBaseUsdCurrentValue}</td>`;
+    const totalAmount = Math.round((Number(inTrade) + Number(inWallet)) * 100) / 100; 
+    const totalStragyCount = Math.round((Number(strategyTrade) + Number(strategyWallet)) * 100) / 100;
+    const allocation = ((currentUsd - investedUsd)/investedUsd)*100;
+    row.innerHTML = `<td style = 'font-size: 12px;'>${symbol}</td>
+                    <td style = 'font-size: 12px;'>${inTrade}(${strategyTrade})</td>
+                    <td style = 'font-size: 12px;'>${inWallet}(${strategyWallet})</td>
+                    <td style = 'font-size: 12px;'>${totalAmount}(${totalStragyCount})</td>
+                    <td style = 'font-size: 12px;'>${'$ '+ investedUsd}</td>
+                    <td style = 'font-size: 12px;'>${'$ '+ currentUsd}</td>
+                    <td style = 'font-size: 12px;'>${Math.round(allocation * 100) / 100 + '%'}</td>`;
 
 
     const tbody = document.getElementById("allocation-breakdown-tbody");
@@ -777,18 +804,28 @@ var applyResponsivenessAllocation = () => {
 
 var switchView = () => {
     if(document.getElementById("grid-switch").checked){
-        document.getElementById('dashboard-grid-container').style.display = 'block';
-        document.getElementById('dashboard-box-container').style.display = 'none';
-        document.getElementById('index-header').style.paddingBottom = '0rem';
-        document.getElementById('index-header').style.minHeight = '65px';
-        applyResponsivenessBots();
+        applyDashboardGridView();
+        sessionStorage.setItem('gridView', true);
     }
     else{
-        document.getElementById('dashboard-grid-container').style.display = 'none';
-        document.getElementById('dashboard-box-container').style.display = 'flex';
-        document.getElementById('index-header').style.paddingBottom = '3rem';
-        document.getElementById('index-header').style.minHeight = '115px';
+        applyDashboardBoxView();
+        sessionStorage.setItem('gridView', false);
     }
+}
+
+var applyDashboardBoxView = () => {
+    document.getElementById('dashboard-grid-container').style.display = 'none';
+    document.getElementById('dashboard-box-container').style.display = 'flex';
+    document.getElementById('index-header').style.paddingBottom = '3rem';
+    document.getElementById('index-header').style.minHeight = '115px';
+}
+
+var applyDashboardGridView = () => {
+    document.getElementById('dashboard-grid-container').style.display = 'block';
+    document.getElementById('dashboard-box-container').style.display = 'none';
+    document.getElementById('index-header').style.paddingBottom = '0rem';
+    document.getElementById('index-header').style.minHeight = '65px';
+    applyResponsivenessBots();
 }
 
 var navigateTokenStats = (botId, userSubscriptionStatus) => {
