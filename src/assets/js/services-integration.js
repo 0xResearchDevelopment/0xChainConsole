@@ -660,7 +660,7 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     const usdPercentColorCode = usdPercent > 0 ? 'success' : 'danger';
     const usdPercentProfitTrend = usdPercent > 0 ? 'trending-up' : 'trending-down';
     const usrsubscriptionStatusFlag = subscriptionStatus > 0 ? 'ACTIVE' : 'INACTIVE';
-    const bgColor = subscriptionStatus > 0 ? '#fff' : '#d3d3d3';
+    const bgColor = subscriptionStatus <= 0 ? '#d3d3d3' : '';
     
     let recommendationScoreColorCode = recommendationScore > 0 ? 'primary' : 'secondary';
     let recommendationTick = "";
@@ -729,13 +729,26 @@ var createTableRowsAllocation = (symbol, inTrade, inWallet, strategyTrade, strat
     const totalAmount = Math.round((Number(inTrade) + Number(inWallet)) * 100) / 100; 
     const totalStragyCount = Math.round((Number(strategyTrade) + Number(strategyWallet)) * 100) / 100;
     const allocation = ((currentUsd - investedUsd)/investedUsd)*100;
-    row.innerHTML = `<td style = 'font-size: 12px;'>${symbol}</td>
-                    <td style = 'font-size: 12px;'>${inTrade}(${strategyTrade})</td>
-                    <td style = 'font-size: 12px;'>${inWallet}(${strategyWallet})</td>
-                    <td style = 'font-size: 12px;'>${totalAmount}(${totalStragyCount})</td>
-                    <td style = 'font-size: 12px;'>${'$ '+ investedUsd}</td>
-                    <td style = 'font-size: 12px;'>${'$ '+ currentUsd}</td>
-                    <td style = 'font-size: 12px;'>${Math.round(allocation * 100) / 100 + '%'}</td>`;
+    let symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"; // USDT
+    if (symbol == 'BTC')
+        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png";
+    else if (symbol == 'ETH')
+        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png";
+    else if (symbol == 'BNB')
+        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png";
+    else
+        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"; // USDT
+
+    console.log("### Icon URL:" + symbolIcon);
+
+    let symbolIconTag = "<span class='avatar avatar-sm avatar-rounded'><img src='" + symbolIcon + "'></span>";
+    row.innerHTML = `<td style = 'font-size: 12px;'>${symbolIconTag}</td>
+                    <td style = 'font-size: 12px;'>${inTrade} [${strategyTrade} Bots]</td>
+                    <td style = 'font-size: 12px;'>${inWallet} [${strategyWallet} Bots]</td>
+                    <td style = 'font-size: 12px;'>${totalAmount} ${symbol} [${totalStragyCount} Bots]</td>
+                    <td style = 'font-size: 12px;'>${'$ '+ investedUsd.toFixed(0)}</td>
+                    <td style = 'font-size: 12px;'>${'$ '+ currentUsd.toFixed(0)}</td>
+                    <td style = 'font-size: 12px;'>${Math.round(allocation.toFixed(0) * 100) / 100 + '%'}</td>`;
 
 
     const tbody = document.getElementById("allocation-breakdown-tbody");
