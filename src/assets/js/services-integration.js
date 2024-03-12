@@ -403,9 +403,11 @@ var getUserProfile = () => {
                     console.log('##Performance Score for : ' + subscribedBots[i].TRADE_SYMBOL + " " + recommendationScoreCalculated);
                     totalRecommendationScoreCalculated = totalRecommendationScoreCalculated + recommendationScoreCalculated;
 
-                    createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
-                                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
-                                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM, recommendationScoreCalculated);                      
+                    if(subscribedBots[i].SUBSCRIBE_STATUS != 0){
+                        createDashboardBoxes(subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].TOKEN_NETPROFIT,
+                            subscribedBots[i].BOT_TOKEN_ICON,subscribedBots[i].BOT_BASE_ICON,subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].APP_TS,  //subscribedBots[i].LAST_TRADED_DATE,
+                            subscribedBots[i].TOKEN_ENTRY_AMOUNT, subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].BOT_ID, subscribedBots[i].SUBSCRIBE_STATUS, subscribedBots[i].PLATFORM, recommendationScoreCalculated);
+                    }
                 
                     createDashboardGridRows(subscribedBots[i].TOTAL_NUMOF_TRADES,subscribedBots[i].TRADE_SYMBOL,subscribedBots[i].TRADE_TIMEFRAME,subscribedBots[i].PLATFORM,subscribedBots[i].TOKEN_NETPROFIT,
                         subscribedBots[i].BASE_NETPROFIT,subscribedBots[i].TOKEN_ENTRY_AMOUNT,subscribedBots[i].LAST_TRADE_QTY,subscribedBots[i].LAST_TRADED_DATE,subscribedBots[i].SUBSCRIBED_ON,
@@ -506,6 +508,7 @@ var getUserProfile = () => {
                         allocationSummaryConsolidated[i].STRATEGY_WALLET,
                         Math.round(allocationSummaryConsolidated[i].INVESTED_USD * 100) / 100,
                         Math.round(allocationSummaryConsolidated[i].CURRENT_USD * 100) / 100,
+                        subscribedBots
                     );
                 }
                 applyResponsivenessAllocation();
@@ -710,44 +713,32 @@ var createDashboardGridRows = (totalTrades, symbol, timeframe, platform, tokenNe
     tbody.appendChild(row);
 }
 
-var createSymbolBoxes = (symbol, amount) => {
-    const div = document.createElement('div');
-    div.setAttribute("class", "col-xxl-2 col-xl-2 col-lg-2 col-md-4 col-sm-6 mb-4 mb-lg-0");
-    div.innerHTML = `<div class="card custom-card shadow-none border">
-                        <div class="card-body py-3 row">
-                            <span class="col-md-6 fw-semibold">${symbol}</span>
-                            <span class="col-md-6">${Math.round(amount * 100) / 100}</span>
-                        </div>
-                    </div>`
-
-    const containerDiv = document.getElementById("symbol-box");
-    containerDiv.appendChild(div);
-}
-
-var createTableRowsAllocation = (symbol, inTrade, inWallet, strategyTrade, strategyWallet, investedUsd, currentUsd) => {
+var createTableRowsAllocation = (symbol, inTrade, inWallet, strategyTrade, strategyWallet, investedUsd, currentUsd, subscribedBotsArr) => {
     const row = document.createElement('tr');
     const totalAmount = Math.round((Number(inTrade) + Number(inWallet)) * 100) / 100; 
     const totalStragyCount = Math.round((Number(strategyTrade) + Number(strategyWallet)) * 100) / 100;
+    const investedUsdDisplay = "$ " + investedUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
+    const currentUsdDisplay = "$ " + currentUsd.toLocaleString("en-US", { maximumFractionDigits: 0, minimumFractionDigits: 0 });
     const allocation = ((currentUsd - investedUsd)/investedUsd)*100;
-    let symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"; // USDT
-    if (symbol == 'BTC')
-        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png";
-    else if (symbol == 'ETH')
-        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png";
-    else if (symbol == 'BNB')
-        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png";
-    else
-        symbolIcon = "https://s2.coinmarketcap.com/static/img/coins/64x64/825.png"; // USDT
+    let symbolIcon = ''; 
 
-    console.log("### Icon URL:" + symbolIcon);
+    //RE-DO
+    //Logic to get BASE ICON URL from subscribedBots array.
+    for (let i = 0; i < subscribedBotsArr.length; i++) {
+        if(subscribedBotsArr[i].TRADE_SYMBOL.includes(symbol)){
+            symbolIcon = subscribedBotsArr[i].BOT_BASE_ICON;
+            console.log("### Icon URL:" + symbolIcon);
+            break;
+        }
+    }
 
     let symbolIconTag = "<span class='avatar avatar-sm avatar-rounded'><img src='" + symbolIcon + "'></span>";
     row.innerHTML = `<td style = 'font-size: 12px;'>${symbolIconTag}</td>
                     <td style = 'font-size: 12px;'>${inTrade} [${strategyTrade} Bots]</td>
                     <td style = 'font-size: 12px;'>${inWallet} [${strategyWallet} Bots]</td>
                     <td style = 'font-size: 12px;'>${totalAmount} ${symbol} [${totalStragyCount} Bots]</td>
-                    <td style = 'font-size: 12px;'>${'$ '+ investedUsd.toFixed(0)}</td>
-                    <td style = 'font-size: 12px;'>${'$ '+ currentUsd.toFixed(0)}</td>
+                    <td style = 'font-size: 12px;'>${investedUsdDisplay}</td>
+                    <td style = 'font-size: 12px;'>${currentUsdDisplay}</td>
                     <td style = 'font-size: 12px;'>${Math.round(allocation.toFixed(0) * 100) / 100 + '%'}</td>`;
 
 
@@ -803,12 +794,15 @@ var applyResponsivenessBots = () => {
 var applyResponsivenessAllocation = () => {
     $('#allocationBreakdownTable').DataTable({
         responsive: true,
-        language: {
-            searchPlaceholder: 'Search...',
-            sSearch: ''
-        },
-        order: [[0, 'desc']],   //Soring by BotID decensing order
-        "pageLength": 25,
+        bPaginate: false, //hide pagination
+        bFilter: false, //hide Search bar
+        bInfo: false, // hide showing entries
+        // language: {
+        //     searchPlaceholder: 'Search...',
+        //     sSearch: ''
+        // },
+        //order: [[0, 'desc']],   //Soring by BotID decensing order
+        //"pageLength": 25,
         // buttons: [
         //     'copy', 'csv', 'excel', 'pdf', 'print'
         // ], dom: 'flirtBlp' //'Bfrtip'
