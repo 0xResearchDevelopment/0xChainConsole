@@ -54,7 +54,7 @@ var loadWorkflowPage = () => {
             const botNameSplitArray = botName.split("_");
             const tradeSymbol = botNameSplitArray[0];
             //API to call balance data for a symbol      
-            getBalanceData(tradeSymbol)
+            getBalanceData(botDetails.TOKEN_CURRENCY_CODE);
 
             //const appCurrentDateTime = new Date().toLocaleString("sv");
             //console.log("### Date & Timezone:", appCurrentDateTime);
@@ -106,8 +106,10 @@ var loadWorkflowPage = () => {
 }
 
 var getBalanceData = (tradeSymbol) => {
+  //FIXME: when error occures, we need to show 0 or error in UI.. 
   //###TODO need to replace all hardcoded values in this API call
-  const endPointUrl = 'http://localhost:3000/api/binance/v1/getBalance';
+  console.log('===> getBalanceData.tradeSymbol:', tradeSymbol);
+  const endPointUrl = 'http://localhost:3010/api/binance/v1/getBalance'; //FIXME: no hard coding
   axios.post(
     endPointUrl,
     {
