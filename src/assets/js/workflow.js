@@ -109,7 +109,7 @@ var getBalanceData = (tradeSymbol) => {
   //FIXME: when error occures, we need to show 0 or error in UI.. 
   //###TODO need to replace all hardcoded values in this API call
   console.log('===> getBalanceData.tradeSymbol:', tradeSymbol);
-  const endPointUrl = 'http://localhost:3010/api/binance/v1/getBalance'; //FIXME: no hard coding
+  const endPointUrl = 'http://localhost:3010/api/binance/v1/balance'; //FIXME: no hard coding
   axios.post(
     endPointUrl,
     {
