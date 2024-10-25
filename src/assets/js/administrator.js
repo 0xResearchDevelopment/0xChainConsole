@@ -272,7 +272,9 @@ var processRequest = (reqId, reqType, reqAction, botId, userEmailID) => {
                     reqActionValue = "REJECTED";
                     showToastAlerts('process-stats-success', 'alert-success-msg', 'Rejected request# '+reqId);
                 }
-                window.location.href = 'admin-workflow.html';
+                setTimeout(()=> {
+                    window.location.href = 'admin-workflow.html';
+                }, delayInMS);
             }
         }).catch(err => {
             console.log("inside err");

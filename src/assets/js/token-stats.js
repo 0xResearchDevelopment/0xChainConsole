@@ -435,7 +435,7 @@ var proceedSubscriptionUpdate = (parentPage, pendingWorkflowRequestsCount, reque
   const active_bots_latest = localStorage.getItem('active_bots_count');
   const role_code = localStorage.getItem('role_code');
   console.log("## requests_subscribe_count: " + requests_subscribe_count + " requests_unsubscribe_count: " + requests_unsubscribe_count + " active_bots_latest: " + active_bots_latest + " role_code: " + role_code);
-  let userTotalBots = active_bots_latest + requests_subscribe_count;
+  let userTotalBots = Number(active_bots_latest) + Number(requests_subscribe_count);
 
   if (pendingWorkflowRequestsCount <= 0) {
     if (userTotalBots < role_code) {
@@ -896,7 +896,7 @@ var validateUnsubscribtionTimeframe = (subscribedOn) => {
   var subscribedDate = new Date(subscribedOn.substring(0, 9));
   var currentDate = new Date();
 
-  subscribedDate.setDate(subscribedDate.getDate() + 30); //adding 30 days to subscribed date
+  subscribedDate.setDate(subscribedDate.getDate() + 0); //adding 0 days to subscribed date (we can add any lock-in days)
   console.log("subscribedOn +30 days : "+ subscribedDate);
   console.log("current date: "+ currentDate);
 

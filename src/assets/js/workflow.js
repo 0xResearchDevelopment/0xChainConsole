@@ -51,6 +51,11 @@ var loadWorkflowPage = () => {
             const botDetails = res.data.tradeTransHistoryOneRow; // 1st row from history
             const serviceFor = userSubscriptionStatusValue == 0 ? 'SUBSCRIBE' : 'UNSUBSCRIBE';  //FIXME: date format needs to be changes and Date format
             botName = botDetails.BOT_NAME;
+            const botNameSplitArray = botName.split("_");
+            const tradeSymbol = botNameSplitArray[0];
+            //API to call balance data for a symbol      
+            getBalanceData(tradeSymbol)
+
             //const appCurrentDateTime = new Date().toLocaleString("sv");
             //console.log("### Date & Timezone:", appCurrentDateTime);
 
@@ -63,17 +68,17 @@ var loadWorkflowPage = () => {
                             + new Date().getMinutes() + ":" 
                             + new Date().getSeconds();
  
-            var lockInEndDate = new Date(new Date().getTime()+(30*24*60*60*1000));                
-            lockInEndDate = (lockInEndDate.getDate()) + "-"
-                                    + months[lockInEndDate.getMonth()]  + "-" 
-                                    + lockInEndDate.getFullYear(); 
+            // var lockInEndDate = new Date(new Date().getTime()+(30*24*60*60*1000));                
+            // lockInEndDate = (lockInEndDate.getDate()) + "-"
+            //                         + months[lockInEndDate.getMonth()]  + "-" 
+            //                         + lockInEndDate.getFullYear(); 
             document.getElementById("workflow-bot-id").innerHTML = botDetails.BOT_ID;
             document.getElementById("workflow-bot-name").innerHTML = botDetails.BOT_NAME;
             document.getElementById("workflow-base-icon").src = botDetails.BOT_BASE_ICON;
             document.getElementById("workflow-token-icon").src = botDetails.BOT_TOKEN_ICON;
             document.getElementById("subscription-date").innerHTML = currentDateTime;
             document.getElementById("service-for").innerHTML = serviceFor;
-            document.getElementById("workflow-lockin-text").innerHTML = 'I Agree for 30 days lock-in period ends on <b>' + lockInEndDate + '</b>';
+            // document.getElementById("workflow-lockin-text").innerHTML = 'I Agree for 30 days lock-in period ends on <b>' + lockInEndDate + '</b>';
 
             /*toImgBase64URL(
               botDetails.BOT_TOKEN_ICON,
@@ -100,10 +105,37 @@ var loadWorkflowPage = () => {
         });
 }
 
+var getBalanceData = (tradeSymbol) => {
+  //###TODO need to replace all hardcoded values in this API call
+  const endPointUrl = 'http://localhost:3000/api/binance/v1/getBalance';
+  axios.post(
+    endPointUrl,
+    {
+      'tradeSymbol': tradeSymbol
+    },
+    {
+      headers: {
+        'x-mbx-apiKey': 'oS1UaFODwH7tGrpYRvsX1BD3ETjDZYcGD1lTUp3u3dtMlbIOAnIDsow5MKpF7uDQ',
+        'x-mbx-secretkey': 'vTx3T7BGkFPgJrwxTVLLxMQOLYCYWah92jWnwdL54HUuaTBEKcsctlNiAJiE8h3O',
+        'target-endpoint-url': 'https://testnet.binance.vision/api/v3/account'
+      }
+    })
+    .then(res => {
+      console.log("### Inside getBalance:res.data: " + res.data);
+      if (res.status == 200) {
+        document.getElementById("workflow-free-balance").innerHTML = res?.data?.freeBalance ? res.data.freeBalance : 'NA';
+        document.getElementById("workflow-locked-balance").innerHTML = res?.data?.lockedBalance ? res.data.freeBalance : 'NA';
+      }
+    })
+    .catch(err => {
+      console.log("### Inside getBalance:err.response", err);
+    });
+}
+
 var validateInputs = () => {
     if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
         && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked
-        && document.getElementById('workflow-file').value.length > 0 && document.getElementById('workflow-remarks').value.length > 0 && subscriptionFilePath.length > 0)
+        && document.getElementById('workflow-remarks').value.length > 0)
         {
             document.getElementById('workflow-submit-request').disabled = false;
         }
@@ -112,8 +144,7 @@ var validateInputs = () => {
     }
 
     if(document.getElementById('workflow-whitelist').checked && document.getElementById('workflow-ip-address').checked
-        && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked
-        && document.getElementById('workflow-lockin').checked)
+        && document.getElementById('workflow-terms').checked && document.getElementById('workflow-consent').checked)
         {
             document.getElementById('workflow-generate-pdf').disabled = false;
         }
@@ -165,7 +196,7 @@ var submitRequest = () => {
         agreeIpAdded: document.getElementById('workflow-ip-address').checked ? 1 : 0,
         agreeTerms: document.getElementById('workflow-terms').checked ? 1 : 0,
         agreeConsent: document.getElementById('workflow-consent').checked ? 1 : 0,
-        agreeLockInDays: document.getElementById('workflow-lockin').checked ? 1 : 0,
+        agreeLockInDays: 1 ,
         agreeTermsDocPath: subscriptionFilePath,
         botName : botName
     }

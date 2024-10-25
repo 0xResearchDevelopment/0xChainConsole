@@ -148,11 +148,23 @@
                                 </div>
 
                                 <!-- Lockin Days -->
-                                <div class="col-xl-12">
+                                <!-- <div class="col-xl-12">
                                     <span><h6>Are you aware of the lock-in days?</h6></span>
                                     <div class="custom-toggle-switch d-flex align-items-center mb-4"> 
                                         <input id="workflow-lockin" name="toggleswitch001" type="checkbox" oninput="validateInputs()"> 
                                         <label for="workflow-lockin" class="label-success"></label><span class="ms-3 fs-16 text-danger" id="workflow-lockin-text"> I Agree for 30 days lock-in period</span>
+                                    </div>
+                                </div> -->
+
+                                <!-- Balance -->
+                                <div class="row col-xl-12 col-lg-12 col-md-12">
+                                    <div class="col-xl-2 col-lg-2 col-md-2">
+                                        <span><h6>Free Balance</h6></span>
+                                        <span id="workflow-free-balance"></span>
+                                    </div>
+                                    <div class="col-xl-2 col-lg-2 col-md-2">
+                                        <span><h6>Locked Balance</h6></span>
+                                        <span id="workflow-locked-balance"></span>
                                     </div>
                                 </div>
 
@@ -177,7 +189,7 @@
 
                                 <!-- Remarks section-->
                                 <div class="col-xl-12 mt-6">
-                                    <span><h6>Remarks if any</h6></span>
+                                    <span><h6>Remarks</h6></span>
                                     <textarea class="form-control" id="workflow-remarks" rows="4" oninput="validateInputs()"></textarea>
                                 </div>
 
